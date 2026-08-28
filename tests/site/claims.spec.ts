@@ -57,6 +57,16 @@ test('@claim:json-output emits parseable scan output for scripts', () => {
   expect(output.databases).toHaveLength(1);
 });
 
+test('@claim:local-execution runs the CLI demo entirely in its local temporary folder', () => {
+  const demo = freshDemo();
+  const temporaryRoot = resolve(demo.temporary_root);
+  const systemTemporaryRoot = resolve(tmpdir());
+  expect(temporaryRoot.startsWith(`${systemTemporaryRoot}/`)).toBe(true);
+  expect(demo.restore.restored.every((path) => resolve(path).startsWith(`${temporaryRoot}/`))).toBe(true);
+  expect(existsSync(join(temporaryRoot, 'sync-folder', 'field-notes.sqlite'))).toBe(true);
+  expect(existsSync(join(temporaryRoot, 'safe-packet', 'dbsync-safe-manifest.json'))).toBe(true);
+});
+
 test('@claim:no-telemetry demo sends no data and stores no sample state', async ({ page }) => {
   const requests: string[] = [];
   page.on('request', (request) => requests.push(request.url()));
@@ -69,13 +79,56 @@ test('@claim:no-telemetry demo sends no data and stores no sample state', async 
   expect(lock).not.toMatch(/name = "(reqwest|ureq|hyper|curl)"/);
 });
 
+test('@claim:github-release-cache requests GitHub release details and caches them for one hour', async ({ page }) => {
+  const githubRequests: string[] = [];
+  const externalOrigins = new Set<string>();
+  page.on('request', (request) => {
+    const origin = new URL(request.url()).origin;
+    if (origin !== 'http://127.0.0.1:4173') externalOrigins.add(origin);
+  });
+  await page.route('https://api.github.com/**', async (route) => {
+    githubRequests.push(route.request().url());
+    await route.fulfill({
+      contentType: 'application/json',
+      body: JSON.stringify([{ tag_name: 'v0.1.0', assets: [{ name: 'dbsync-safe-linux-x86_64.tar.gz', browser_download_url: 'https://github.com/B-Divyesh/sf-db-file-sync-safety/releases/download/v0.1.0/dbsync-safe-linux-x86_64.tar.gz' }] }]),
+    });
+  });
+
+  await page.goto('/');
+  await expect(page.locator('.release-state')).toContainText('v0.1.0 is ready');
+  expect(githubRequests).toEqual(['https://api.github.com/repos/B-Divyesh/sf-db-file-sync-safety/releases?per_page=1']);
+  expect([...externalOrigins]).toEqual(['https://api.github.com']);
+
+  const cache = await page.evaluate(() => {
+    const keys = Object.keys(localStorage);
+    const value = JSON.parse(localStorage.getItem('dbsync-safe:release') ?? '{}') as { expires?: number };
+    return { keys, expires: value.expires, now: Date.now() };
+  });
+  expect(cache.keys).toEqual(['dbsync-safe:release']);
+  expect(cache.expires! - cache.now).toBeGreaterThan(3_595_000);
+  expect(cache.expires! - cache.now).toBeLessThanOrEqual(3_600_000);
+
+  await page.reload();
+  await expect(page.locator('.release-state')).toContainText('v0.1.0 is ready');
+  expect(githubRequests).toHaveLength(1);
+
+  await page.evaluate(() => {
+    const cached = JSON.parse(localStorage.getItem('dbsync-safe:release') ?? '{}');
+    cached.expires = Date.now() - 1;
+    localStorage.setItem('dbsync-safe:release', JSON.stringify(cached));
+  });
+  await page.reload();
+  await expect(page.locator('.release-state')).toContainText('v0.1.0 is ready');
+  expect(githubRequests).toHaveLength(2);
+});
+
 test('@claim:mit-free ships the MIT license', () => {
   const license = readFileSync(resolve('LICENSE'), 'utf8');
   expect(license).toContain('MIT License');
   expect(license).toContain('Permission is hereby granted, free of charge');
 });
 
-test('@claim:installer-checksum shell installer checks SHA-256 before installing', () => {
+function installerFixture(publishedChecksum: string | 'correct') {
   const temp = mkdtempSync(join(tmpdir(), 'dbsync-installer-test-'));
   const fakeBin = join(temp, 'bin');
   const installDir = join(temp, 'install');
@@ -85,7 +138,9 @@ test('@claim:installer-checksum shell installer checks SHA-256 before installing
   copyFileSync(binary, join(archiveRoot, 'dbsync-safe'));
   const archive = join(temp, 'dbsync-safe-linux-x86_64.tar.gz');
   execFileSync('tar', ['-C', archiveRoot, '-czf', archive, 'dbsync-safe']);
-  const checksum = createHash('sha256').update(readFileSync(archive)).digest('hex');
+  const checksum = publishedChecksum === 'correct'
+    ? createHash('sha256').update(readFileSync(archive)).digest('hex')
+    : publishedChecksum;
   const fakeCurl = join(fakeBin, 'curl');
   writeFileSync(fakeCurl, `#!/bin/sh\nout=''\nurl=''\nwhile [ "$#" -gt 0 ]; do\n  if [ "$1" = '-o' ]; then out="$2"; shift 2; else url="$1"; shift; fi\ndone\ncase "$url" in\n  *SHA256SUMS) printf '%s  dbsync-safe-linux-x86_64.tar.gz\\n' "$FIXTURE_SHA" > "$out" ;;\n  *) cp "$FIXTURE_ARCHIVE" "$out" ;;\nesac\n`);
   chmodSync(fakeCurl, 0o755);
@@ -93,6 +148,18 @@ test('@claim:installer-checksum shell installer checks SHA-256 before installing
     encoding: 'utf8',
     env: { ...process.env, PATH: `${fakeBin}:${process.env.PATH}`, FIXTURE_ARCHIVE: archive, FIXTURE_SHA: checksum, DBSYNC_SAFE_INSTALL_DIR: installDir },
   });
+  return { result, installDir };
+}
+
+test('@claim:installer-checksum shell installer rejects a checksum mismatch before installing', () => {
+  const { result, installDir } = installerFixture('0'.repeat(64));
+  expect(result.status).not.toBe(0);
+  expect(result.stderr).toContain('checksum failed. Nothing was installed.');
+  expect(readdirSync(installDir)).toEqual([]);
+});
+
+test('shell installer installs an archive after its checksum succeeds', () => {
+  const { result, installDir } = installerFixture('correct');
   expect(result.status, result.stderr).toBe(0);
   expect(readdirSync(installDir)).toContain('dbsync-safe');
 });
@@ -114,6 +181,22 @@ test('static hosting caches fingerprinted build assets immutably without caching
   expect(builtAssets.every((asset) => asset.startsWith('/assets/'))).toBe(true);
 });
 
+test('static hosting serves only known application routes and returns a real 404 for unknown paths', () => {
+  const config = JSON.parse(readFileSync(resolve('site/public/staticwebapp.config.json'), 'utf8')) as {
+    navigationFallback?: unknown;
+    responseOverrides?: Record<string, { rewrite?: string }>;
+    routes?: { route: string; rewrite?: string }[];
+  };
+  const appRoutes = ['/', '/demo', '/privacy', '/terms', '/404'];
+
+  expect(config.navigationFallback).toBeUndefined();
+  expect(config.responseOverrides?.['404']?.rewrite).toBe('/404.html');
+  for (const route of appRoutes) {
+    expect(config.routes).toContainEqual(expect.objectContaining({ route, rewrite: '/index.html' }));
+  }
+  expect(config.routes?.some((route) => route.route === '/*' && route.rewrite === '/index.html')).toBe(false);
+});
+
 test('all routes have one h1, useful titles, and no serious accessibility errors', async ({ page }) => {
   for (const route of ['/', '/demo', '/privacy', '/terms', '/not-a-route']) {
     const errors: string[] = [];
@@ -128,12 +211,20 @@ test('all routes have one h1, useful titles, and no serious accessibility errors
   }
 });
 
-test('landing works at 390 pixels and keyboard focus is visible', async ({ page }) => {
+test('all interactive targets are at least 44 by 44 pixels at the 390-pixel viewport', async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 });
+  for (const route of ['/', '/demo', '/privacy', '/terms', '/not-a-route']) {
+    await page.goto(route);
+    await expect(page.getByRole('heading', { level: 1 })).toBeVisible();
+    const targets = await page.locator('a, button, summary').evaluateAll((nodes) => nodes.map((node) => {
+      const bounds = node.getBoundingClientRect();
+      return { name: node.textContent?.trim().replace(/\s+/g, ' ') ?? '', width: bounds.width, height: bounds.height };
+    }));
+    expect(targets.filter((target) => target.width < 44 || target.height < 44), `${route}: ${JSON.stringify(targets)}`).toEqual([]);
+    expect(await page.evaluate(() => document.documentElement.scrollWidth <= document.documentElement.clientWidth)).toBe(true);
+  }
+
   await page.goto('/');
-  await expect(page.getByRole('heading', { level: 1 })).toBeVisible();
-  await expect(page.getByRole('link', { name: 'Try it with sample data' })).toBeVisible();
   await page.keyboard.press('Tab');
   await expect(page.getByRole('link', { name: 'Skip to main content' })).toBeFocused();
-  expect(await page.evaluate(() => document.documentElement.scrollWidth <= document.documentElement.clientWidth)).toBe(true);
 });

@@ -115,7 +115,7 @@ summary { min-height: 48px; display: flex; align-items: center; color: var(--blu
 
 .demo-banner { position: relative; z-index: 4; min-height: 48px; display: flex; align-items: center; justify-content: center; gap: 24px; padding: 6px 20px; color: var(--mint-ink); background: var(--mint); font-size: 14px; }
 .demo-banner > div { display: flex; align-items: center; gap: 16px; }
-.demo-banner a, .demo-banner button { color: var(--mint-ink); font-weight: 700; }
+.demo-banner a, .demo-banner button { min-width: 44px; min-height: 44px; display: inline-flex; align-items: center; justify-content: center; color: var(--mint-ink); font-weight: 700; }
 .inner-main { min-height: calc(100vh - 160px); padding: clamp(64px, 10vw, 128px) clamp(20px, 12vw, 180px); }
 .inner-main h1 { max-width: 900px; font-size: clamp(44px, 7vw, 78px); }
 .demo-stage { max-width: 1000px; margin-top: 56px; }
@@ -132,13 +132,14 @@ summary { min-height: 48px; display: flex; align-items: center; color: var(--blu
 .legal section { max-width: 720px; margin-top: 64px; }
 .legal section h2 { font-size: 30px; margin-bottom: 16px; }
 .legal section p { color: var(--muted); font-size: 18px; }
+.legal section a { min-width: 44px; min-height: 44px; display: inline-flex; align-items: center; }
 .missing { position: relative; }
 .lost-plate { position: absolute; right: 10vw; top: 70px; width: 280px; aspect-ratio: 1; display: grid; place-items: center; border: 1px solid var(--line); color: rgba(115, 243, 203, .16); background: linear-gradient(135deg, var(--glass), transparent); transform: rotate(12deg); font: 700 80px var(--mono); clip-path: polygon(0 0, 100% 0, 100% 75%, 75% 100%, 0 100%); }
 .missing > *:not(.lost-plate) { position: relative; max-width: 650px; }
 
 .site-footer { min-height: 88px; display: grid; grid-template-columns: 1fr auto auto; align-items: center; gap: 32px; padding: 20px clamp(20px, 5vw, 72px); border-top: 1px solid var(--line); color: var(--muted); font-size: 13px; }
 .signal-dot { display: inline-block; width: 8px; height: 8px; margin-right: 8px; border-radius: 50%; background: var(--mint); box-shadow: 0 0 10px var(--mint); }
-.site-footer a { color: var(--muted); }
+.site-footer a { min-width: 44px; min-height: 44px; display: inline-flex; align-items: center; justify-content: center; color: var(--muted); }
 .build { font-family: var(--mono); }
 
 @media (max-width: 900px) {
