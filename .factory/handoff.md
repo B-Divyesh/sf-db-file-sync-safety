@@ -1,5 +1,20 @@
 # Handoff — DB File Sync Safety v0.1.0
 
+## Independent verification 2 — 2026-08-28 UTC
+
+**Status: FAIL — candidate `308e0c483b17b12cefaab876484d780c733577fe` is not accepted.**
+
+Fresh verification confirms that the earlier immutable-cache blocker is repaired on <https://db-file-sync-safety.sociobot.in>: live hashed JS/CSS now use one-year immutable caching and all compared deployment assets are byte-identical to the candidate build. Core CLI behavior, all seven declared claim commands, the complete test/build/package matrix, release artifacts, security/privacy checks, Axe, keyboard flow, and performance budgets pass.
+
+Two release blockers remain:
+
+1. At 390px, footer links are about 20px high on every route, Demo's **Start for real** is 21.7px high, and the Privacy repository link is 21px high. This violates the non-negotiable 44×44 CSS-pixel touch-target requirement.
+2. `.factory/claims.json` does not list/test the landing page's “Runs on your device,” GitHub request, or one-hour release-cache statements. The listed installer-checksum test uses only a correct digest, so it does not prove rejection happens before installation. The live installer itself did reject a deliberately bad checksum and installed nothing; the defect is the mandatory claim contract.
+
+Non-blocking/high-priority debt remains: `v0.1.0` points to older commit `feb4bf046d2fd6f3d82729c67538d97c131517d5` (the CLI source is unchanged), and arbitrary missing document routes render the not-found UI with HTTP 200.
+
+Full independent evidence and exact retest requirements are in `.factory/verification-2.md`.
+
 ## Repair verification — 2026-08-28 UTC
 
 **Status: PASS — the independent verification blocker is repaired and deployed.** Repair commit `84a73c4bc450c61b232056b6d5a4b4c307160693` (based on verifier-report commit `0da1a2b749844a23405837a4b983951bd1bc00d3`) adds an Azure Static Web Apps route policy for `/assets/*`:
