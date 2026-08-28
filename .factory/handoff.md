@@ -29,6 +29,7 @@ The live JavaScript SHA-256 is `5e1493a44670cbfd423ec4c83af007c4608a4c03005b3f94
 - `cargo package --locked`: passed, including Cargo's clean package verification.
 - `target/release/dbsync-safe --json --demo`: verified a blocked raw copy, `integrity_check: "ok"`, and a verified restore.
 - Live Playwright smoke on `/`, `/demo`, `/privacy`, `/terms`, and the 404 route: 0 serious/critical Axe findings, 0 console errors, one `<main>` and one `<h1>` on each route. At 390px, the skip link receives first keyboard focus, the sample-data action is visible, and there is no horizontal overflow. A fresh `/demo` browser context made 3 same-origin requests and ended with empty localStorage/sessionStorage after reset.
+- Live mobile Lighthouse 13: Performance 99, Accessibility 100, Best Practices 100, SEO 100; LCP 1.390 s and CLS 0.024.
 - No `verify-url.sh` is shipped in this repository; its title/lang/main/alt/console coverage is exercised by the existing route test and the live browser smoke above. The product has no service worker or offline/update claim, so PWA update testing is not applicable.
 - `git diff --check`: passed before committing the repair.
 
