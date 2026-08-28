@@ -1,5 +1,11 @@
 # Handoff — DB File Sync Safety v0.1.0
 
+## Independent verification update — 2026-08-28 UTC
+
+**Status: FAIL — release acceptance is blocked.** Independent verification of candidate `a0a646b5f2e6e73c0ad458f09cbfa078160f1bbd` at <https://db-file-sync-safety.sociobot.in> found one release-blocking deployment defect: content-hashed JS/CSS and static image assets are served with `Cache-Control: public, must-revalidate, max-age=30`, rather than long-lived immutable caching required by the performance contract. Fix the static-host asset cache policy, deploy, and recheck the response headers before accepting.
+
+All product checks otherwise passed: every `.factory/claims.json` command, complete `npm test` (9 Playwright tests / 5 Rust integration tests), `npm run build`, `cargo package --locked`, live Axe/browser/mobile/reduced-motion/privacy checks, a clean consumer installation of the public Linux archive with checksum verification, and an end-to-end CLI demo/recovery exercise. Live application assets matched a fresh candidate build byte-for-byte. Full evidence and the non-blocking release-tag provenance note are in `.factory/verification.md`.
+
 ## What shipped
 
 - A Rust `dbsync-safe` binary with `scan`, `guard`, `snapshot`, `verify`, `restore`, and `demo` commands.
