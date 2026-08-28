@@ -1,0 +1,20 @@
+{
+  "name": "db-file-sync-safety-site",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite --host 0.0.0.0",
+    "build:site": "vite build",
+    "build": "cargo build --release && npm run build:site",
+    "test:rust": "cargo test",
+    "test": "npm run test:rust && npm run build:site && playwright test"
+  },
+  "devDependencies": {
+    "@axe-core/playwright": "4.10.2",
+    "@playwright/test": "1.58.2",
+    "typescript": "5.9.3",
+    "vite": "7.1.3"
+  }
+}
+

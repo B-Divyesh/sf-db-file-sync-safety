@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+Sitemap: https://db-file-sync-safety.sociobot.in/sitemap.xml
+
