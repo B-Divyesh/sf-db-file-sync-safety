@@ -216,6 +216,8 @@ test('all interactive targets are at least 44 by 44 pixels at the 390-pixel view
   for (const route of ['/', '/demo', '/privacy', '/terms', '/not-a-route']) {
     await page.goto(route);
     await expect(page.getByRole('heading', { level: 1 })).toBeVisible();
+    const results = await new AxeBuilder({ page }).analyze();
+    expect(results.violations.filter((item) => ['serious', 'critical'].includes(item.impact ?? '')), `mobile Axe: ${route}`).toEqual([]);
     const targets = await page.locator('a, button, summary').evaluateAll((nodes) => nodes.map((node) => {
       const bounds = node.getBoundingClientRect();
       return { name: node.textContent?.trim().replace(/\s+/g, ' ') ?? '', width: bounds.width, height: bounds.height };

@@ -44,7 +44,7 @@ function shell(content: string, route: Route): string {
 function terminal(id = 'terminal'): string {
   return `<div class="terminal" id="${id}" aria-label="Terminal recording of the sample workflow">
     <div class="terminal-bar"><span></span><span></span><span></span><b>sample / field-notes.sqlite</b></div>
-    <div class="terminal-body" role="log" aria-live="polite">
+    <div class="terminal-body" role="log" aria-live="polite" tabindex="0">
       <p><span class="prompt">$</span> dbsync-safe --demo</p>
       <p class="terminal-row row-1"><span class="step">01 · SCAN</span> field-notes.sqlite <span class="warn">+ live WAL</span></p>
       <p class="terminal-row row-2"><span class="step">02 · BLOCK</span> raw file copy refused</p>
