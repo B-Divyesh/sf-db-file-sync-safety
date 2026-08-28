@@ -97,6 +97,23 @@ test('@claim:installer-checksum shell installer checks SHA-256 before installing
   expect(readdirSync(installDir)).toContain('dbsync-safe');
 });
 
+test('static hosting caches fingerprinted build assets immutably without caching HTML globally', () => {
+  const config = JSON.parse(readFileSync(resolve('site/public/staticwebapp.config.json'), 'utf8')) as {
+    globalHeaders?: Record<string, string>;
+    routes?: { route: string; headers?: Record<string, string> }[];
+  };
+  const cacheControl = 'public, max-age=31536000, immutable';
+  const assetRoute = config.routes?.find((route) => route.route === '/assets/*');
+
+  expect(assetRoute?.headers?.['Cache-Control']).toBe(cacheControl);
+  expect(config.globalHeaders?.['Cache-Control']).toBeUndefined();
+
+  const html = readFileSync(resolve('dist/site/index.html'), 'utf8');
+  const builtAssets = [...html.matchAll(/(?:src|href)="(\/assets\/[^\"]+)"/g)].map((match) => match[1]);
+  expect(builtAssets).toEqual(expect.arrayContaining([expect.stringMatching(/\.js$/), expect.stringMatching(/\.css$/)]));
+  expect(builtAssets.every((asset) => asset.startsWith('/assets/'))).toBe(true);
+});
+
 test('all routes have one h1, useful titles, and no serious accessibility errors', async ({ page }) => {
   for (const route of ['/', '/demo', '/privacy', '/terms', '/not-a-route']) {
     const errors: string[] = [];
@@ -120,4 +137,3 @@ test('landing works at 390 pixels and keyboard focus is visible', async ({ page 
   await expect(page.getByRole('link', { name: 'Skip to main content' })).toBeFocused();
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= document.documentElement.clientWidth)).toBe(true);
 });
-
