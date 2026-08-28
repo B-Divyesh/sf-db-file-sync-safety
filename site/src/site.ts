@@ -128,7 +128,7 @@ function landing(): string {
           <div><p>macOS or Linux</p><code>curl -fsSL https://db-file-sync-safety.sociobot.in/install.sh | sh</code></div>
           <div><p>Windows PowerShell</p><code>irm https://db-file-sync-safety.sociobot.in/install.ps1 | iex</code></div>
         </div>
-        <details><summary>Package manager options</summary><div class="package-list"><code>brew install B-Divyesh/db-file-sync-safety/dbsync-safe</code><code>scoop bucket add dbsync-safe https://github.com/B-Divyesh/sf-db-file-sync-safety &amp;&amp; scoop install dbsync-safe</code><p>The macOS package and Windows binary are unsigned in v0.1.0.</p></div></details>
+        <details><summary>Package manager options</summary><div class="package-list"><code>brew install B-Divyesh/db-file-sync-safety/dbsync-safe</code><code>scoop install https://raw.githubusercontent.com/B-Divyesh/sf-db-file-sync-safety/main/scoop-bucket/dbsync-safe.json</code><p>The macOS package and Windows binary are unsigned in v0.1.0.</p></div></details>
       </div>
     </section>
   </main>`, '/');
