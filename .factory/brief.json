@@ -1,0 +1,29 @@
+{
+  "slug": "db-file-sync-safety",
+  "title": "DB File Sync Safety",
+  "summary": "Make verified SQLite snapshots before a file-sync tool copies them.",
+  "territory": "devtools-data",
+  "user": "A local-first developer or power user synchronizing app data between devices who needs an explicit warning and safe procedure before a live SQLite/database file is copied by a file-sync product.",
+  "evidence": [
+    {
+      "url": "https://hn.algolia.com/api/v1/items/44673651",
+      "date": "2025-07-24",
+      "quote_or_summary": "The asker says Syncthing works except for local databases such as SQLite and cites Firefox-profile corruption when trying to keep one profile across machines."
+    },
+    {
+      "url": "https://lobste.rs/s/yhavca",
+      "date": "2025-03-07",
+      "quote_or_summary": "Lobsters discussion: ‘Why Local-First Software Is the Future and its Limitations.’"
+    }
+  ],
+  "recurrence": "The 2025 request names a widespread file-sync workflow and corruption risk; local-first limitations remain an active 2025 discussion.",
+  "current_workaround": "Hope sync pauses at the right time, close the application manually, copy files by hand, or accept corruption/conflict risk.",
+  "incumbents_and_gap": "Syncthing, Dropbox, iCloud, LiteFS, SQLite backup APIs, and CRDT databases solve pieces. There is no simple device-local preflight that recognizes a database bundle and produces a safe snapshot/restore procedure for ordinary file sync.",
+  "smallest_useful_product": "Cross-platform CLI that detects SQLite/WAL bundles in a selected sync folder, checks live-lock indicators, makes a consistent SQLite backup, writes a sync-safe manifest, and verifies a restore on another folder.",
+  "success_measure": "In 20 test scenarios involving SQLite plus WAL, the tool prevents every attempted raw live-file copy and restores every generated snapshot successfully.",
+  "artifact_class": "cli-installers",
+  "monetization": "free",
+  "constraints": "SQLite only initially; never modify source databases; locking behavior varies by OS; do not claim universal application safety.",
+  "confidence": 4,
+  "state": "BUILT"
+}

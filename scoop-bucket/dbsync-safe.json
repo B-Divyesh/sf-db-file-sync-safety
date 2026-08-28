@@ -6,9 +6,8 @@
   "architecture": {
     "64bit": {
       "url": "https://github.com/B-Divyesh/sf-db-file-sync-safety/releases/download/v0.1.0/dbsync-safe-windows-x86_64.zip",
-      "hash": "RELEASE_SHA256_WINDOWS_X64"
+      "hash": "2d91215bde34611d3601381bf480ca61dfd8e459cdc9e37ae9740f2badabc7d3"
     }
   },
   "bin": "dbsync-safe.exe"
 }
-
