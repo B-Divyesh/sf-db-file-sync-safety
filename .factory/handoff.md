@@ -32,7 +32,7 @@ No Rust source, CLI behavior, package manifest, installer implementation, resear
 - `cargo clippy --all-targets --all-features -- -D warnings`: passed.
 - TypeScript check for `site/src/site.ts`: passed. The repository has no separate lint script.
 - `npm run build`: passed; produced `target/release/dbsync-safe` and `dist/site/`.
-- `cargo package --allow-dirty --locked`: passed, including Cargo's package verification build.
+- `cargo package --locked`: passed from the final clean tree, including Cargo's package verification build.
 - Clean consumer `cargo install` from `target/package/db-file-sync-safety-0.1.0`: passed. The installed binary reported 0.1.0 and its JSON demo reported raw copy blocked, SQLite integrity `ok`, and restore verified.
 - Azure Static Web Apps emulator: `/`, `/demo`, `/privacy`, `/terms`, and `/404` returned 200; an arbitrary missing document and missing asset returned 404.
 - Final live browser audit: 10 combinations across desktop 1440×900 and mobile 390×844. All had one `main`, one `h1`, `lang=en`, no horizontal overflow, no console/page errors, no sub-44px interactive targets, and zero serious/critical Axe findings.
