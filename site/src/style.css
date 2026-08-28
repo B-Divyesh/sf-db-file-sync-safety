@@ -75,9 +75,9 @@ h3 { margin: 0 0 8px; font-size: 24px; line-height: 1.2; }
 .terminal-bar b { margin-left: auto; color: var(--muted); font: 10px var(--mono); letter-spacing: .08em; }
 .terminal-body { min-height: 320px; padding: clamp(18px, 4vw, 36px); font: clamp(13px, 1.7vw, 16px)/1.7 var(--mono); font-variant-numeric: tabular-nums; }
 .terminal-body p { margin: 0 0 14px; }
-.terminal-row { opacity: 0; animation: row-in .25s ease forwards; }
+.terminal-row { opacity: 1; animation: row-in .25s ease both; }
 .row-1 { animation-delay: .15s; }.row-2 { animation-delay: .35s; }.row-3 { animation-delay: .55s; }.row-4 { animation-delay: .75s; }.row-5 { animation-delay: .95s; }
-@keyframes row-in { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: none; } }
+@keyframes row-in { from { transform: translateY(5px); } to { transform: none; } }
 .prompt, .safe, .step { color: var(--mint); }
 .step { display: inline-block; min-width: 150px; font-weight: 700; }
 .warn { color: var(--amber); }
@@ -181,4 +181,3 @@ summary { min-height: 48px; display: flex; align-items: center; color: var(--blu
   .integrity-sweep { display: none; }
   .terminal-row { opacity: 1; transform: none; }
 }
-
