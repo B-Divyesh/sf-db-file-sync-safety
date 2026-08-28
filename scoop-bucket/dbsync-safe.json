@@ -1,0 +1,14 @@
+{
+  "version": "0.1.0",
+  "description": "Make verified SQLite snapshots before file sync",
+  "homepage": "https://db-file-sync-safety.sociobot.in",
+  "license": "MIT",
+  "architecture": {
+    "64bit": {
+      "url": "https://github.com/B-Divyesh/sf-db-file-sync-safety/releases/download/v0.1.0/dbsync-safe-windows-x86_64.zip",
+      "hash": "RELEASE_SHA256_WINDOWS_X64"
+    }
+  },
+  "bin": "dbsync-safe.exe"
+}
+

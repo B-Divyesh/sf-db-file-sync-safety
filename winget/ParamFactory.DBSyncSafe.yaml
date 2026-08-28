@@ -1,0 +1,20 @@
+PackageIdentifier: ParamFactory.DBSyncSafe
+PackageVersion: 0.1.0
+PackageLocale: en-US
+Publisher: Param Factory
+PackageName: DB File Sync Safety
+License: MIT
+ShortDescription: Make verified SQLite snapshots before file sync.
+PackageUrl: https://db-file-sync-safety.sociobot.in
+InstallerType: zip
+Installers:
+  - Architecture: x64
+    InstallerUrl: https://github.com/B-Divyesh/sf-db-file-sync-safety/releases/download/v0.1.0/dbsync-safe-windows-x86_64.zip
+    InstallerSha256: RELEASE_SHA256_WINDOWS_X64
+    NestedInstallerType: portable
+    NestedInstallerFiles:
+      - RelativeFilePath: dbsync-safe.exe
+        PortableCommandAlias: dbsync-safe
+ManifestType: singleton
+ManifestVersion: 1.9.0
+

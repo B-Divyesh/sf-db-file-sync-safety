@@ -1,0 +1,100 @@
+name: Release binaries
+
+on:
+  push:
+    tags: ['v*']
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: ubuntu-latest
+            target: x86_64-unknown-linux-gnu
+            platform: linux-x86_64
+          - os: windows-latest
+            target: x86_64-pc-windows-msvc
+            platform: windows-x86_64
+          - os: macos-latest
+            target: x86_64-apple-darwin
+            platform: macos-x86_64
+          - os: macos-latest
+            target: aarch64-apple-darwin
+            platform: macos-aarch64
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: ${{ matrix.target }}
+      - name: Test
+        if: matrix.target == 'x86_64-unknown-linux-gnu'
+        run: cargo test --locked
+      - name: Build binary
+        run: cargo build --release --locked --target ${{ matrix.target }}
+      - name: Package Unix archive
+        if: runner.os != 'Windows'
+        shell: bash
+        run: |
+          mkdir -p release
+          cp "target/${{ matrix.target }}/release/dbsync-safe" release/dbsync-safe
+          tar -C release -czf "dbsync-safe-${{ matrix.platform }}.tar.gz" dbsync-safe
+      - name: Package Windows archive
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: |
+          New-Item -ItemType Directory -Path release
+          Copy-Item "target/${{ matrix.target }}/release/dbsync-safe.exe" "release/dbsync-safe.exe"
+          Compress-Archive "release/dbsync-safe.exe" "dbsync-safe-${{ matrix.platform }}.zip"
+      - name: Build Linux packages
+        if: matrix.platform == 'linux-x86_64'
+        shell: bash
+        run: |
+          cargo install cargo-deb --locked
+          cargo deb --no-build
+          cp target/debian/*.deb dbsync-safe-linux-x86_64.deb
+          curl -sSfL https://github.com/goreleaser/nfpm/releases/download/v2.41.3/nfpm_2.41.3_Linux_x86_64.tar.gz | tar xz nfpm
+          ./nfpm package --config packaging/nfpm.yaml --packager rpm --target dbsync-safe-linux-x86_64.rpm
+      - name: Build macOS package
+        if: runner.os == 'macOS'
+        shell: bash
+        run: |
+          mkdir -p pkg-root/usr/local/bin
+          cp "target/${{ matrix.target }}/release/dbsync-safe" pkg-root/usr/local/bin/dbsync-safe
+          pkgbuild --root pkg-root --identifier in.sociobot.db-file-sync-safety --version 0.1.0 "dbsync-safe-${{ matrix.platform }}.pkg"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.platform }}
+          path: |
+            dbsync-safe-*.tar.gz
+            dbsync-safe-*.zip
+            dbsync-safe-*.deb
+            dbsync-safe-*.rpm
+            dbsync-safe-*.pkg
+          if-no-files-found: error
+
+  publish:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          path: release
+          merge-multiple: true
+      - name: Write checksums and manifest
+        shell: bash
+        run: |
+          cd release
+          sha256sum dbsync-safe-* > SHA256SUMS
+          python3 ../scripts/write-latest.py "${GITHUB_REF_NAME:-v0.1.0}" . > latest.json
+      - uses: softprops/action-gh-release@v2
+        with:
+          generate_release_notes: true
+          files: release/*
+
