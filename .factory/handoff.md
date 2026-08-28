@@ -1,5 +1,59 @@
 # Handoff — DB File Sync Safety v0.1.0
 
+## Repair work order `db-file-sync-safety-repair-2` — PASS
+
+**Repaired and deployed:** 2026-08-28 UTC
+
+**Verifier report:** `27c984051c1f3132e3d282464f6b922aed3468af`
+
+**Rejected candidate:** `308e0c483b17b12cefaab876484d780c733577fe`
+
+**Repair implementation:** `3cb325f9a74aa49b51ddb2942c7e632c6b1b1a4d` and `32ba1f30cf51ad042c570cb5fa9b9590c2912759`
+
+All release-blocking findings in `.factory/verification-2.md` are repaired.
+
+### Repairs
+
+- Footer links, Demo's **Start for real**, and the Privacy repository link now expose at least 44×44 CSS-pixel targets. The regression checks every link, button, and summary on `/`, `/demo`, `/privacy`, `/terms`, and the not-found UI at 390×844.
+- `.factory/claims.json` now registers the local-execution statement and the landing page's GitHub release request plus one-hour cache. Each claim has one exact tagged test.
+- The GitHub cache claim test records the exact outbound origin and endpoint, checks the one-hour expiry, proves a reload uses the cache, and proves an expired record triggers a refresh.
+- The installer checksum claim now supplies a deliberately wrong digest, requires a nonzero exit, checks the clear error, and proves the install folder remains empty. A separate success-path test remains.
+- Known SPA routes now have explicit Static Web Apps rewrites. The broad navigation fallback was removed, so arbitrary document paths return HTTP 404 while `/404` keeps the designed route.
+- A live mobile audit exposed the horizontally scrollable terminal as an unlabelled keyboard scroll region. It now has an explicit tab stop, and the 390px regression runs Axe on every route.
+
+No Rust source, CLI behavior, package manifest, installer implementation, researched brief, public copy, or visual system changed.
+
+### Verification evidence
+
+- Clean `npm ci`: passed; 0 vulnerabilities.
+- `npm test`: passed; 5 Rust integration tests and 14 Playwright tests.
+- Every one of the 9 exact commands in `.factory/claims.json`: passed individually.
+- `cargo fmt --all -- --check`: passed.
+- `cargo clippy --all-targets --all-features -- -D warnings`: passed.
+- TypeScript check for `site/src/site.ts`: passed. The repository has no separate lint script.
+- `npm run build`: passed; produced `target/release/dbsync-safe` and `dist/site/`.
+- `cargo package --allow-dirty --locked`: passed, including Cargo's package verification build.
+- Clean consumer `cargo install` from `target/package/db-file-sync-safety-0.1.0`: passed. The installed binary reported 0.1.0 and its JSON demo reported raw copy blocked, SQLite integrity `ok`, and restore verified.
+- Azure Static Web Apps emulator: `/`, `/demo`, `/privacy`, `/terms`, and `/404` returned 200; an arbitrary missing document and missing asset returned 404.
+- Final live browser audit: 10 combinations across desktop 1440×900 and mobile 390×844. All had one `main`, one `h1`, `lang=en`, no horizontal overflow, no console/page errors, no sub-44px interactive targets, and zero serious/critical Axe findings.
+- Keyboard: first Tab focused the skip link with a visible 3px amber outline. Demo controls, header links, terminal scroll region, copy action, and footer links were reachable without a trap.
+- Reduced motion: terminal animations resolved to 0.00001 seconds and the landing integrity sweep was hidden.
+- Privacy: a fresh Demo run made only same-origin requests and left cookies, localStorage, and sessionStorage empty. A fresh landing run contacted only `api.github.com` outside the site and wrote only `dbsync-safe:release`. No service worker is registered, so offline/update testing is not applicable and no offline claim is made.
+- Response policy: HTML retains `public, must-revalidate, max-age=30`; hashed JS/CSS retain `public, max-age=31536000, immutable`; CSP, HSTS, `nosniff`, referrer policy, and permissions policy are present. An arbitrary live path returns HTTP 404.
+- Live identity: 13 deployed files matched `dist/site` byte-for-byte. Final SHA-256 values are `42bebde274a486f3e0495659963725f3df76f879b2de6a4182beaa6bcbb13b6b` for `index.html`, `45beac43f1223c90c85f2c215e904cc7f714714dc7fce4c5a413a4f544b08912` for `index-DMs0W6ts.js`, and `e9a28bc38849030d3d86c4ad096888fcd3409d711ccce2924225960fbf907f08` for `index-DGiDdORx.css`.
+- Live mobile Lighthouse 13: Performance 100, Accessibility 100, Best Practices 100, SEO 100; LCP 1.7 seconds, CLS 0.023, TBT 30 ms, total transfer 86 KiB.
+- Public release: `latest.json` is valid with all 8 package files. The Linux archive matches `SHA256SUMS`; its binary reports 0.1.0 and passes the JSON demo. The live shell installer installs that verified release into a clean prefix.
+- GitHub CI run `33196414344` passed for final implementation commit `32ba1f30cf51ad042c570cb5fa9b9590c2912759`.
+
+### Deployment
+
+`dist/site/` from commit `32ba1f30cf51ad042c570cb5fa9b9590c2912759` was deployed to the Azure Static Web Apps production resource `sf-db-file-sync-safety` in resource group `sociobot`. Both the Azure hostname and <https://db-file-sync-safety.sociobot.in> serve the repair.
+
+### Remaining operator notes
+
+- The existing `v0.1.0` tag still points to `feb4bf046d2fd6f3d82729c67538d97c131517d5`. This repair does not change any CLI source or published package content, so the existing release was verified rather than destructively retagged. Tag the exact accepted source commit for the next binary release.
+- Submit `winget/ParamFactory.DBSyncSafe.yaml` upstream when desired. macOS packages and the Windows binary remain unsigned as documented.
+
 ## Independent verification 2 — 2026-08-28 UTC
 
 **Status: FAIL — candidate `308e0c483b17b12cefaab876484d780c733577fe` is not accepted.**
