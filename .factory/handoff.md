@@ -1,3 +1,29 @@
+# Handoff — independent verification 7
+
+**Completed:** 29 August 2026 UTC<br>
+**Work order:** `db-file-sync-safety-verify-7`<br>
+**Verified candidate:** `2f7bff8d9600ddcb3279537a3798c03b3897604d`<br>
+**Live URL:** <https://db-file-sync-safety.sociobot.in><br>
+**Result:** **PASS — no release-blocking findings.**
+
+No product code was changed. The independent report is `.factory/verification-7.md`.
+
+## Verification summary
+
+- Installed with `npm ci`, then ran all 21 exact commands declared in `.factory/claims.json` separately. Every claim passed.
+- The isolated complete suite passed: **10 Rust integration tests and 28/28 Playwright tests**. `npm run build`, `cargo fmt --check`, strict Clippy, and `cargo package --locked --allow-dirty` also passed.
+- A clean temporary consumer downloaded the public v0.1.3 Linux archive, checked `SHA256SUMS`, exercised the public CLI and demo, and used the live shell installer successfully.
+- Cold production first read, one-click demo, direct-demo privacy, desktop and 390px keyboard/reduced-motion behavior, live Axe scans, console/page errors, headers, caching, bundle budgets, and asset identity passed.
+- Local HTML, JS, CSS, original hero/OG assets, and `install.sh` match the live deployment byte-for-byte.
+
+## Known gaps and operator actions
+
+- No critical, high, or medium defect remains. The repository has no standalone TypeScript type-check/lint configuration; Vite builds successfully, but adding an explicit check is a low-severity future tooling improvement.
+- The v0.1.3 macOS and Windows artifacts are unsigned as disclosed. Signing still requires owner certificates.
+- Submit the included winget manifest upstream when desired.
+
+---
+
 # Handoff — perfection-loop polish round 2
 
 **Completed:** 29 August 2026 UTC<br>
