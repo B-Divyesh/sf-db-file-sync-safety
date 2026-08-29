@@ -172,6 +172,7 @@ summary { min-height: 48px; display: flex; align-items: center; color: var(--blu
   .step { min-width: 118px; }
   .demo-banner { align-items: flex-start; flex-direction: column; gap: 0; }
   .inner-main { padding: 56px 20px 80px; }
+  .lost-plate { right: -190px; opacity: .3; }
   .demo-path { flex-direction: column; }
   .site-footer nav { flex-wrap: wrap; }
 }

@@ -25,5 +25,5 @@ main > p:not(.eyebrow) { position: relative; max-width: 620px; margin: 28px 0; c
 .site-footer a { min-width: 44px; min-height: 44px; display: inline-flex; align-items: center; justify-content: center; color: #a9c4c4; }
 .build { font-family: SFMono-Regular, Consolas, monospace; }
 @media (max-width: 900px) { .site-footer { grid-template-columns: 1fr; gap: 12px; } .plate { opacity: .45; right: -80px; } }
-@media (max-width: 560px) { .site-header { min-height: 64px; padding: 10px 16px; } .site-header nav { gap: 8px; } .site-header nav a { padding: 0 6px; font-size: 13px; } .wordmark > span:last-child { font-size: 14px; } main { padding: 64px 20px 80px; } .plate { right: -90px; } .site-footer nav { flex-wrap: wrap; } }
+@media (max-width: 560px) { .site-header { min-height: 64px; padding: 10px 16px; } .site-header nav { gap: 8px; } .site-header nav a { padding: 0 6px; font-size: 13px; } .wordmark > span:last-child { font-size: 14px; } main { padding: 64px 20px 80px; } .plate { right: -190px; opacity: .3; } .site-footer nav { flex-wrap: wrap; } }
 @media (prefers-reduced-motion: reduce) { .plate { transform: none; } }
