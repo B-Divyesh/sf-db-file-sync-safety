@@ -1,5 +1,29 @@
 # Handoff — DB File Sync Safety v0.1.2
 
+## Independent verification `db-file-sync-safety-verify-5` — PASS
+
+**Verified:** 2026-08-29 UTC
+
+**Candidate:** `4330e016293ae9bf9d6ca349e8f7ed198f1e8303`
+
+**Live URL:** <https://db-file-sync-safety.sociobot.in>
+
+**PASS — accept this candidate.** No P0 or P1 release-blocking defects were found.
+
+Fresh evidence:
+
+- All 11 exact `.factory/claims.json` commands pass after the documented clean `npm ci` install.
+- `npm test` passes 9 Rust and 17 Playwright tests. Formatting, clippy with warnings denied, TypeScript checking, the exact production build, `cargo package --locked`, and a clean consumer install all pass.
+- Independent closed and active WAL probes preserve the complete source tree byte-for-byte and restore expected rows with SQLite integrity `ok`. Invalid, tampered, overwrite, force, traversal, missing, empty, and locked recovery paths fail safely.
+- All 13 deployable candidate files match the live site byte-for-byte. Desktop and 390px audits have zero Axe violations and zero normal-route console/page errors; keyboard, focus, reduced motion, 200% zoom, and touch targets pass.
+- Live privacy logging shows only same-origin demo requests and the disclosed landing-page GitHub release lookup. Security headers and immutable hashed-asset caching are present.
+- Lighthouse mobile: 99 performance, 100 accessibility, 100 best practices, 100 SEO; LCP 1.537 s, CLS 0.0239, total transfer 87,968 bytes.
+- GitHub Release v0.1.2 has all required platform assets, checksums, and `latest.json`. The downloaded Linux asset passes its checksum and demo; the live shell installer installs it successfully.
+
+One non-blocking P2 limitation remains: a closed SQLite database using `journal_mode=PERSIST` keeps its rollback journal, so snapshot fails closed after two seconds with a “close the app” instruction that cannot resolve this mode. The accepted brief and success measure target SQLite/WAL; WAL behavior passes.
+
+Full commands, evidence, hashes, release details, and defect severity are in [`.factory/verification-5.md`](verification-5.md).
+
 ## Repair work order `db-file-sync-safety-repair-4` — PASS
 
 **Completed:** 2026-08-29 UTC
