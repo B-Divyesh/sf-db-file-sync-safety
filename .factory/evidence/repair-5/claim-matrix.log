@@ -1,0 +1,1452 @@
+
+npm test -- --grep @claim:sqlite-wal-detection
+
+> db-file-sync-safety-site@0.1.3 test
+> npm run test:rust && npm run build:site && playwright test --grep @claim:sqlite-wal-detection
+
+
+> db-file-sync-safety-site@0.1.3 test:rust
+> cargo test
+
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.04s
+     Running unittests src/lib.rs (target/debug/deps/db_file_sync_safety-6f8ff38c1b5fc589)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running unittests src/main.rs (target/debug/deps/dbsync_safe-198e5c03c5b88fd4)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/safety.rs (target/debug/deps/safety-ca7d0cb6847421b3)
+
+running 10 tests
+test closed_persistent_journal_snapshot_preserves_source_and_restores ... ok
+test active_wal_snapshot_preserves_existing_sidecar_bytes ... ok
+test detects_database_without_a_db_extension ... ok
+test ignores_non_sqlite_files_and_reports_empty_state ... ok
+test closed_wal_database_snapshot_preserves_every_source_path_and_byte ... ok
+test readonly_closed_wal_source_snapshot_preserves_exact_tree ... ok
+test refuses_to_replace_a_target_by_default ... ok
+test rejects_tampered_packet_before_restore ... ok
+test twenty_sqlite_scenarios_block_raw_copy_and_restore ... ok
+test locked_database_fails_within_a_bound_and_removes_staging_files ... ok
+
+test result: ok. 10 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 2.27s
+
+   Doc-tests db_file_sync_safety
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+
+> db-file-sync-safety-site@0.1.3 build:site
+> vite build
+
+vite v7.3.6 building client environment for production...
+transforming...
+✓ 4 modules transformed.
+rendering chunks...
+computing gzip size...
+../dist/site/index.html                  2.17 kB │ gzip: 0.78 kB
+../dist/site/assets/index-Dt3pJBWW.css  13.31 kB │ gzip: 3.87 kB
+../dist/site/assets/index-BURSQoIL.js   16.24 kB │ gzip: 5.57 kB │ map: 24.29 kB
+✓ built in 123ms
+(node:5681) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 1 test using 1 worker
+(node:5694) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:5694) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:5694) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+·
+  1 passed (1.5s)
+
+npm test -- --grep @claim:consistent-snapshot
+
+> db-file-sync-safety-site@0.1.3 test
+> npm run test:rust && npm run build:site && playwright test --grep @claim:consistent-snapshot
+
+
+> db-file-sync-safety-site@0.1.3 test:rust
+> cargo test
+
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.04s
+     Running unittests src/lib.rs (target/debug/deps/db_file_sync_safety-6f8ff38c1b5fc589)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running unittests src/main.rs (target/debug/deps/dbsync_safe-198e5c03c5b88fd4)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/safety.rs (target/debug/deps/safety-ca7d0cb6847421b3)
+
+running 10 tests
+test closed_persistent_journal_snapshot_preserves_source_and_restores ... ok
+test active_wal_snapshot_preserves_existing_sidecar_bytes ... ok
+test detects_database_without_a_db_extension ... ok
+test closed_wal_database_snapshot_preserves_every_source_path_and_byte ... ok
+test ignores_non_sqlite_files_and_reports_empty_state ... ok
+test readonly_closed_wal_source_snapshot_preserves_exact_tree ... ok
+test refuses_to_replace_a_target_by_default ... ok
+test rejects_tampered_packet_before_restore ... ok
+test twenty_sqlite_scenarios_block_raw_copy_and_restore ... ok
+test locked_database_fails_within_a_bound_and_removes_staging_files ... ok
+
+test result: ok. 10 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 2.23s
+
+   Doc-tests db_file_sync_safety
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+
+> db-file-sync-safety-site@0.1.3 build:site
+> vite build
+
+vite v7.3.6 building client environment for production...
+transforming...
+✓ 4 modules transformed.
+rendering chunks...
+computing gzip size...
+../dist/site/index.html                  2.17 kB │ gzip: 0.78 kB
+../dist/site/assets/index-Dt3pJBWW.css  13.31 kB │ gzip: 3.87 kB
+../dist/site/assets/index-BURSQoIL.js   16.24 kB │ gzip: 5.57 kB │ map: 24.29 kB
+✓ built in 126ms
+(node:5787) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 1 test using 1 worker
+(node:5800) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:5800) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:5800) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+·
+  1 passed (1.5s)
+
+npm test -- --grep @claim:persistent-journal-snapshot
+
+> db-file-sync-safety-site@0.1.3 test
+> npm run test:rust && npm run build:site && playwright test --grep @claim:persistent-journal-snapshot
+
+
+> db-file-sync-safety-site@0.1.3 test:rust
+> cargo test
+
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.04s
+     Running unittests src/lib.rs (target/debug/deps/db_file_sync_safety-6f8ff38c1b5fc589)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running unittests src/main.rs (target/debug/deps/dbsync_safe-198e5c03c5b88fd4)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/safety.rs (target/debug/deps/safety-ca7d0cb6847421b3)
+
+running 10 tests
+test closed_persistent_journal_snapshot_preserves_source_and_restores ... ok
+test active_wal_snapshot_preserves_existing_sidecar_bytes ... ok
+test detects_database_without_a_db_extension ... ok
+test ignores_non_sqlite_files_and_reports_empty_state ... ok
+test closed_wal_database_snapshot_preserves_every_source_path_and_byte ... ok
+test readonly_closed_wal_source_snapshot_preserves_exact_tree ... ok
+test refuses_to_replace_a_target_by_default ... ok
+test rejects_tampered_packet_before_restore ... ok
+test twenty_sqlite_scenarios_block_raw_copy_and_restore ... ok
+test locked_database_fails_within_a_bound_and_removes_staging_files ... ok
+
+test result: ok. 10 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 2.22s
+
+   Doc-tests db_file_sync_safety
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+
+> db-file-sync-safety-site@0.1.3 build:site
+> vite build
+
+vite v7.3.6 building client environment for production...
+transforming...
+✓ 4 modules transformed.
+rendering chunks...
+computing gzip size...
+../dist/site/index.html                  2.17 kB │ gzip: 0.78 kB
+../dist/site/assets/index-Dt3pJBWW.css  13.31 kB │ gzip: 3.87 kB
+../dist/site/assets/index-BURSQoIL.js   16.24 kB │ gzip: 5.57 kB │ map: 24.29 kB
+✓ built in 122ms
+(node:5891) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 1 test using 1 worker
+(node:5904) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:5904) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:5904) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+·
+  1 passed (1.5s)
+
+npm test -- --grep @claim:readonly-source-snapshot
+
+> db-file-sync-safety-site@0.1.3 test
+> npm run test:rust && npm run build:site && playwright test --grep @claim:readonly-source-snapshot
+
+
+> db-file-sync-safety-site@0.1.3 test:rust
+> cargo test
+
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.04s
+     Running unittests src/lib.rs (target/debug/deps/db_file_sync_safety-6f8ff38c1b5fc589)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running unittests src/main.rs (target/debug/deps/dbsync_safe-198e5c03c5b88fd4)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/safety.rs (target/debug/deps/safety-ca7d0cb6847421b3)
+
+running 10 tests
+test closed_persistent_journal_snapshot_preserves_source_and_restores ... ok
+test active_wal_snapshot_preserves_existing_sidecar_bytes ... ok
+test detects_database_without_a_db_extension ... ok
+test ignores_non_sqlite_files_and_reports_empty_state ... ok
+test closed_wal_database_snapshot_preserves_every_source_path_and_byte ... ok
+test readonly_closed_wal_source_snapshot_preserves_exact_tree ... ok
+test refuses_to_replace_a_target_by_default ... ok
+test rejects_tampered_packet_before_restore ... ok
+test twenty_sqlite_scenarios_block_raw_copy_and_restore ... ok
+test locked_database_fails_within_a_bound_and_removes_staging_files ... ok
+
+test result: ok. 10 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 2.25s
+
+   Doc-tests db_file_sync_safety
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+
+> db-file-sync-safety-site@0.1.3 build:site
+> vite build
+
+vite v7.3.6 building client environment for production...
+transforming...
+✓ 4 modules transformed.
+rendering chunks...
+computing gzip size...
+../dist/site/index.html                  2.17 kB │ gzip: 0.78 kB
+../dist/site/assets/index-Dt3pJBWW.css  13.31 kB │ gzip: 3.87 kB
+../dist/site/assets/index-BURSQoIL.js   16.24 kB │ gzip: 5.57 kB │ map: 24.29 kB
+✓ built in 118ms
+(node:5996) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 1 test using 1 worker
+(node:6009) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:6009) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:6009) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+·
+  1 passed (1.5s)
+
+npm test -- --grep @claim:source-open-isolation
+
+> db-file-sync-safety-site@0.1.3 test
+> npm run test:rust && npm run build:site && playwright test --grep @claim:source-open-isolation
+
+
+> db-file-sync-safety-site@0.1.3 test:rust
+> cargo test
+
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.04s
+     Running unittests src/lib.rs (target/debug/deps/db_file_sync_safety-6f8ff38c1b5fc589)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running unittests src/main.rs (target/debug/deps/dbsync_safe-198e5c03c5b88fd4)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/safety.rs (target/debug/deps/safety-ca7d0cb6847421b3)
+
+running 10 tests
+test closed_persistent_journal_snapshot_preserves_source_and_restores ... ok
+test active_wal_snapshot_preserves_existing_sidecar_bytes ... ok
+test detects_database_without_a_db_extension ... ok
+test ignores_non_sqlite_files_and_reports_empty_state ... ok
+test closed_wal_database_snapshot_preserves_every_source_path_and_byte ... ok
+test readonly_closed_wal_source_snapshot_preserves_exact_tree ... ok
+test refuses_to_replace_a_target_by_default ... ok
+test rejects_tampered_packet_before_restore ... ok
+test twenty_sqlite_scenarios_block_raw_copy_and_restore ... ok
+test locked_database_fails_within_a_bound_and_removes_staging_files ... ok
+
+test result: ok. 10 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 2.23s
+
+   Doc-tests db_file_sync_safety
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+
+> db-file-sync-safety-site@0.1.3 build:site
+> vite build
+
+vite v7.3.6 building client environment for production...
+transforming...
+✓ 4 modules transformed.
+rendering chunks...
+computing gzip size...
+../dist/site/index.html                  2.17 kB │ gzip: 0.78 kB
+../dist/site/assets/index-Dt3pJBWW.css  13.31 kB │ gzip: 3.87 kB
+../dist/site/assets/index-BURSQoIL.js   16.24 kB │ gzip: 5.57 kB │ map: 24.29 kB
+✓ built in 122ms
+(node:6100) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 1 test using 1 worker
+(node:6113) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:6113) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:6113) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+·
+  1 passed (1.7s)
+
+npm test -- --grep @claim:verified-restore
+
+> db-file-sync-safety-site@0.1.3 test
+> npm run test:rust && npm run build:site && playwright test --grep @claim:verified-restore
+
+
+> db-file-sync-safety-site@0.1.3 test:rust
+> cargo test
+
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.04s
+     Running unittests src/lib.rs (target/debug/deps/db_file_sync_safety-6f8ff38c1b5fc589)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running unittests src/main.rs (target/debug/deps/dbsync_safe-198e5c03c5b88fd4)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/safety.rs (target/debug/deps/safety-ca7d0cb6847421b3)
+
+running 10 tests
+test closed_persistent_journal_snapshot_preserves_source_and_restores ... ok
+test active_wal_snapshot_preserves_existing_sidecar_bytes ... ok
+test detects_database_without_a_db_extension ... ok
+test ignores_non_sqlite_files_and_reports_empty_state ... ok
+test closed_wal_database_snapshot_preserves_every_source_path_and_byte ... ok
+test readonly_closed_wal_source_snapshot_preserves_exact_tree ... ok
+test refuses_to_replace_a_target_by_default ... ok
+test rejects_tampered_packet_before_restore ... ok
+test twenty_sqlite_scenarios_block_raw_copy_and_restore ... ok
+test locked_database_fails_within_a_bound_and_removes_staging_files ... ok
+
+test result: ok. 10 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 2.28s
+
+   Doc-tests db_file_sync_safety
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+
+> db-file-sync-safety-site@0.1.3 build:site
+> vite build
+
+vite v7.3.6 building client environment for production...
+transforming...
+✓ 4 modules transformed.
+rendering chunks...
+computing gzip size...
+../dist/site/index.html                  2.17 kB │ gzip: 0.78 kB
+../dist/site/assets/index-Dt3pJBWW.css  13.31 kB │ gzip: 3.87 kB
+../dist/site/assets/index-BURSQoIL.js   16.24 kB │ gzip: 5.57 kB │ map: 24.29 kB
+✓ built in 122ms
+(node:6229) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 1 test using 1 worker
+(node:6242) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:6242) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:6242) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+·
+  1 passed (1.5s)
+
+npm test -- --grep @claim:restore-overwrite-refusal
+
+> db-file-sync-safety-site@0.1.3 test
+> npm run test:rust && npm run build:site && playwright test --grep @claim:restore-overwrite-refusal
+
+
+> db-file-sync-safety-site@0.1.3 test:rust
+> cargo test
+
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.04s
+     Running unittests src/lib.rs (target/debug/deps/db_file_sync_safety-6f8ff38c1b5fc589)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running unittests src/main.rs (target/debug/deps/dbsync_safe-198e5c03c5b88fd4)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/safety.rs (target/debug/deps/safety-ca7d0cb6847421b3)
+
+running 10 tests
+test closed_persistent_journal_snapshot_preserves_source_and_restores ... ok
+test active_wal_snapshot_preserves_existing_sidecar_bytes ... ok
+test closed_wal_database_snapshot_preserves_every_source_path_and_byte ... ok
+test ignores_non_sqlite_files_and_reports_empty_state ... ok
+test detects_database_without_a_db_extension ... ok
+test readonly_closed_wal_source_snapshot_preserves_exact_tree ... ok
+test refuses_to_replace_a_target_by_default ... ok
+test rejects_tampered_packet_before_restore ... ok
+test twenty_sqlite_scenarios_block_raw_copy_and_restore ... ok
+test locked_database_fails_within_a_bound_and_removes_staging_files ... ok
+
+test result: ok. 10 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 2.30s
+
+   Doc-tests db_file_sync_safety
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+
+> db-file-sync-safety-site@0.1.3 build:site
+> vite build
+
+vite v7.3.6 building client environment for production...
+transforming...
+✓ 4 modules transformed.
+rendering chunks...
+computing gzip size...
+../dist/site/index.html                  2.17 kB │ gzip: 0.78 kB
+../dist/site/assets/index-Dt3pJBWW.css  13.31 kB │ gzip: 3.87 kB
+../dist/site/assets/index-BURSQoIL.js   16.24 kB │ gzip: 5.57 kB │ map: 24.29 kB
+✓ built in 137ms
+(node:6335) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 1 test using 1 worker
+(node:6348) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:6348) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:6348) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+·
+  1 passed (1.5s)
+
+npm test -- --grep @claim:demo-restored-count
+
+> db-file-sync-safety-site@0.1.3 test
+> npm run test:rust && npm run build:site && playwright test --grep @claim:demo-restored-count
+
+
+> db-file-sync-safety-site@0.1.3 test:rust
+> cargo test
+
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.04s
+     Running unittests src/lib.rs (target/debug/deps/db_file_sync_safety-6f8ff38c1b5fc589)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running unittests src/main.rs (target/debug/deps/dbsync_safe-198e5c03c5b88fd4)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/safety.rs (target/debug/deps/safety-ca7d0cb6847421b3)
+
+running 10 tests
+test closed_persistent_journal_snapshot_preserves_source_and_restores ... ok
+test active_wal_snapshot_preserves_existing_sidecar_bytes ... ok
+test detects_database_without_a_db_extension ... ok
+test ignores_non_sqlite_files_and_reports_empty_state ... ok
+test closed_wal_database_snapshot_preserves_every_source_path_and_byte ... ok
+test readonly_closed_wal_source_snapshot_preserves_exact_tree ... ok
+test refuses_to_replace_a_target_by_default ... ok
+test rejects_tampered_packet_before_restore ... ok
+test twenty_sqlite_scenarios_block_raw_copy_and_restore ... ok
+test locked_database_fails_within_a_bound_and_removes_staging_files ... ok
+
+test result: ok. 10 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 2.26s
+
+   Doc-tests db_file_sync_safety
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+
+> db-file-sync-safety-site@0.1.3 build:site
+> vite build
+
+vite v7.3.6 building client environment for production...
+transforming...
+✓ 4 modules transformed.
+rendering chunks...
+computing gzip size...
+../dist/site/index.html                  2.17 kB │ gzip: 0.78 kB
+../dist/site/assets/index-Dt3pJBWW.css  13.31 kB │ gzip: 3.87 kB
+../dist/site/assets/index-BURSQoIL.js   16.24 kB │ gzip: 5.57 kB │ map: 24.29 kB
+✓ built in 121ms
+(node:6465) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 1 test using 1 worker
+(node:6478) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:6478) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:6478) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+·
+  1 passed (1.8s)
+
+npm test -- --grep @claim:json-output
+
+> db-file-sync-safety-site@0.1.3 test
+> npm run test:rust && npm run build:site && playwright test --grep @claim:json-output
+
+
+> db-file-sync-safety-site@0.1.3 test:rust
+> cargo test
+
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.04s
+     Running unittests src/lib.rs (target/debug/deps/db_file_sync_safety-6f8ff38c1b5fc589)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running unittests src/main.rs (target/debug/deps/dbsync_safe-198e5c03c5b88fd4)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/safety.rs (target/debug/deps/safety-ca7d0cb6847421b3)
+
+running 10 tests
+test closed_persistent_journal_snapshot_preserves_source_and_restores ... ok
+test active_wal_snapshot_preserves_existing_sidecar_bytes ... ok
+test detects_database_without_a_db_extension ... ok
+test ignores_non_sqlite_files_and_reports_empty_state ... ok
+test closed_wal_database_snapshot_preserves_every_source_path_and_byte ... ok
+test readonly_closed_wal_source_snapshot_preserves_exact_tree ... ok
+test refuses_to_replace_a_target_by_default ... ok
+test rejects_tampered_packet_before_restore ... ok
+test twenty_sqlite_scenarios_block_raw_copy_and_restore ... ok
+test locked_database_fails_within_a_bound_and_removes_staging_files ... ok
+
+test result: ok. 10 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 2.26s
+
+   Doc-tests db_file_sync_safety
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+
+> db-file-sync-safety-site@0.1.3 build:site
+> vite build
+
+vite v7.3.6 building client environment for production...
+transforming...
+✓ 4 modules transformed.
+rendering chunks...
+computing gzip size...
+../dist/site/index.html                  2.17 kB │ gzip: 0.78 kB
+../dist/site/assets/index-Dt3pJBWW.css  13.31 kB │ gzip: 3.87 kB
+../dist/site/assets/index-BURSQoIL.js   16.24 kB │ gzip: 5.57 kB │ map: 24.29 kB
+✓ built in 118ms
+(node:6642) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 1 test using 1 worker
+(node:6659) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:6659) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:6659) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+·
+  1 passed (1.7s)
+
+npm test -- --grep @claim:local-execution
+
+> db-file-sync-safety-site@0.1.3 test
+> npm run test:rust && npm run build:site && playwright test --grep @claim:local-execution
+
+
+> db-file-sync-safety-site@0.1.3 test:rust
+> cargo test
+
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.04s
+     Running unittests src/lib.rs (target/debug/deps/db_file_sync_safety-6f8ff38c1b5fc589)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running unittests src/main.rs (target/debug/deps/dbsync_safe-198e5c03c5b88fd4)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/safety.rs (target/debug/deps/safety-ca7d0cb6847421b3)
+
+running 10 tests
+test closed_persistent_journal_snapshot_preserves_source_and_restores ... ok
+test active_wal_snapshot_preserves_existing_sidecar_bytes ... ok
+test closed_wal_database_snapshot_preserves_every_source_path_and_byte ... ok
+test detects_database_without_a_db_extension ... ok
+test ignores_non_sqlite_files_and_reports_empty_state ... ok
+test readonly_closed_wal_source_snapshot_preserves_exact_tree ... ok
+test refuses_to_replace_a_target_by_default ... ok
+test rejects_tampered_packet_before_restore ... ok
+test twenty_sqlite_scenarios_block_raw_copy_and_restore ... ok
+test locked_database_fails_within_a_bound_and_removes_staging_files ... ok
+
+test result: ok. 10 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 2.26s
+
+   Doc-tests db_file_sync_safety
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+
+> db-file-sync-safety-site@0.1.3 build:site
+> vite build
+
+vite v7.3.6 building client environment for production...
+transforming...
+✓ 4 modules transformed.
+rendering chunks...
+computing gzip size...
+../dist/site/index.html                  2.17 kB │ gzip: 0.78 kB
+../dist/site/assets/index-Dt3pJBWW.css  13.31 kB │ gzip: 3.87 kB
+../dist/site/assets/index-BURSQoIL.js   16.24 kB │ gzip: 5.57 kB │ map: 24.29 kB
+✓ built in 122ms
+(node:6765) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 1 test using 1 worker
+(node:6780) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:6780) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:6780) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+·
+  1 passed (1.4s)
+
+npm test -- --grep @claim:no-account
+
+> db-file-sync-safety-site@0.1.3 test
+> npm run test:rust && npm run build:site && playwright test --grep @claim:no-account
+
+
+> db-file-sync-safety-site@0.1.3 test:rust
+> cargo test
+
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.04s
+     Running unittests src/lib.rs (target/debug/deps/db_file_sync_safety-6f8ff38c1b5fc589)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running unittests src/main.rs (target/debug/deps/dbsync_safe-198e5c03c5b88fd4)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/safety.rs (target/debug/deps/safety-ca7d0cb6847421b3)
+
+running 10 tests
+test closed_persistent_journal_snapshot_preserves_source_and_restores ... ok
+test active_wal_snapshot_preserves_existing_sidecar_bytes ... ok
+test closed_wal_database_snapshot_preserves_every_source_path_and_byte ... ok
+test ignores_non_sqlite_files_and_reports_empty_state ... ok
+test detects_database_without_a_db_extension ... ok
+test readonly_closed_wal_source_snapshot_preserves_exact_tree ... ok
+test refuses_to_replace_a_target_by_default ... ok
+test rejects_tampered_packet_before_restore ... ok
+test twenty_sqlite_scenarios_block_raw_copy_and_restore ... ok
+test locked_database_fails_within_a_bound_and_removes_staging_files ... ok
+
+test result: ok. 10 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 2.28s
+
+   Doc-tests db_file_sync_safety
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+
+> db-file-sync-safety-site@0.1.3 build:site
+> vite build
+
+vite v7.3.6 building client environment for production...
+transforming...
+✓ 4 modules transformed.
+rendering chunks...
+computing gzip size...
+../dist/site/index.html                  2.17 kB │ gzip: 0.78 kB
+../dist/site/assets/index-Dt3pJBWW.css  13.31 kB │ gzip: 3.87 kB
+../dist/site/assets/index-BURSQoIL.js   16.24 kB │ gzip: 5.57 kB │ map: 24.29 kB
+✓ built in 126ms
+(node:6876) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 1 test using 1 worker
+(node:6890) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:6890) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:6890) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+·
+  1 passed (1.4s)
+
+npm test -- --grep @claim:no-network
+
+> db-file-sync-safety-site@0.1.3 test
+> npm run test:rust && npm run build:site && playwright test --grep @claim:no-network
+
+
+> db-file-sync-safety-site@0.1.3 test:rust
+> cargo test
+
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.05s
+     Running unittests src/lib.rs (target/debug/deps/db_file_sync_safety-6f8ff38c1b5fc589)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running unittests src/main.rs (target/debug/deps/dbsync_safe-198e5c03c5b88fd4)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/safety.rs (target/debug/deps/safety-ca7d0cb6847421b3)
+
+running 10 tests
+test closed_persistent_journal_snapshot_preserves_source_and_restores ... ok
+test active_wal_snapshot_preserves_existing_sidecar_bytes ... ok
+test detects_database_without_a_db_extension ... ok
+test ignores_non_sqlite_files_and_reports_empty_state ... ok
+test closed_wal_database_snapshot_preserves_every_source_path_and_byte ... ok
+test readonly_closed_wal_source_snapshot_preserves_exact_tree ... ok
+test refuses_to_replace_a_target_by_default ... ok
+test rejects_tampered_packet_before_restore ... ok
+test twenty_sqlite_scenarios_block_raw_copy_and_restore ... ok
+test locked_database_fails_within_a_bound_and_removes_staging_files ... ok
+
+test result: ok. 10 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 2.28s
+
+   Doc-tests db_file_sync_safety
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+
+> db-file-sync-safety-site@0.1.3 build:site
+> vite build
+
+vite v7.3.6 building client environment for production...
+transforming...
+✓ 4 modules transformed.
+rendering chunks...
+computing gzip size...
+../dist/site/index.html                  2.17 kB │ gzip: 0.78 kB
+../dist/site/assets/index-Dt3pJBWW.css  13.31 kB │ gzip: 3.87 kB
+../dist/site/assets/index-BURSQoIL.js   16.24 kB │ gzip: 5.57 kB │ map: 24.29 kB
+✓ built in 137ms
+(node:6986) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 1 test using 1 worker
+(node:7000) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:7000) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:7000) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+·
+  1 passed (1.8s)
+
+npm test -- --grep @claim:no-telemetry
+
+> db-file-sync-safety-site@0.1.3 test
+> npm run test:rust && npm run build:site && playwright test --grep @claim:no-telemetry
+
+
+> db-file-sync-safety-site@0.1.3 test:rust
+> cargo test
+
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.04s
+     Running unittests src/lib.rs (target/debug/deps/db_file_sync_safety-6f8ff38c1b5fc589)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running unittests src/main.rs (target/debug/deps/dbsync_safe-198e5c03c5b88fd4)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/safety.rs (target/debug/deps/safety-ca7d0cb6847421b3)
+
+running 10 tests
+test closed_persistent_journal_snapshot_preserves_source_and_restores ... ok
+test active_wal_snapshot_preserves_existing_sidecar_bytes ... ok
+test closed_wal_database_snapshot_preserves_every_source_path_and_byte ... ok
+test ignores_non_sqlite_files_and_reports_empty_state ... ok
+test detects_database_without_a_db_extension ... ok
+test readonly_closed_wal_source_snapshot_preserves_exact_tree ... ok
+test refuses_to_replace_a_target_by_default ... ok
+test rejects_tampered_packet_before_restore ... ok
+test twenty_sqlite_scenarios_block_raw_copy_and_restore ... ok
+test locked_database_fails_within_a_bound_and_removes_staging_files ... ok
+
+test result: ok. 10 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 2.23s
+
+   Doc-tests db_file_sync_safety
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+
+> db-file-sync-safety-site@0.1.3 build:site
+> vite build
+
+vite v7.3.6 building client environment for production...
+transforming...
+✓ 4 modules transformed.
+rendering chunks...
+computing gzip size...
+../dist/site/index.html                  2.17 kB │ gzip: 0.78 kB
+../dist/site/assets/index-Dt3pJBWW.css  13.31 kB │ gzip: 3.87 kB
+../dist/site/assets/index-BURSQoIL.js   16.24 kB │ gzip: 5.57 kB │ map: 24.29 kB
+✓ built in 128ms
+(node:7107) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 1 test using 1 worker
+(node:7121) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:7121) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:7121) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+·
+  1 passed (2.0s)
+
+npm test -- --grep @claim:github-release-cache
+
+> db-file-sync-safety-site@0.1.3 test
+> npm run test:rust && npm run build:site && playwright test --grep @claim:github-release-cache
+
+
+> db-file-sync-safety-site@0.1.3 test:rust
+> cargo test
+
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.04s
+     Running unittests src/lib.rs (target/debug/deps/db_file_sync_safety-6f8ff38c1b5fc589)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running unittests src/main.rs (target/debug/deps/dbsync_safe-198e5c03c5b88fd4)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/safety.rs (target/debug/deps/safety-ca7d0cb6847421b3)
+
+running 10 tests
+test closed_persistent_journal_snapshot_preserves_source_and_restores ... ok
+test active_wal_snapshot_preserves_existing_sidecar_bytes ... ok
+test detects_database_without_a_db_extension ... ok
+test ignores_non_sqlite_files_and_reports_empty_state ... ok
+test closed_wal_database_snapshot_preserves_every_source_path_and_byte ... ok
+test readonly_closed_wal_source_snapshot_preserves_exact_tree ... ok
+test refuses_to_replace_a_target_by_default ... ok
+test rejects_tampered_packet_before_restore ... ok
+test twenty_sqlite_scenarios_block_raw_copy_and_restore ... ok
+test locked_database_fails_within_a_bound_and_removes_staging_files ... ok
+
+test result: ok. 10 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 2.25s
+
+   Doc-tests db_file_sync_safety
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+
+> db-file-sync-safety-site@0.1.3 build:site
+> vite build
+
+vite v7.3.6 building client environment for production...
+transforming...
+✓ 4 modules transformed.
+rendering chunks...
+computing gzip size...
+../dist/site/index.html                  2.17 kB │ gzip: 0.78 kB
+../dist/site/assets/index-Dt3pJBWW.css  13.31 kB │ gzip: 3.87 kB
+../dist/site/assets/index-BURSQoIL.js   16.24 kB │ gzip: 5.57 kB │ map: 24.29 kB
+✓ built in 123ms
+(node:7278) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 1 test using 1 worker
+(node:7292) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:7292) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:7292) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+·
+  1 passed (2.2s)
+
+npm test -- --grep @claim:sqlite-only-scope
+
+> db-file-sync-safety-site@0.1.3 test
+> npm run test:rust && npm run build:site && playwright test --grep @claim:sqlite-only-scope
+
+
+> db-file-sync-safety-site@0.1.3 test:rust
+> cargo test
+
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.04s
+     Running unittests src/lib.rs (target/debug/deps/db_file_sync_safety-6f8ff38c1b5fc589)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running unittests src/main.rs (target/debug/deps/dbsync_safe-198e5c03c5b88fd4)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/safety.rs (target/debug/deps/safety-ca7d0cb6847421b3)
+
+running 10 tests
+test closed_persistent_journal_snapshot_preserves_source_and_restores ... ok
+test active_wal_snapshot_preserves_existing_sidecar_bytes ... ok
+test closed_wal_database_snapshot_preserves_every_source_path_and_byte ... ok
+test ignores_non_sqlite_files_and_reports_empty_state ... ok
+test detects_database_without_a_db_extension ... ok
+test readonly_closed_wal_source_snapshot_preserves_exact_tree ... ok
+test refuses_to_replace_a_target_by_default ... ok
+test rejects_tampered_packet_before_restore ... ok
+test twenty_sqlite_scenarios_block_raw_copy_and_restore ... ok
+test locked_database_fails_within_a_bound_and_removes_staging_files ... ok
+
+test result: ok. 10 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 2.23s
+
+   Doc-tests db_file_sync_safety
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+
+> db-file-sync-safety-site@0.1.3 build:site
+> vite build
+
+vite v7.3.6 building client environment for production...
+transforming...
+✓ 4 modules transformed.
+rendering chunks...
+computing gzip size...
+../dist/site/index.html                  2.17 kB │ gzip: 0.78 kB
+../dist/site/assets/index-Dt3pJBWW.css  13.31 kB │ gzip: 3.87 kB
+../dist/site/assets/index-BURSQoIL.js   16.24 kB │ gzip: 5.57 kB │ map: 24.29 kB
+✓ built in 122ms
+(node:7491) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 1 test using 1 worker
+(node:7506) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:7506) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:7506) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+·
+  1 passed (1.4s)
+
+npm test -- --grep @claim:mit-free
+
+> db-file-sync-safety-site@0.1.3 test
+> npm run test:rust && npm run build:site && playwright test --grep @claim:mit-free
+
+
+> db-file-sync-safety-site@0.1.3 test:rust
+> cargo test
+
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.04s
+     Running unittests src/lib.rs (target/debug/deps/db_file_sync_safety-6f8ff38c1b5fc589)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running unittests src/main.rs (target/debug/deps/dbsync_safe-198e5c03c5b88fd4)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/safety.rs (target/debug/deps/safety-ca7d0cb6847421b3)
+
+running 10 tests
+test closed_persistent_journal_snapshot_preserves_source_and_restores ... ok
+test active_wal_snapshot_preserves_existing_sidecar_bytes ... ok
+test closed_wal_database_snapshot_preserves_every_source_path_and_byte ... ok
+test ignores_non_sqlite_files_and_reports_empty_state ... ok
+test detects_database_without_a_db_extension ... ok
+test readonly_closed_wal_source_snapshot_preserves_exact_tree ... ok
+test refuses_to_replace_a_target_by_default ... ok
+test rejects_tampered_packet_before_restore ... ok
+test twenty_sqlite_scenarios_block_raw_copy_and_restore ... ok
+test locked_database_fails_within_a_bound_and_removes_staging_files ... ok
+
+test result: ok. 10 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 2.31s
+
+   Doc-tests db_file_sync_safety
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+
+> db-file-sync-safety-site@0.1.3 build:site
+> vite build
+
+vite v7.3.6 building client environment for production...
+transforming...
+✓ 4 modules transformed.
+rendering chunks...
+computing gzip size...
+../dist/site/index.html                  2.17 kB │ gzip: 0.78 kB
+../dist/site/assets/index-Dt3pJBWW.css  13.31 kB │ gzip: 3.87 kB
+../dist/site/assets/index-BURSQoIL.js   16.24 kB │ gzip: 5.57 kB │ map: 24.29 kB
+✓ built in 119ms
+(node:7607) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 1 test using 1 worker
+(node:7623) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:7623) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:7623) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+·
+  1 passed (1.4s)
+
+npm test -- --grep @claim:installer-checksum
+
+> db-file-sync-safety-site@0.1.3 test
+> npm run test:rust && npm run build:site && playwright test --grep @claim:installer-checksum
+
+
+> db-file-sync-safety-site@0.1.3 test:rust
+> cargo test
+
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.04s
+     Running unittests src/lib.rs (target/debug/deps/db_file_sync_safety-6f8ff38c1b5fc589)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running unittests src/main.rs (target/debug/deps/dbsync_safe-198e5c03c5b88fd4)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/safety.rs (target/debug/deps/safety-ca7d0cb6847421b3)
+
+running 10 tests
+test closed_persistent_journal_snapshot_preserves_source_and_restores ... ok
+test active_wal_snapshot_preserves_existing_sidecar_bytes ... ok
+test closed_wal_database_snapshot_preserves_every_source_path_and_byte ... ok
+test detects_database_without_a_db_extension ... ok
+test ignores_non_sqlite_files_and_reports_empty_state ... ok
+test readonly_closed_wal_source_snapshot_preserves_exact_tree ... ok
+test refuses_to_replace_a_target_by_default ... ok
+test rejects_tampered_packet_before_restore ... ok
+test twenty_sqlite_scenarios_block_raw_copy_and_restore ... ok
+test locked_database_fails_within_a_bound_and_removes_staging_files ... ok
+
+test result: ok. 10 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 2.24s
+
+   Doc-tests db_file_sync_safety
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+
+> db-file-sync-safety-site@0.1.3 build:site
+> vite build
+
+vite v7.3.6 building client environment for production...
+transforming...
+✓ 4 modules transformed.
+rendering chunks...
+computing gzip size...
+../dist/site/index.html                  2.17 kB │ gzip: 0.78 kB
+../dist/site/assets/index-Dt3pJBWW.css  13.31 kB │ gzip: 3.87 kB
+../dist/site/assets/index-BURSQoIL.js   16.24 kB │ gzip: 5.57 kB │ map: 24.29 kB
+✓ built in 128ms
+(node:7722) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 1 test using 1 worker
+(node:7737) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:7737) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:7737) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+·
+  1 passed (2.4s)
+
+npm test -- --grep @claim:release-assets
+
+> db-file-sync-safety-site@0.1.3 test
+> npm run test:rust && npm run build:site && playwright test --grep @claim:release-assets
+
+
+> db-file-sync-safety-site@0.1.3 test:rust
+> cargo test
+
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.04s
+     Running unittests src/lib.rs (target/debug/deps/db_file_sync_safety-6f8ff38c1b5fc589)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running unittests src/main.rs (target/debug/deps/dbsync_safe-198e5c03c5b88fd4)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/safety.rs (target/debug/deps/safety-ca7d0cb6847421b3)
+
+running 10 tests
+test closed_persistent_journal_snapshot_preserves_source_and_restores ... ok
+test active_wal_snapshot_preserves_existing_sidecar_bytes ... ok
+test closed_wal_database_snapshot_preserves_every_source_path_and_byte ... ok
+test ignores_non_sqlite_files_and_reports_empty_state ... ok
+test detects_database_without_a_db_extension ... ok
+test readonly_closed_wal_source_snapshot_preserves_exact_tree ... ok
+test refuses_to_replace_a_target_by_default ... ok
+test rejects_tampered_packet_before_restore ... ok
+test twenty_sqlite_scenarios_block_raw_copy_and_restore ... ok
+test locked_database_fails_within_a_bound_and_removes_staging_files ... ok
+
+test result: ok. 10 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 2.29s
+
+   Doc-tests db_file_sync_safety
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+
+> db-file-sync-safety-site@0.1.3 build:site
+> vite build
+
+vite v7.3.6 building client environment for production...
+transforming...
+✓ 4 modules transformed.
+rendering chunks...
+computing gzip size...
+../dist/site/index.html                  2.17 kB │ gzip: 0.78 kB
+../dist/site/assets/index-Dt3pJBWW.css  13.31 kB │ gzip: 3.87 kB
+../dist/site/assets/index-BURSQoIL.js   16.24 kB │ gzip: 5.57 kB │ map: 24.29 kB
+✓ built in 123ms
+(node:7856) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 1 test using 1 worker
+(node:7872) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:7872) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:7872) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+·
+  1 passed (1.7s)
+
+npm test -- --grep @claim:package-manifests
+
+> db-file-sync-safety-site@0.1.3 test
+> npm run test:rust && npm run build:site && playwright test --grep @claim:package-manifests
+
+
+> db-file-sync-safety-site@0.1.3 test:rust
+> cargo test
+
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.04s
+     Running unittests src/lib.rs (target/debug/deps/db_file_sync_safety-6f8ff38c1b5fc589)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running unittests src/main.rs (target/debug/deps/dbsync_safe-198e5c03c5b88fd4)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/safety.rs (target/debug/deps/safety-ca7d0cb6847421b3)
+
+running 10 tests
+test closed_persistent_journal_snapshot_preserves_source_and_restores ... ok
+test active_wal_snapshot_preserves_existing_sidecar_bytes ... ok
+test detects_database_without_a_db_extension ... ok
+test ignores_non_sqlite_files_and_reports_empty_state ... ok
+test closed_wal_database_snapshot_preserves_every_source_path_and_byte ... ok
+test readonly_closed_wal_source_snapshot_preserves_exact_tree ... ok
+test refuses_to_replace_a_target_by_default ... ok
+test rejects_tampered_packet_before_restore ... ok
+test twenty_sqlite_scenarios_block_raw_copy_and_restore ... ok
+test locked_database_fails_within_a_bound_and_removes_staging_files ... ok
+
+test result: ok. 10 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 2.20s
+
+   Doc-tests db_file_sync_safety
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+
+> db-file-sync-safety-site@0.1.3 build:site
+> vite build
+
+vite v7.3.6 building client environment for production...
+transforming...
+✓ 4 modules transformed.
+rendering chunks...
+computing gzip size...
+../dist/site/index.html                  2.17 kB │ gzip: 0.78 kB
+../dist/site/assets/index-Dt3pJBWW.css  13.31 kB │ gzip: 3.87 kB
+../dist/site/assets/index-BURSQoIL.js   16.24 kB │ gzip: 5.57 kB │ map: 24.29 kB
+✓ built in 123ms
+(node:7970) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 1 test using 1 worker
+(node:7985) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:7985) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:7985) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+·
+  1 passed (1.4s)
+
+npm test -- --grep @claim:build-contract
+
+> db-file-sync-safety-site@0.1.3 test
+> npm run test:rust && npm run build:site && playwright test --grep @claim:build-contract
+
+
+> db-file-sync-safety-site@0.1.3 test:rust
+> cargo test
+
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.04s
+     Running unittests src/lib.rs (target/debug/deps/db_file_sync_safety-6f8ff38c1b5fc589)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running unittests src/main.rs (target/debug/deps/dbsync_safe-198e5c03c5b88fd4)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/safety.rs (target/debug/deps/safety-ca7d0cb6847421b3)
+
+running 10 tests
+test closed_persistent_journal_snapshot_preserves_source_and_restores ... ok
+test active_wal_snapshot_preserves_existing_sidecar_bytes ... ok
+test closed_wal_database_snapshot_preserves_every_source_path_and_byte ... ok
+test ignores_non_sqlite_files_and_reports_empty_state ... ok
+test detects_database_without_a_db_extension ... ok
+test readonly_closed_wal_source_snapshot_preserves_exact_tree ... ok
+test refuses_to_replace_a_target_by_default ... ok
+test rejects_tampered_packet_before_restore ... ok
+test twenty_sqlite_scenarios_block_raw_copy_and_restore ... ok
+test locked_database_fails_within_a_bound_and_removes_staging_files ... ok
+
+test result: ok. 10 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 2.22s
+
+   Doc-tests db_file_sync_safety
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+
+> db-file-sync-safety-site@0.1.3 build:site
+> vite build
+
+vite v7.3.6 building client environment for production...
+transforming...
+✓ 4 modules transformed.
+rendering chunks...
+computing gzip size...
+../dist/site/index.html                  2.17 kB │ gzip: 0.78 kB
+../dist/site/assets/index-Dt3pJBWW.css  13.31 kB │ gzip: 3.87 kB
+../dist/site/assets/index-BURSQoIL.js   16.24 kB │ gzip: 5.57 kB │ map: 24.29 kB
+✓ built in 121ms
+(node:8080) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 1 test using 1 worker
+(node:8111) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:8111) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:8111) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+    Finished `release` profile [optimized] target(s) in 0.03s
+(node:8184) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+·
+  1 passed (3.3s)
+
+npm test -- --grep @claim:release-workflow
+
+> db-file-sync-safety-site@0.1.3 test
+> npm run test:rust && npm run build:site && playwright test --grep @claim:release-workflow
+
+
+> db-file-sync-safety-site@0.1.3 test:rust
+> cargo test
+
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.04s
+     Running unittests src/lib.rs (target/debug/deps/db_file_sync_safety-6f8ff38c1b5fc589)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running unittests src/main.rs (target/debug/deps/dbsync_safe-198e5c03c5b88fd4)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/safety.rs (target/debug/deps/safety-ca7d0cb6847421b3)
+
+running 10 tests
+test closed_persistent_journal_snapshot_preserves_source_and_restores ... ok
+test active_wal_snapshot_preserves_existing_sidecar_bytes ... ok
+test closed_wal_database_snapshot_preserves_every_source_path_and_byte ... ok
+test ignores_non_sqlite_files_and_reports_empty_state ... ok
+test detects_database_without_a_db_extension ... ok
+test readonly_closed_wal_source_snapshot_preserves_exact_tree ... ok
+test refuses_to_replace_a_target_by_default ... ok
+test rejects_tampered_packet_before_restore ... ok
+test twenty_sqlite_scenarios_block_raw_copy_and_restore ... ok
+test locked_database_fails_within_a_bound_and_removes_staging_files ... ok
+
+test result: ok. 10 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 2.24s
+
+   Doc-tests db_file_sync_safety
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+
+> db-file-sync-safety-site@0.1.3 build:site
+> vite build
+
+vite v7.3.6 building client environment for production...
+transforming...
+✓ 4 modules transformed.
+rendering chunks...
+computing gzip size...
+../dist/site/index.html                  2.17 kB │ gzip: 0.78 kB
+../dist/site/assets/index-Dt3pJBWW.css  13.31 kB │ gzip: 3.87 kB
+../dist/site/assets/index-BURSQoIL.js   16.24 kB │ gzip: 5.57 kB │ map: 24.29 kB
+✓ built in 122ms
+(node:8287) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 1 test using 1 worker
+(node:8303) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:8303) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:8303) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+·
+  1 passed (1.4s)

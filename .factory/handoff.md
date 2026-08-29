@@ -2,7 +2,8 @@
 
 **Completed:** 29 August 2026 UTC  
 **Work order:** `db-file-sync-safety-repair-5`  
-**Base reviewed:** `72ae6a740ab389e90b5ab5491e8983579bb4303f`
+**Base reviewed:** `72ae6a740ab389e90b5ab5491e8983579bb4303f`  
+**Repair commit:** `410bafa`
 
 ## Repaired release blocker
 
@@ -35,6 +36,9 @@ From a clean `npm ci` install:
 - `cargo package --locked --allow-dirty` — PASS.
 - Fresh consumer install from `target/package/db-file-sync-safety-0.1.3` — PASS; its JSON demo had `verified: true` and `raw_copy_safe: false`.
 - `npm run test:performance` — PASS; report named above.
+- Deployed production audit — PASS: five normal routes plus the real 404 at desktop, 390px mobile, keyboard/back focus, reduced motion, 200% zoom, Axe, touch targets, privacy/storage, no service worker, and link crawl all pass. `live-audit.log` holds the exact JSON result.
+- Live mobile Lighthouse — PASS: **Performance 100, Accessibility 100, Best Practices 100, SEO 100; FCP 1.4 s, LCP 1.4 s, TBT 0 ms, CLS 0.026.** `lighthouse-live-after.json` is the full report.
+- Deployment identity — PASS: live `index.html`, hashed JavaScript/CSS, and the hero image byte-match the local `dist/site/` build. The static host returns immutable caching for hashed assets, 30-second revalidation for HTML/images, and the expected CSP/HSTS/nosniff/referrer/permissions headers.
 
 ## Run and deploy
 
@@ -51,6 +55,8 @@ The static deployment target is unchanged:
 ```sh
 swa deploy dist/site --swa-config-location site/public --resource-group sociobot --app-name sf-db-file-sync-safety --env production
 ```
+
+This command completed successfully for repair commit `410bafa`.
 
 ## Known gaps
 
