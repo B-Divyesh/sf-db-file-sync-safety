@@ -5,8 +5,9 @@ const origin = process.argv[2] ?? 'https://db-file-sync-safety.sociobot.in';
 const browser = await chromium.launch();
 const routes = ['/', '/?demo=1', '/demo', '/privacy', '/terms'];
 const missingRoute = '/definitely-not-a-route';
+const viewports = [{ width: 1440, height: 900 }, { width: 1440, height: 768 }, { width: 390, height: 844 }];
 
-for (const viewport of [{ width: 1440, height: 900 }, { width: 390, height: 844 }]) {
+for (const viewport of viewports) {
   const context = await browser.newContext({ viewport });
   for (const route of routes) {
     const page = await context.newPage();
@@ -49,7 +50,7 @@ for (const viewport of [{ width: 1440, height: 900 }, { width: 390, height: 844 
   await context.close();
 }
 
-for (const viewport of [{ width: 1440, height: 900 }, { width: 390, height: 844 }]) {
+for (const viewport of viewports) {
   const context = await browser.newContext({ viewport });
   const page = await context.newPage();
   const response = await page.goto(`${origin}${missingRoute}`, { waitUntil: 'networkidle' });
@@ -156,4 +157,4 @@ for (const href of links) {
 await linksContext.close();
 
 await browser.close();
-console.log(JSON.stringify({ routes: routes.length, production404: 'pass', viewports: 2, axeViolations: 0, consoleErrors: 0, keyboard: 'pass', reducedMotion: 'pass', privacy: 'pass', serviceWorkers: 0, textZoom: 'pass', liveLinks: links.size, detectedDownload: 'v0.1.3 Linux archive' }));
+console.log(JSON.stringify({ routes: routes.length, production404: 'pass', viewports: viewports.length, axeViolations: 0, consoleErrors: 0, keyboard: 'pass', reducedMotion: 'pass', privacy: 'pass', serviceWorkers: 0, textZoom: 'pass', liveLinks: links.size, detectedDownload: 'v0.1.3 Linux archive' }));
