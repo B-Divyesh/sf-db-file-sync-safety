@@ -1,4 +1,41 @@
-# Handoff — DB File Sync Safety v0.1.2
+# Handoff — adversarial first-read review 1
+
+**Completed:** 2026-08-29 UTC<br>
+**Work order:** `db-file-sync-safety-review-1`<br>
+**Candidate:** `727b71e6ddcb9cc69c4da0de9656c0f202201f5d`<br>
+**Result:** **FAIL**
+
+No product code was changed. The full report is `.factory/review-1.md`.
+
+## What was done
+
+- Opened the live deployment cold in fresh 390×844 and 1440×900 browser contexts and recorded the first-read answers before scrolling.
+- Audited every landing-page and README sentence/label for length, jargon, terminology, information value, and action naming.
+- Exercised the one-click browser demo, Reset, Start for real, storage isolation, request isolation, and the real `dbsync-safe --json --demo` command from a temporary directory.
+- Ran every exact command in `.factory/claims.json` after `npm ci` and `cargo clean`.
+- Rechecked all earlier issues recorded in this handoff, live and in code.
+- Crawled routes and links; checked 404 behavior, metadata, history/focus, keyboard use, reduced motion, 200% zoom, mobile targets, Axe, console output, security headers, and cache headers.
+- Reproduced the remaining persistent rollback-journal limitation from a newly created closed SQLite database.
+
+## Verification summary
+
+- All 11 declared claim commands: PASS.
+- `npm test`: PASS — 9 Rust and 17 Playwright tests.
+- `npm run build`: PASS — release binary and `dist/site/` produced.
+- `node scripts/live-audit.mjs https://db-file-sync-safety.sociobot.in`: PASS — 4 normal routes at both viewports, zero Axe violations or console errors, all links live, keyboard/reduced-motion/privacy/zoom checks pass.
+- `/opt/fleet/lib/verify-url.sh <url> <temp-evidence-dir>`: PASS.
+- Real CLI WAL demo: PASS — raw copy blocked, integrity `ok`, restore verified, all generated files under its process-specific temp root.
+- Closed `journal_mode=PERSIST` probe: FAIL — exits after two seconds with “Close the app and try again” even though the app is already closed.
+
+## Findings and next steps
+
+`F-1-1` is blocking: implement a safe closed-persistent-journal snapshot or narrow the advertised journal-sidecar scope and provide a truthful recovery path. `F-1-2` through `F-1-8` cover unlisted or broader-than-tested privacy, isolation, JSON, overwrite, distribution, build, and release claims. `F-1-9` through `F-1-13` cover jargon, inaccurate transformation copy, two vague controls, and route metadata.
+
+Re-run the complete review after repairs. PASS requires no remaining blocking or minor finding and no untested public claim.
+
+---
+
+# Earlier handoff — DB File Sync Safety v0.1.2
 
 ## Independent verification `db-file-sync-safety-verify-5` — PASS
 
