@@ -366,6 +366,22 @@ test('@claim:github-release-cache requests GitHub release details and caches the
   expect(githubRequests).toHaveLength(2);
 });
 
+test('landing keeps the release lookup off the critical image path and skips below-fold rendering', async ({ page }) => {
+  let githubRequests = 0;
+  page.on('request', (request) => {
+    if (new URL(request.url()).origin === 'https://api.github.com') githubRequests += 1;
+  });
+  await page.route('**/hero-database.webp', async (route) => {
+    await new Promise((resolveDelay) => setTimeout(resolveDelay, 300));
+    await route.continue();
+  });
+
+  await page.goto('/', { waitUntil: 'domcontentloaded' });
+  await page.waitForTimeout(100);
+  expect(githubRequests).toBe(0);
+  await expect(page.locator('.band').first()).toHaveCSS('content-visibility', 'auto');
+});
+
 test('platform download avoids guessing Mac architecture and uses the neutral Linux archive', async ({ browser }) => {
   const release = {
     tag_name: 'v0.1.2',

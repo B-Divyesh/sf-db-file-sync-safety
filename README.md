@@ -82,12 +82,16 @@ Requirements: stable Rust, Node.js 22, and npm.
 ```sh
 npm ci
 npm test
+npm run typecheck
 npm run build
+npm run test:performance
 ```
 
 `npm test` runs Rust integration tests, builds the site, and runs browser claim and accessibility tests. Its 20-scenario regression covers SQLite databases with and without live WAL files.
 
 `npm run build` creates the release binary and writes the static site to `dist/site/`. The site can also be built alone with `npm run build:site`.
+
+`npm run typecheck` checks the TypeScript site source. `npm run test:performance` starts a local production preview and requires mobile Lighthouse performance of at least 90; set `PERFORMANCE_URL` to audit a deployed URL instead.
 
 ## Release and deploy
 

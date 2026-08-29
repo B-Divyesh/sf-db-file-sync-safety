@@ -1,57 +1,57 @@
-# Verification 8 status — FAIL (29 August 2026 UTC)
+# Repair 5 handoff — DB File Sync Safety
 
-Independent QA of commit `72ae6a740ab389e90b5ab5491e8983579bb4303f` at <https://db-file-sync-safety.sociobot.in> is **FAIL**. This overrides any earlier PASS handoff for release acceptance.
+**Completed:** 29 August 2026 UTC  
+**Work order:** `db-file-sync-safety-repair-5`  
+**Base reviewed:** `72ae6a740ab389e90b5ab5491e8983579bb4303f`
 
-- All 21 `.factory/claims.json` commands passed separately after `npm ci`; the full `npm test` passed (10 Rust tests, 29 Playwright tests).
-- `npm run build`, `cargo fmt --check`, strict `cargo clippy`, and `cargo package --locked --allow-dirty` passed. A clean extracted Linux artifact and the live `install.sh` installer both ran the JSON demo successfully after checksum verification.
-- The local candidate's static HTML, JS, CSS, and hero image matched the live deployment byte-for-byte. The cold first screen is plain, includes one-click sample data, and the demo, privacy, headers, 390px layout, keyboard focus, and axe checks passed.
-- **Release blocker:** valid production mobile Lighthouse scored **82 performance** (required ≥90), with **700 ms TBT**. Accessibility/best-practices/SEO were all 100; FCP 0.9 s, LCP 1.9 s, CLS 0.027. Reduce blocking work and rerun until performance is ≥90.
-- Low follow-up: no explicit TypeScript lint/type-check command is configured.
+## Repaired release blocker
 
-Full evidence and exact claim table: `.factory/verification-8.md`.
+Verification 8 reported a valid production mobile Lighthouse result of 82 performance and 700 ms total blocking time. I first reran its Chrome/Lighthouse-style audit against both the local production build and the live URL. This worker's repeatable runs were already 100/0 ms, so the exact 82/700 ms result could not be reproduced under this container's timing profile; raw reports are retained in `.factory/evidence/repair-5/lighthouse-local-before.json` and `lighthouse-live-before.json`.
 
-# Polish round 3 handoff — DB File Sync Safety
+The landing page nevertheless had avoidable first-view work. The repair:
 
-**Completed:** 29 August 2026 UTC
-**Work order:** `db-file-sync-safety-polish-3`
-**Base candidate:** `2f7bff8d9600ddcb3279537a3798c03b3897604d`
-**Repair commits:** `c11ca460b885ff5094fc49548318bd089280caa4`, `eae5c7db853f6d3d4b9e61a3d4df24c38549fd91`
-**Live URL:** <https://db-file-sync-safety.sociobot.in>
-**Result:** PASS — no outstanding review findings.
+- defers the below-fold GitHub release lookup until the page `load` event, after the LCP image, so its response parsing cannot compete with the first view;
+- uses `content-visibility: auto` for below-fold sections, with an intrinsic size, to skip initial layout/paint work;
+- preloads the one LCP hero image; and
+- adds a browser regression that holds the hero request and proves the GitHub request does not begin on the critical image path.
 
-## What changed
+`npm run test:performance` is now a pinned, repeatable production-preview mobile Lighthouse gate. It fails below 90. The report from this repair is `.factory/evidence/repair-5/lighthouse-mobile.json`: **Performance 100, Accessibility 100, Best Practices 100, SEO 100; FCP 1.4 s, LCP 1.4 s, TBT 0 ms, CLS 0.026; 87 KiB transfer.**
 
-- Closed F-3-1 by compacting the desktop hero only: a bounded 64px headline, shorter vertical spacing, and the same asymmetric database landscape. “Runs on your device,” “No telemetry,” and “Free under MIT” now fit before the fold at 1440×900, 1440×768, and 390×844.
-- Added the regression `the complete first-screen fact list is visible before scrolling at required viewports` and added 1440×768 to the production audit.
-- Revalidated the cumulative F-1 and F-2 repairs: actual CLI safety behavior, one-click isolated `?demo=1`, claim coverage, direct routing/focus, legal links, standalone 404 metadata/shell/targets, plain-language copy, and mobile layout all remain intact.
-- Updated the catalog description to: “Create verified SQLite snapshots before syncing a live database.” It is verb-first and 64 characters.
+An explicit strict TypeScript gate was also added: `npm run typecheck`.
 
-## How to run and verify
+## What was preserved
+
+The CLI safety behavior, the bundled four-note WAL demo, installer checksum rejection, release/package claims, isolated browser demo, touch targets, real HTTP 404, privacy behavior, keyboard routing, reduced motion, and existing product-specific visual system were not changed.
+
+## Verification performed
+
+From a clean `npm ci` install:
+
+- `npm test` — PASS: 10 Rust tests and 30 Playwright tests, including desktop/390px layout, touch targets, keyboard/focus, Axe, reduced-motion, privacy/storage, routes, and the performance-path regression.
+- All 21 exact commands in `.factory/claims.json` — PASS individually; full transcript: `.factory/evidence/repair-5/claim-matrix.log`.
+- `npm run typecheck` — PASS.
+- `npm run build` — PASS; writes `target/release/dbsync-safe` and `dist/site/`.
+- `cargo fmt --all -- --check` and `cargo clippy --all-targets --all-features -- -D warnings` — PASS.
+- `cargo package --locked --allow-dirty` — PASS.
+- Fresh consumer install from `target/package/db-file-sync-safety-0.1.3` — PASS; its JSON demo had `verified: true` and `raw_copy_safe: false`.
+- `npm run test:performance` — PASS; report named above.
+
+## Run and deploy
 
 ```sh
 npm ci
 npm test
+npm run typecheck
 npm run build
-node scripts/live-audit.mjs https://db-file-sync-safety.sociobot.in
+npm run test:performance
 ```
 
-The live build was deployed with the work-order static target:
+The static deployment target is unchanged:
 
 ```sh
-npm ci && npm run build:site
 swa deploy dist/site --swa-config-location site/public --resource-group sociobot --app-name sf-db-file-sync-safety --env production
 ```
 
-## Exact evidence
+## Known gaps
 
-- Fresh shallow clone after `npm ci`: all 21 individual `claims.json` commands pass. Full transcript: `.factory/evidence/polish-3/clean-clone-claims.log`.
-- Local: `npm test` passes 10 Rust integration tests and 29 Playwright tests (`.factory/evidence/polish-3/npm-test.log`). `npm run build` writes `dist/site/`; formatting, strict Clippy, `cargo package --locked --allow-dirty`, and diff checks pass.
-- Live: `live-audit.json` records five normal routes plus production HTTP 404 at 1440×900, 1440×768, and 390×844. It reports zero Axe violations, console errors, overflow, undersized targets, dead links, or demo privacy/storage leaks.
-- First-screen cold measurements: the fact bottoms are 706.5px at 1440×900, 640.5px at 1440×768, and 676.6px at 390×844. Screenshots: `.factory/evidence/polish-3/live-home-1440x768.png` and `live-home-390x844.png`.
-- Factory verifier reports are in `.factory/evidence/polish-3/verify-home/verify.json` and `verify-demo/verify.json`.
-- Lighthouse mobile report: `.factory/evidence/polish-3/lighthouse-mobile.json` — Performance 100, Accessibility 100, Best Practices 100, SEO 100; FCP 0.8s, LCP 1.7s, CLS 0.026, TBT 20ms, transfer 86KiB.
-- Full finding-by-finding closure: `.factory/polish-3.md`.
-
-## Known gaps and next steps
-
-None. The CLI continues to state its real limits: SQLite only, no sync engine or conflict resolver, close source apps when possible, and keep an independent backup before `--force`.
+None. The CLI remains deliberately SQLite-only and continues to advise closing source applications and keeping an independent backup before `--force`.

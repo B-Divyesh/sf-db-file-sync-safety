@@ -223,7 +223,7 @@ function render(shouldFocus = false): void {
   document.querySelector<HTMLMetaElement>('meta[name="robots"]')!.content = meta.noindex ? 'noindex, nofollow' : 'index, follow';
   app.innerHTML = route === '/' ? landing() : route === '/demo' ? demo() : route === '/privacy' ? privacy() : route === '/terms' ? terms() : notFound();
   bindEvents();
-  if (route === '/') void loadRelease();
+  if (route === '/') scheduleReleaseLoad();
   if (shouldFocus) {
     const heading = document.querySelector<HTMLHeadingElement>('h1')!;
     heading.focus();
@@ -257,6 +257,14 @@ function platform(): { label: string; asset: RegExp | null } {
   if (value.includes('windows')) return { label: 'Windows x64', asset: /windows.*x86_64.*\.zip$/i };
   if (value.includes('mac')) return { label: 'macOS — Apple silicon or Intel', asset: null };
   return { label: 'Linux x64', asset: /linux.*x86_64.*\.tar\.gz$/i };
+}
+
+function scheduleReleaseLoad(): void {
+  // The release picker is below the fold. Waiting until the LCP image has
+  // loaded keeps its network response and JSON parsing out of the first view.
+  const start = () => window.setTimeout(() => { void loadRelease(); }, 0);
+  if (document.readyState === 'complete') start();
+  else window.addEventListener('load', start, { once: true });
 }
 
 async function loadRelease(): Promise<void> {
