@@ -6,16 +6,16 @@ class DbsyncSafe < Formula
   on_macos do
     if Hardware::CPU.arm?
       url "https://github.com/B-Divyesh/sf-db-file-sync-safety/releases/download/v0.1.3/dbsync-safe-macos-aarch64.tar.gz"
-      sha256 "54b4ac4478d00568e65487c303e74a8838d0738bc09494c5c0c239e282075108"
+      sha256 "06aa3b7f6d4a3e91a8bff1a0629ba7c20540d68132a07f28bac0cb8e7a59d853"
     else
       url "https://github.com/B-Divyesh/sf-db-file-sync-safety/releases/download/v0.1.3/dbsync-safe-macos-x86_64.tar.gz"
-      sha256 "9c5febe8573c78a695b8095430f4b7cb7fc88af08e11a98fe6d45ce55cf2387a"
+      sha256 "3cea06a5c9480d8f0cbbf661782eff862f662f7c3ad41f4d6c7a7a16c6206e6d"
     end
   end
 
   on_linux do
     url "https://github.com/B-Divyesh/sf-db-file-sync-safety/releases/download/v0.1.3/dbsync-safe-linux-x86_64.tar.gz"
-    sha256 "af8b4a7627a6b69dcc123524cdb330fcd4e37841e45c034757011bc7534625e7"
+    sha256 "f341ae5da98999cd41618d572b4c17042149df90dbc20a168e89865c8727fb91"
   end
 
   def install

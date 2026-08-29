@@ -10,7 +10,7 @@ InstallerType: zip
 Installers:
   - Architecture: x64
     InstallerUrl: https://github.com/B-Divyesh/sf-db-file-sync-safety/releases/download/v0.1.3/dbsync-safe-windows-x86_64.zip
-    InstallerSha256: 7B70A534EE462E3C67E82C2775F091CAF39159B9DC7E2600122BE7E250912211
+    InstallerSha256: A38446F463D0C3AF80E3F907694249D2B46999E1A501EC85D0307CBDAD57E489
     NestedInstallerType: portable
     NestedInstallerFiles:
       - RelativeFilePath: dbsync-safe.exe
