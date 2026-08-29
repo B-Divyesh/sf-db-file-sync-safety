@@ -1,0 +1,58 @@
+{
+  "demo": true,
+  "manifest": {
+    "created_unix_seconds": 1788001028,
+    "entries": [
+      {
+        "bytes": 8192,
+        "integrity_check": "ok",
+        "sha256": "e63e4a1bc5dc70aeeb8cfebbe2280f855ad040404fabdde76bc9e2392f4d81f8",
+        "snapshot_path": "databases/field-notes.sqlite",
+        "source_relative_path": "field-notes.sqlite",
+        "source_sidecars_seen": [
+          "field-notes.sqlite-wal",
+          "field-notes.sqlite-shm"
+        ]
+      }
+    ],
+    "format": "dbsync-safe/v1",
+    "limits": [
+      "SQLite only. Other database formats are ignored.",
+      "A successful snapshot does not make simultaneous application use safe.",
+      "OS and application locking behavior varies; close the application when possible."
+    ],
+    "procedure": [
+      "Sync this packet directory, not the live source database or its sidecars.",
+      "On the other device, run `dbsync-safe restore <packet> --target <folder>`.",
+      "Open the restored database only after verification succeeds."
+    ],
+    "source_root": "/tmp/dbsync-safe-demo-16971/sync-folder",
+    "tool_version": "0.1.3"
+  },
+  "ok": true,
+  "restore": {
+    "restored": [
+      "/tmp/dbsync-safe-demo-16971/restored/field-notes.sqlite"
+    ],
+    "target": "/tmp/dbsync-safe-demo-16971/restored",
+    "verified": true
+  },
+  "scan": {
+    "databases": [
+      {
+        "path": "field-notes.sqlite",
+        "reason": "Found live SQLite sidecar files: field-notes.sqlite-wal, field-notes.sqlite-shm. Do not copy this bundle raw.",
+        "sidecars": [
+          "field-notes.sqlite-wal",
+          "field-notes.sqlite-shm"
+        ],
+        "state": "snapshot_required"
+      }
+    ],
+    "next_step": "Run `dbsync-safe snapshot <path> --output <packet>` and sync only the packet.",
+    "raw_copy_safe": false,
+    "root": "/tmp/dbsync-safe-demo-16971/sync-folder",
+    "sqlite_only": true
+  },
+  "temporary_root": "/tmp/dbsync-safe-demo-16971"
+}

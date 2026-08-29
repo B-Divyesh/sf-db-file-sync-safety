@@ -1,0 +1,104 @@
+[
+  {
+    "file": "index.html",
+    "status": 200,
+    "bytes": {
+      "local": 2165,
+      "live": 2165
+    },
+    "match": true,
+    "local_sha256": "3706d53867f1546f80edd7ea5e26f9d294f4a918bb399008959a55089c5dfceb",
+    "live_sha256": "3706d53867f1546f80edd7ea5e26f9d294f4a918bb399008959a55089c5dfceb",
+    "cache": "public, must-revalidate, max-age=30",
+    "contentSecurityPolicy": "default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; connect-src 'self' https://api.github.com; font-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'",
+    "hsts": "max-age=10886400; includeSubDomains; preload",
+    "nosniff": "nosniff",
+    "referrer": "strict-origin-when-cross-origin",
+    "permissions": "camera=(), microphone=(), geolocation=()"
+  },
+  {
+    "file": "assets/index-BURSQoIL.js",
+    "status": 200,
+    "bytes": {
+      "local": 16238,
+      "live": 16238
+    },
+    "match": true,
+    "local_sha256": "ab214d71569d6ad90c639c6d2b409319df152bdd52a48a201607352fa73c451c",
+    "live_sha256": "ab214d71569d6ad90c639c6d2b409319df152bdd52a48a201607352fa73c451c",
+    "cache": "public, max-age=31536000, immutable",
+    "contentSecurityPolicy": "default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; connect-src 'self' https://api.github.com; font-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'",
+    "hsts": "max-age=10886400; includeSubDomains; preload",
+    "nosniff": "nosniff",
+    "referrer": "strict-origin-when-cross-origin",
+    "permissions": "camera=(), microphone=(), geolocation=()"
+  },
+  {
+    "file": "assets/index-Dt3pJBWW.css",
+    "status": 200,
+    "bytes": {
+      "local": 13308,
+      "live": 13308
+    },
+    "match": true,
+    "local_sha256": "c91b0f037700a98ad0fe2f2f02d00b6c8827f450ccd17b65e211a888f35c1b38",
+    "live_sha256": "c91b0f037700a98ad0fe2f2f02d00b6c8827f450ccd17b65e211a888f35c1b38",
+    "cache": "public, max-age=31536000, immutable",
+    "contentSecurityPolicy": "default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; connect-src 'self' https://api.github.com; font-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'",
+    "hsts": "max-age=10886400; includeSubDomains; preload",
+    "nosniff": "nosniff",
+    "referrer": "strict-origin-when-cross-origin",
+    "permissions": "camera=(), microphone=(), geolocation=()"
+  },
+  {
+    "file": "hero-database.webp",
+    "status": 200,
+    "bytes": {
+      "local": 73194,
+      "live": 73194
+    },
+    "match": true,
+    "local_sha256": "83424c8f3662842245432fa77a8bd98a38522c6c06c4fa4392eded6ba9a05513",
+    "live_sha256": "83424c8f3662842245432fa77a8bd98a38522c6c06c4fa4392eded6ba9a05513",
+    "cache": "public, must-revalidate, max-age=30",
+    "contentSecurityPolicy": "default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; connect-src 'self' https://api.github.com; font-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'",
+    "hsts": "max-age=10886400; includeSubDomains; preload",
+    "nosniff": "nosniff",
+    "referrer": "strict-origin-when-cross-origin",
+    "permissions": "camera=(), microphone=(), geolocation=()"
+  },
+  {
+    "file": "404.html",
+    "status": 200,
+    "bytes": {
+      "local": 2756,
+      "live": 2756
+    },
+    "match": true,
+    "local_sha256": "fa28daf86c37ac268cd2a174ff50b548fd7fbd484f24644a41e0e2b538520ecb",
+    "live_sha256": "fa28daf86c37ac268cd2a174ff50b548fd7fbd484f24644a41e0e2b538520ecb",
+    "cache": "public, must-revalidate, max-age=30",
+    "contentSecurityPolicy": "default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; connect-src 'self' https://api.github.com; font-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'",
+    "hsts": "max-age=10886400; includeSubDomains; preload",
+    "nosniff": "nosniff",
+    "referrer": "strict-origin-when-cross-origin",
+    "permissions": "camera=(), microphone=(), geolocation=()"
+  },
+  {
+    "file": "staticwebapp.config.json",
+    "status": 404,
+    "bytes": {
+      "local": 983,
+      "live": 2756
+    },
+    "match": false,
+    "local_sha256": "d3869b0a861e9ab7250962c63fd4ad66217b5ab1ac4b20e3345d7f2da00e2940",
+    "live_sha256": "fa28daf86c37ac268cd2a174ff50b548fd7fbd484f24644a41e0e2b538520ecb",
+    "cache": "public, must-revalidate, max-age=30",
+    "contentSecurityPolicy": "default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; connect-src 'self' https://api.github.com; font-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'",
+    "hsts": "max-age=10886400; includeSubDomains; preload",
+    "nosniff": "nosniff",
+    "referrer": "strict-origin-when-cross-origin",
+    "permissions": "camera=(), microphone=(), geolocation=()"
+  }
+]

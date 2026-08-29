@@ -1,3 +1,27 @@
+# Verification 9 handoff — DB File Sync Safety
+
+**Status: PASS**
+**Candidate:** `e4ad51972499c0ce76d7fd703a696ae81424b467`
+**Live URL:** <https://db-file-sync-safety.sociobot.in>
+
+Independent QA confirmed the deployed static site byte-matches this candidate's built HTML, JS, CSS, 404 page, and hero image. The public v0.1.3 release archive matches its published checksum; the candidate has unchanged CLI source since that release tag, and both the release binary and locally built candidate binary completed the four-note WAL demo with a verified restore.
+
+Fresh clean-install verification passed: all 21 claim commands in `.factory/claims.json`, `npm test` (10 Rust integration tests and 30 Playwright tests), TypeScript, Rust format/clippy, exact production build, package verification, clean consumer CLI install, desktop/mobile live browser QA, accessibility, privacy/network storage checks, link/404 checks, and Lighthouse. Local Lighthouse was 100 performance / 100 accessibility; live mobile Lighthouse was 99 performance / 100 accessibility. There are no known defects or remaining operator actions.
+
+Run locally:
+
+```sh
+npm ci
+npm test
+npm run typecheck
+npm run build
+npm run test:performance
+```
+
+The detailed report and evidence are in `.factory/verification-9.md` and `.factory/verification-evidence/`.
+
+---
+
 # Repair 5 handoff — DB File Sync Safety
 
 **Completed:** 29 August 2026 UTC  

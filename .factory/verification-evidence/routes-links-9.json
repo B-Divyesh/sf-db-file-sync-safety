@@ -1,0 +1,66 @@
+{
+  "missing": {
+    "status": 404,
+    "title": "Page not found — DB File Sync Safety",
+    "h1": "Page not found",
+    "robots": "noindex, nofollow"
+  },
+  "links": [
+    {
+      "href": "https://db-file-sync-safety.sociobot.in/#main",
+      "status": 200
+    },
+    {
+      "href": "https://db-file-sync-safety.sociobot.in/",
+      "status": 200
+    },
+    {
+      "href": "https://db-file-sync-safety.sociobot.in/demo",
+      "status": 200
+    },
+    {
+      "href": "https://db-file-sync-safety.sociobot.in/#install",
+      "status": 200
+    },
+    {
+      "href": "https://db-file-sync-safety.sociobot.in/privacy",
+      "status": 200
+    },
+    {
+      "href": "https://db-file-sync-safety.sociobot.in/?demo=1",
+      "status": 200
+    },
+    {
+      "href": "https://github.com/B-Divyesh/sf-db-file-sync-safety/releases/download/v0.1.3/dbsync-safe-linux-x86_64.tar.gz",
+      "status": 200
+    },
+    {
+      "href": "https://db-file-sync-safety.sociobot.in/terms",
+      "status": 200
+    },
+    {
+      "href": "https://sociobot.in/",
+      "status": 200
+    },
+    {
+      "href": "https://db-file-sync-safety.sociobot.in/?demo=1#main",
+      "status": 200
+    },
+    {
+      "href": "https://db-file-sync-safety.sociobot.in/demo#main",
+      "status": 200
+    },
+    {
+      "href": "https://db-file-sync-safety.sociobot.in/privacy#main",
+      "status": 200
+    },
+    {
+      "href": "https://github.com/B-Divyesh/sf-db-file-sync-safety",
+      "status": 200
+    },
+    {
+      "href": "https://db-file-sync-safety.sociobot.in/terms#main",
+      "status": 200
+    }
+  ]
+}

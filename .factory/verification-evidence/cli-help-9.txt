@@ -1,0 +1,17 @@
+Make verified SQLite snapshots before file sync
+
+Usage: dbsync-safe [OPTIONS] <COMMAND>
+
+Commands:
+  scan      Find SQLite files and live sidecars without changing them
+  guard     Exit 2 when a path contains any SQLite database that needs a snapshot
+  snapshot  Create a consistent, checksummed packet without opening the source in SQLite
+  verify    Check every checksum and run SQLite integrity checks
+  restore   Verify a packet, restore it, then verify each restored database
+  demo      Run the full workflow on bundled sample data in a temporary folder
+  help      Print this message or the help of the given subcommand(s)
+
+Options:
+      --json     Print machine-readable JSON
+  -h, --help     Print help
+  -V, --version  Print version

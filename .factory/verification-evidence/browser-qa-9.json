@@ -1,0 +1,151 @@
+{
+  "results": [
+    {
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "route": "/",
+      "status": 200,
+      "h1": 1,
+      "main": 1,
+      "overflow": false,
+      "axe_serious_critical": [],
+      "axe_all": [],
+      "small_targets": [],
+      "errors": []
+    },
+    {
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "route": "/demo",
+      "status": 200,
+      "h1": 1,
+      "main": 1,
+      "overflow": false,
+      "axe_serious_critical": [],
+      "axe_all": [],
+      "small_targets": [],
+      "errors": []
+    },
+    {
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "route": "/privacy",
+      "status": 200,
+      "h1": 1,
+      "main": 1,
+      "overflow": false,
+      "axe_serious_critical": [],
+      "axe_all": [],
+      "small_targets": [],
+      "errors": []
+    },
+    {
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "route": "/terms",
+      "status": 200,
+      "h1": 1,
+      "main": 1,
+      "overflow": false,
+      "axe_serious_critical": [],
+      "axe_all": [],
+      "small_targets": [],
+      "errors": []
+    },
+    {
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "route": "/",
+      "status": 200,
+      "h1": 1,
+      "main": 1,
+      "overflow": false,
+      "axe_serious_critical": [],
+      "axe_all": [],
+      "small_targets": [],
+      "errors": []
+    },
+    {
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "route": "/demo",
+      "status": 200,
+      "h1": 1,
+      "main": 1,
+      "overflow": false,
+      "axe_serious_critical": [],
+      "axe_all": [],
+      "small_targets": [],
+      "errors": []
+    },
+    {
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "route": "/privacy",
+      "status": 200,
+      "h1": 1,
+      "main": 1,
+      "overflow": false,
+      "axe_serious_critical": [],
+      "axe_all": [],
+      "small_targets": [],
+      "errors": []
+    },
+    {
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "route": "/terms",
+      "status": 200,
+      "h1": 1,
+      "main": 1,
+      "overflow": false,
+      "axe_serious_critical": [],
+      "axe_all": [],
+      "small_targets": [],
+      "errors": []
+    }
+  ],
+  "demo": {
+    "url": "https://db-file-sync-safety.sociobot.in/?demo=1",
+    "h1": "Run the SQLite safety check",
+    "banner": 1,
+    "reset": 1,
+    "startReal": 1,
+    "requests": [
+      "https://db-file-sync-safety.sociobot.in/?demo=1",
+      "https://db-file-sync-safety.sociobot.in/hero-database.webp",
+      "https://db-file-sync-safety.sociobot.in/assets/index-BURSQoIL.js",
+      "https://db-file-sync-safety.sociobot.in/assets/index-Dt3pJBWW.css"
+    ],
+    "state": {
+      "local": [],
+      "session": [],
+      "cookies": "",
+      "workers": 0
+    }
+  },
+  "keyboard": {
+    "firstFocus": "Skip to main content",
+    "headingFocused": true
+  },
+  "reduced": {
+    "sweep": "none",
+    "duration": "1e-05s"
+  }
+}

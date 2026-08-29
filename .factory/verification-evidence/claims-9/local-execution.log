@@ -1,0 +1,71 @@
+
+> db-file-sync-safety-site@0.1.3 test
+> npm run test:rust && npm run build:site && playwright test --grep @claim:local-execution
+
+
+> db-file-sync-safety-site@0.1.3 test:rust
+> cargo test
+
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.05s
+     Running unittests src/lib.rs (target/debug/deps/db_file_sync_safety-6f8ff38c1b5fc589)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running unittests src/main.rs (target/debug/deps/dbsync_safe-198e5c03c5b88fd4)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/safety.rs (target/debug/deps/safety-ca7d0cb6847421b3)
+
+running 10 tests
+test active_wal_snapshot_preserves_existing_sidecar_bytes ... ok
+test closed_persistent_journal_snapshot_preserves_source_and_restores ... ok
+test closed_wal_database_snapshot_preserves_every_source_path_and_byte ... ok
+test detects_database_without_a_db_extension ... ok
+test ignores_non_sqlite_files_and_reports_empty_state ... ok
+test locked_database_fails_within_a_bound_and_removes_staging_files ... ok
+test readonly_closed_wal_source_snapshot_preserves_exact_tree ... ok
+test refuses_to_replace_a_target_by_default ... ok
+test rejects_tampered_packet_before_restore ... ok
+test twenty_sqlite_scenarios_block_raw_copy_and_restore ... ok
+
+test result: ok. 10 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 3.99s
+
+   Doc-tests db_file_sync_safety
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+
+> db-file-sync-safety-site@0.1.3 build:site
+> vite build
+
+vite v7.3.6 building client environment for production...
+transforming...
+✓ 4 modules transformed.
+rendering chunks...
+computing gzip size...
+../dist/site/index.html                  2.17 kB │ gzip: 0.78 kB
+../dist/site/assets/index-Dt3pJBWW.css  13.31 kB │ gzip: 3.87 kB
+../dist/site/assets/index-BURSQoIL.js   16.24 kB │ gzip: 5.57 kB │ map: 24.29 kB
+✓ built in 191ms
+[WebServer] (node:12373) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:12386) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+(node:12359) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 1 test using 1 worker
+(node:12404) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:12404) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:12404) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+·
+  1 passed (2.8s)
