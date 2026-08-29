@@ -1,10 +1,10 @@
 # Landing copy audit
 
-Audited on 28 August 2026. Counts treat hyphenated terms, paths, and version strings as one word. UI labels and terminal rows are included because visitors read them as product copy.
+Audited on 29 August 2026. Counts treat hyphenated terms, paths, and version strings as one word. UI labels and terminal rows are included because visitors read them as product copy.
 
 | Words | Copy |
 | ---: | --- |
-| 3 | SQLite preflight · v0.1.1 |
+| 3 | SQLite preflight · v0.1.2 |
 | 6 | Make SQLite snapshots safe to sync |
 | 15 | For developers syncing app folders, it blocks raw database copies and creates a verified packet. |
 | 5 | Try it with sample data |
@@ -31,7 +31,7 @@ Audited on 28 August 2026. Counts treat hyphenated terms, paths, and version str
 | 4 | Scan the source folder |
 | 10 | Find SQLite headers and their WAL, SHM, or journal sidecars. |
 | 4 | Make the snapshot packet |
-| 11 | Use SQLite’s backup API, then write checksums and a restore procedure. |
+| 11 | Copy the bundle privately, then use SQLite’s backup API and write checksums. |
 | 5 | Restore on the other device |
 | 10 | Check the packet before copying, then run SQLite’s integrity check. |
 | 1 | Scope |
@@ -52,17 +52,19 @@ Audited on 28 August 2026. Counts treat hyphenated terms, paths, and version str
 | 1 | Install |
 | 3 | Install one binary |
 | 11 | Choose a package, or use the installer for your current system. |
-| 7 | Installers verify SHA-256 before changing your path. |
+| 8 | The shell installer verifies SHA-256 before installation. |
 | 2 | Detected system |
 | 3 | Checking your system… |
 | 2 | Checking the latest release… |
 | 4 | Download for [detected system] |
+| 4 | Choose a macOS download |
+| 7 | v0.1.2 has Apple silicon and Intel packages. |
 | 4 | Downloads are being published. |
 | 7 | The release page has the current status. |
 | 3 | macOS or Linux |
 | 2 | Windows PowerShell |
 | 3 | Package manager options |
-| 10 | The macOS package and Windows binary are unsigned in v0.1.1. |
+| 10 | The macOS package and Windows binary are unsigned in v0.1.2. |
 | 6 | Verified SQLite packets for file sync. |
 | 4 | Built by Param Factory |
 

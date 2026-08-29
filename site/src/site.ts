@@ -37,7 +37,7 @@ function shell(content: string, route: Route): string {
     <footer class="site-footer">
       <p><span class="signal-dot" aria-hidden="true"></span> Verified SQLite packets for file sync.</p>
       <nav aria-label="Footer navigation"><a href="/privacy" data-link>Privacy</a><a href="/terms" data-link>Terms</a><a href="https://sociobot.in" rel="external">Built by Param Factory <span class="sr-only">(external)</span></a></nav>
-      <p class="build">v0.1.1 · build 002</p>
+      <p class="build">v0.1.2 · build 003</p>
     </footer>`;
 }
 
@@ -59,7 +59,7 @@ function landing(): string {
   return shell(`<main id="main">
     <section class="hero" aria-labelledby="page-title">
       <div class="hero-copy">
-        <p class="eyebrow">SQLite preflight · v0.1.1</p>
+        <p class="eyebrow">SQLite preflight · v0.1.2</p>
         <h1 id="page-title" tabindex="-1">Make SQLite snapshots safe to sync</h1>
         <p class="lede">For developers syncing app folders, it blocks raw database copies and creates a verified packet.</p>
         <div class="hero-actions">
@@ -96,7 +96,7 @@ function landing(): string {
         <h2 id="workflow-heading">Replace raw copying with three checks</h2>
         <ol class="steps">
           <li><span>1</span><div><h3>Scan the source folder</h3><p>Find SQLite headers and their WAL, SHM, or journal sidecars.</p><code>dbsync-safe scan ~/Sync/App</code></div></li>
-          <li><span>2</span><div><h3>Make the snapshot packet</h3><p>Use SQLite’s backup API, then write checksums and a restore procedure.</p><code>dbsync-safe snapshot ~/Sync/App -o ~/ToSync</code></div></li>
+          <li><span>2</span><div><h3>Make the snapshot packet</h3><p>Copy the bundle privately, then use SQLite’s backup API and write checksums.</p><code>dbsync-safe snapshot ~/Sync/App -o ~/ToSync</code></div></li>
           <li><span>3</span><div><h3>Restore on the other device</h3><p>Check the packet before copying, then run SQLite’s integrity check.</p><code>dbsync-safe restore ~/ToSync -t ~/AppData</code></div></li>
         </ol>
       </div>
@@ -118,7 +118,7 @@ function landing(): string {
       <div class="section-label"><span>04</span><p>Install</p></div>
       <div>
         <h2 id="install-heading">Install one binary</h2>
-        <p class="measure">Choose a package, or use the installer for your current system. Installers verify SHA-256 before changing your path.</p>
+        <p class="measure">Choose a package, or use the installer for your current system. The shell installer verifies SHA-256 before installation.</p>
         <div class="install-panel">
           <div><p class="os-label">Detected system</p><p class="detected-platform">Checking your system…</p></div>
           <a class="button primary platform-download" href="${releasePage}">View downloads</a>
@@ -128,7 +128,7 @@ function landing(): string {
           <div><p>macOS or Linux</p><code>curl -fsSL https://db-file-sync-safety.sociobot.in/install.sh | sh</code></div>
           <div><p>Windows PowerShell</p><code>irm https://db-file-sync-safety.sociobot.in/install.ps1 | iex</code></div>
         </div>
-        <details><summary>Package manager options</summary><div class="package-list"><code>brew install B-Divyesh/db-file-sync-safety/dbsync-safe</code><code>scoop install https://raw.githubusercontent.com/B-Divyesh/sf-db-file-sync-safety/main/scoop-bucket/dbsync-safe.json</code><p>The macOS package and Windows binary are unsigned in v0.1.1.</p></div></details>
+        <details><summary>Package manager options</summary><div class="package-list"><code>brew install B-Divyesh/db-file-sync-safety/dbsync-safe</code><code>scoop install https://raw.githubusercontent.com/B-Divyesh/sf-db-file-sync-safety/main/scoop-bucket/dbsync-safe.json</code><p>The macOS package and Windows binary are unsigned in v0.1.2.</p></div></details>
       </div>
     </section>
   </main>`, '/');
@@ -153,7 +153,7 @@ function privacy(): string {
     <p class="eyebrow">Policy · effective 28 August 2026</p>
     <h1 id="page-title" tabindex="-1">Your database stays on your device</h1>
     <p class="lede">The CLI has no account, analytics, ads, or telemetry.</p>
-    <section><h2>What the CLI reads</h2><p>It reads paths you give it. It opens SQLite source files in read-only mode.</p><p>Snapshots and manifests go only to the output folder you choose.</p></section>
+    <section><h2>What the CLI reads</h2><p>It reads database and sidecar bytes from paths you give it. SQLite opens only a temporary working copy.</p><p>Read-only source folders stay unchanged. Snapshots and manifests go only to the output folder you choose.</p></section>
     <section><h2>What this site stores</h2><p>The site may cache public GitHub release details for one hour. The demo does not save any data.</p></section>
     <section><h2>Network requests</h2><p>The landing page asks GitHub for the latest public release. The CLI makes no network requests.</p></section>
     <section><h2>Questions</h2><p>Open an issue in the <a href="https://github.com/${repo}">public repository <span class="sr-only">(external)</span></a>.</p></section>
@@ -220,14 +220,11 @@ function bindEvents(): void {
   });
 }
 
-function platform(): { label: string; asset: RegExp } {
+function platform(): { label: string; asset: RegExp | null } {
   const value = navigator.userAgent.toLowerCase();
   if (value.includes('windows')) return { label: 'Windows x64', asset: /windows.*x86_64.*\.zip$/i };
-  if (value.includes('mac')) {
-    const arm = navigator.platform.toLowerCase().includes('arm');
-    return { label: arm ? 'macOS Apple silicon' : 'macOS Intel', asset: new RegExp(`macos.*${arm ? 'aarch64' : 'x86_64'}.*\\.(tar\\.gz|pkg)$`, 'i') };
-  }
-  return { label: 'Linux x64', asset: /linux.*x86_64.*\.(tar\.gz|deb)$/i };
+  if (value.includes('mac')) return { label: 'macOS — Apple silicon or Intel', asset: null };
+  return { label: 'Linux x64', asset: /linux.*x86_64.*\.tar\.gz$/i };
 }
 
 async function loadRelease(): Promise<void> {
@@ -238,7 +235,15 @@ async function loadRelease(): Promise<void> {
     const cached = localStorage.getItem('dbsync-safe:release');
     const parsed = cached ? JSON.parse(cached) as { expires: number; data: Release } : null;
     const release = parsed && parsed.expires > Date.now() ? parsed.data : await fetchRelease();
-    const asset = release.assets.find((item) => detected.asset.test(item.name));
+    if (!detected.asset) {
+      document.querySelectorAll<HTMLAnchorElement>('.platform-download').forEach((link) => {
+        link.href = releasePage;
+        link.textContent = 'Choose a macOS download';
+      });
+      if (state) state.textContent = `${release.tag_name} has Apple silicon and Intel packages.`;
+      return;
+    }
+    const asset = release.assets.find((item) => detected.asset!.test(item.name));
     if (!asset) throw new Error('platform asset not published');
     document.querySelectorAll<HTMLAnchorElement>('.platform-download').forEach((link) => {
       link.href = asset.browser_download_url;

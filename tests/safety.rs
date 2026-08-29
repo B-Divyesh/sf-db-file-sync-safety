@@ -1,6 +1,6 @@
 use db_file_sync_safety::{create_snapshot, restore_packet, scan, verify_packet, SafetyState};
 use rusqlite::Connection;
-use std::{fs, path::Path, time::Instant};
+use std::{collections::BTreeMap, fs, path::Path, time::Instant};
 use tempfile::tempdir;
 
 fn database(path: &Path, wal: bool, rows: usize) -> Connection {
@@ -22,6 +22,53 @@ fn database(path: &Path, wal: bool, rows: usize) -> Connection {
             .unwrap();
     }
     connection
+}
+
+#[derive(Debug, PartialEq, Eq)]
+struct TreeEntry {
+    bytes: Vec<u8>,
+    readonly: bool,
+}
+
+fn exact_tree(root: &Path) -> BTreeMap<String, TreeEntry> {
+    fn visit(root: &Path, directory: &Path, entries: &mut BTreeMap<String, TreeEntry>) {
+        let mut children = fs::read_dir(directory)
+            .unwrap()
+            .map(|entry| entry.unwrap())
+            .collect::<Vec<_>>();
+        children.sort_by_key(|entry| entry.file_name());
+        for child in children {
+            let path = child.path();
+            let relative = path
+                .strip_prefix(root)
+                .unwrap()
+                .to_string_lossy()
+                .to_string();
+            let kind = child.file_type().unwrap();
+            if kind.is_dir() {
+                entries.insert(
+                    format!("{relative}/"),
+                    TreeEntry {
+                        bytes: Vec::new(),
+                        readonly: fs::metadata(&path).unwrap().permissions().readonly(),
+                    },
+                );
+                visit(root, &path, entries);
+            } else if kind.is_file() {
+                entries.insert(
+                    relative,
+                    TreeEntry {
+                        bytes: fs::read(&path).unwrap(),
+                        readonly: fs::metadata(&path).unwrap().permissions().readonly(),
+                    },
+                );
+            }
+        }
+    }
+
+    let mut entries = BTreeMap::new();
+    visit(root, root, &mut entries);
+    entries
 }
 
 #[test]
@@ -120,6 +167,9 @@ fn locked_database_fails_within_a_bound_and_removes_staging_files() {
     fs::create_dir(&source).unwrap();
     let connection = database(&source.join("locked.sqlite"), false, 1);
     connection.execute_batch("BEGIN EXCLUSIVE;").unwrap();
+    connection
+        .execute("INSERT INTO items(value) VALUES ('uncommitted')", [])
+        .unwrap();
     let packet = temp.path().join("packet");
 
     let started = Instant::now();
@@ -131,4 +181,75 @@ fn locked_database_fails_within_a_bound_and_removes_staging_files() {
     assert!(!packet
         .with_extension(format!("partial-{}", std::process::id()))
         .exists());
+}
+
+#[test]
+fn closed_wal_database_snapshot_preserves_every_source_path_and_byte() {
+    let temp = tempdir().unwrap();
+    let source = temp.path().join("source");
+    fs::create_dir(&source).unwrap();
+    let database_path = source.join("closed.sqlite");
+    let connection = database(&database_path, true, 4);
+    drop(connection);
+    assert_eq!(
+        fs::read_dir(&source).unwrap().count(),
+        1,
+        "the closed WAL database must begin without sidecars"
+    );
+
+    let before = exact_tree(&source);
+    let packet = temp.path().join("packet");
+    create_snapshot(&source, &packet).unwrap();
+    let after = exact_tree(&source);
+
+    assert_eq!(after, before, "snapshot changed the source directory tree");
+    let restored = temp.path().join("restored");
+    restore_packet(&packet, &restored, false).unwrap();
+    let restored_connection = Connection::open(restored.join("closed.sqlite")).unwrap();
+    let count: usize = restored_connection
+        .query_row("SELECT count(*) FROM items", [], |row| row.get(0))
+        .unwrap();
+    assert_eq!(count, 4);
+}
+
+#[cfg(unix)]
+#[test]
+fn readonly_closed_wal_source_snapshot_preserves_exact_tree() {
+    use std::os::unix::fs::PermissionsExt;
+
+    let temp = tempdir().unwrap();
+    let source = temp.path().join("readonly-source");
+    fs::create_dir(&source).unwrap();
+    let database_path = source.join("closed.sqlite");
+    let connection = database(&database_path, true, 3);
+    drop(connection);
+    fs::set_permissions(&database_path, fs::Permissions::from_mode(0o444)).unwrap();
+    fs::set_permissions(&source, fs::Permissions::from_mode(0o555)).unwrap();
+
+    let before = exact_tree(&source);
+    let packet = temp.path().join("readonly-packet");
+    create_snapshot(&source, &packet).unwrap();
+    let after = exact_tree(&source);
+
+    assert_eq!(after, before, "snapshot changed the read-only source tree");
+    verify_packet(&packet).unwrap();
+}
+
+#[test]
+fn active_wal_snapshot_preserves_existing_sidecar_bytes() {
+    let temp = tempdir().unwrap();
+    let source = temp.path().join("source");
+    fs::create_dir(&source).unwrap();
+    let database_path = source.join("active.sqlite");
+    let connection = database(&database_path, true, 5);
+    assert!(source.join("active.sqlite-wal").exists());
+    assert!(source.join("active.sqlite-shm").exists());
+
+    let before = exact_tree(&source);
+    let packet = temp.path().join("packet");
+    create_snapshot(&source, &packet).unwrap();
+    let after = exact_tree(&source);
+
+    assert_eq!(after, before, "snapshot changed active WAL sidecars");
+    drop(connection);
 }

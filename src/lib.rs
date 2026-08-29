@@ -287,11 +287,58 @@ pub fn restore_packet(packet: &Path, target: &Path, force: bool) -> Result<Resto
 }
 
 fn backup_database(source_path: &Path, destination_path: &Path) -> Result<(), String> {
+    wait_for_rollback_journal(source_path)?;
+    let acquisition =
+        destination_path.with_extension(format!("dbsync-safe-acquisition-{}", std::process::id()));
+    if acquisition.exists() {
+        fs::remove_dir_all(&acquisition).map_err(io_error)?;
+    }
+    fs::create_dir_all(&acquisition).map_err(io_error)?;
+    let acquired_database = acquisition.join("source.sqlite");
+
+    let result = (|| {
+        copy_database_bundle(source_path, &acquired_database)?;
+        backup_acquired_database(source_path, &acquired_database, destination_path)
+    })();
+    let cleanup = fs::remove_dir_all(&acquisition);
+    match result {
+        Err(error) => Err(error),
+        Ok(()) => cleanup.map_err(io_error),
+    }
+}
+
+fn copy_database_bundle(source_path: &Path, acquired_path: &Path) -> Result<(), String> {
+    fs::copy(source_path, acquired_path).map_err(io_error)?;
+    let source_wal = PathBuf::from(format!("{}-wal", source_path.to_string_lossy()));
+    if source_wal.is_file() {
+        let acquired_wal = PathBuf::from(format!("{}-wal", acquired_path.to_string_lossy()));
+        fs::copy(&source_wal, acquired_wal).map_err(|error| {
+            format!(
+                "Could not copy the SQLite WAL for {}: {}. Close the app and try again.",
+                source_path.display(),
+                error
+            )
+        })?;
+    }
+    Ok(())
+}
+
+fn backup_acquired_database(
+    source_path: &Path,
+    acquired_path: &Path,
+    destination_path: &Path,
+) -> Result<(), String> {
     let source = Connection::open_with_flags(
-        source_path,
-        OpenFlags::SQLITE_OPEN_READ_ONLY | OpenFlags::SQLITE_OPEN_NO_MUTEX,
+        acquired_path,
+        OpenFlags::SQLITE_OPEN_READ_WRITE | OpenFlags::SQLITE_OPEN_NO_MUTEX,
     )
-    .map_err(sql_error(source_path))?;
+    .map_err(|error| {
+        format!(
+            "SQLite could not read a consistent copy of {}: {}. Close the app and try again.",
+            acquired_path.display(),
+            error
+        )
+    })?;
     source.busy_timeout(Duration::ZERO).map_err(|e| {
         format!(
             "SQLite could not prepare a snapshot of {}: {}. Close the app and try again.",
@@ -328,6 +375,24 @@ fn backup_database(source_path: &Path, destination_path: &Path) -> Result<(), St
     }
     drop(backup);
     destination.close().map_err(|(_, e)| e.to_string())?;
+    Ok(())
+}
+
+fn wait_for_rollback_journal(source_path: &Path) -> Result<(), String> {
+    let journal = PathBuf::from(format!("{}-journal", source_path.to_string_lossy()));
+    if !journal.exists() {
+        return Ok(());
+    }
+    let started = Instant::now();
+    while journal.exists() && started.elapsed() < BACKUP_LOCK_TIMEOUT {
+        thread::sleep(BACKUP_RETRY_DELAY);
+    }
+    if journal.exists() {
+        return Err(format!(
+            "SQLite stayed locked for 2 seconds while snapshotting {}. Close the app and try again.",
+            source_path.display()
+        ));
+    }
     Ok(())
 }
 

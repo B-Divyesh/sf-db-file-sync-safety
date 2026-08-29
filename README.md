@@ -45,7 +45,7 @@ dbsync-safe guard ~/Sync/MyApp
 
 `guard` exits with code 2 when it finds a SQLite database. Use that exit code in a sync hook.
 
-Next, create a packet with SQLite's backup API:
+Next, create a packet. The CLI copies the database bundle into private staging. It opens only that copy with SQLite's backup API:
 
 ```sh
 dbsync-safe snapshot ~/Sync/MyApp --output ~/Packets/myapp-2026-08-28
@@ -59,6 +59,8 @@ dbsync-safe restore ~/Packets/myapp-2026-08-28 --target ~/Restored/MyApp
 ```
 
 The restore checks every SHA-256 and runs SQLite's integrity check. It refuses to replace an existing database unless you pass `--force`.
+
+Snapshot acquisition does not open the source through SQLite. Closed WAL-mode databases work from read-only folders, and every source path and file byte stays unchanged.
 
 Every command accepts `--json` for scripts:
 

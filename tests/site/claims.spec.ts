@@ -3,7 +3,7 @@ import AxeBuilder from '@axe-core/playwright';
 import { execFileSync, spawnSync } from 'node:child_process';
 import { createHash } from 'node:crypto';
 import { DatabaseSync } from 'node:sqlite';
-import { chmodSync, copyFileSync, existsSync, mkdtempSync, readFileSync, readdirSync, writeFileSync } from 'node:fs';
+import { chmodSync, copyFileSync, existsSync, mkdirSync, mkdtempSync, readFileSync, readdirSync, statSync, writeFileSync } from 'node:fs';
 import { join, resolve } from 'node:path';
 import { tmpdir } from 'node:os';
 
@@ -22,6 +22,48 @@ function freshDemo() {
   };
 }
 
+type SourceTreeEntry = { path: string; type: 'directory' | 'file'; mode: number; sha256?: string; bytes?: number };
+
+function sourceTree(root: string): SourceTreeEntry[] {
+  const entries: SourceTreeEntry[] = [{ path: './', type: 'directory', mode: statSync(root).mode & 0o777 }];
+  const visit = (directory: string, prefix = '') => {
+    for (const item of readdirSync(directory, { withFileTypes: true }).sort((left, right) => left.name.localeCompare(right.name))) {
+      const path = join(directory, item.name);
+      const relative = prefix ? `${prefix}/${item.name}` : item.name;
+      const mode = statSync(path).mode & 0o777;
+      if (item.isDirectory()) {
+        entries.push({ path: `${relative}/`, type: 'directory', mode });
+        visit(path, relative);
+      } else if (item.isFile()) {
+        const bytes = readFileSync(path);
+        entries.push({ path: relative, type: 'file', mode, bytes: bytes.length, sha256: createHash('sha256').update(bytes).digest('hex') });
+      }
+    }
+  };
+  visit(root);
+  return entries;
+}
+
+function closedWalFixture(readOnly: boolean) {
+  const root = mkdtempSync(join(tmpdir(), 'dbsync-closed-wal-'));
+  chmodSync(root, 0o755);
+  const source = join(root, 'source');
+  const output = join(root, 'output');
+  mkdirSync(source, { mode: 0o755 });
+  mkdirSync(output, { mode: 0o777 });
+  chmodSync(output, 0o777);
+  const databasePath = join(source, 'app.sqlite');
+  const database = new DatabaseSync(databasePath);
+  database.exec("PRAGMA journal_mode=WAL; CREATE TABLE items(id INTEGER PRIMARY KEY, value TEXT); INSERT INTO items(value) VALUES ('closed WAL row');");
+  database.close();
+  expect(readdirSync(source)).toEqual(['app.sqlite']);
+  if (readOnly) {
+    chmodSync(databasePath, 0o444);
+    chmodSync(source, 0o555);
+  }
+  return { root, source, packet: join(output, 'packet') };
+}
+
 test('@claim:sqlite-wal-detection detects a SQLite WAL bundle and blocks raw copy', () => {
   const demo = freshDemo();
   expect(demo.scan.raw_copy_safe).toBe(false);
@@ -31,15 +73,26 @@ test('@claim:sqlite-wal-detection detects a SQLite WAL bundle and blocks raw cop
 });
 
 test('@claim:consistent-snapshot writes a checksummed SQLite packet without changing the source', () => {
-  const demo = freshDemo();
-  const source = join(demo.temporary_root, 'sync-folder', 'field-notes.sqlite');
-  const before = createHash('sha256').update(readFileSync(source)).digest('hex');
-  const secondPacket = join(demo.temporary_root, 'second-packet');
-  cli('snapshot', join(demo.temporary_root, 'sync-folder'), '--output', secondPacket);
-  const after = createHash('sha256').update(readFileSync(source)).digest('hex');
-  expect(after).toBe(before);
-  const manifest = JSON.parse(readFileSync(join(secondPacket, 'dbsync-safe-manifest.json'), 'utf8'));
+  const fixture = closedWalFixture(false);
+  const before = sourceTree(fixture.source);
+  cli('snapshot', fixture.source, '--output', fixture.packet);
+  expect(sourceTree(fixture.source)).toEqual(before);
+  const manifest = JSON.parse(readFileSync(join(fixture.packet, 'dbsync-safe-manifest.json'), 'utf8'));
   expect(manifest.entries[0].sha256).toMatch(/^[a-f0-9]{64}$/);
+  expect(manifest.entries[0].integrity_check).toBe('ok');
+});
+
+test('@claim:readonly-source-snapshot snapshots a read-only source and preserves its exact tree', () => {
+  const fixture = closedWalFixture(true);
+  const before = sourceTree(fixture.source);
+  const runAsNobody = typeof process.getuid === 'function' && process.getuid() === 0;
+  const result = spawnSync(binary, ['--json', 'snapshot', fixture.source, '--output', fixture.packet], {
+    encoding: 'utf8',
+    ...(runAsNobody ? { uid: 65534, gid: 65534 } : {}),
+  });
+  expect(result.status, `${result.stdout}\n${result.stderr}`).toBe(0);
+  expect(sourceTree(fixture.source)).toEqual(before);
+  const manifest = JSON.parse(readFileSync(join(fixture.packet, 'dbsync-safe-manifest.json'), 'utf8'));
   expect(manifest.entries[0].integrity_check).toBe('ok');
 });
 
@@ -139,6 +192,34 @@ test('@claim:github-release-cache requests GitHub release details and caches the
   await page.reload();
   await expect(page.locator('.release-state')).toContainText('v0.1.0 is ready');
   expect(githubRequests).toHaveLength(2);
+});
+
+test('platform download avoids guessing Mac architecture and uses the neutral Linux archive', async ({ browser }) => {
+  const release = {
+    tag_name: 'v0.1.2',
+    assets: [
+      { name: 'dbsync-safe-macos-x86_64.pkg', browser_download_url: 'https://github.com/example/macos-x86.pkg' },
+      { name: 'dbsync-safe-macos-aarch64.pkg', browser_download_url: 'https://github.com/example/macos-arm.pkg' },
+      { name: 'dbsync-safe-linux-x86_64.deb', browser_download_url: 'https://github.com/example/linux.deb' },
+      { name: 'dbsync-safe-linux-x86_64.tar.gz', browser_download_url: 'https://github.com/example/linux.tar.gz' },
+    ],
+  };
+
+  const macContext = await browser.newContext({ userAgent: 'Mozilla/5.0 (Macintosh; Intel Mac OS X)' });
+  const macPage = await macContext.newPage();
+  await macPage.route('https://api.github.com/**', (route) => route.fulfill({ contentType: 'application/json', body: JSON.stringify([release]) }));
+  await macPage.goto('/');
+  await expect(macPage.locator('.detected-platform')).toHaveText('macOS — Apple silicon or Intel');
+  await expect(macPage.locator('.platform-download').first()).toHaveAttribute('href', 'https://github.com/B-Divyesh/sf-db-file-sync-safety/releases');
+  await expect(macPage.locator('.release-state')).toContainText('Apple silicon and Intel packages');
+  await macContext.close();
+
+  const linuxContext = await browser.newContext({ userAgent: 'Mozilla/5.0 (X11; Fedora; Linux x86_64)' });
+  const linuxPage = await linuxContext.newPage();
+  await linuxPage.route('https://api.github.com/**', (route) => route.fulfill({ contentType: 'application/json', body: JSON.stringify([release]) }));
+  await linuxPage.goto('/');
+  await expect(linuxPage.locator('.platform-download').first()).toHaveAttribute('href', 'https://github.com/example/linux.tar.gz');
+  await linuxContext.close();
 });
 
 test('@claim:mit-free ships the MIT license', () => {

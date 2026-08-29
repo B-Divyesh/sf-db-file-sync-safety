@@ -23,7 +23,7 @@ enum Command {
     Scan { path: PathBuf },
     /// Exit 2 when a path contains any SQLite database that needs a snapshot
     Guard { path: PathBuf },
-    /// Create a consistent, checksummed packet with SQLite's backup API
+    /// Create a consistent, checksummed packet without opening the source in SQLite
     Snapshot {
         path: PathBuf,
         #[arg(short, long)]
