@@ -1,5 +1,5 @@
 PackageIdentifier: ParamFactory.DBSyncSafe
-PackageVersion: 0.1.0
+PackageVersion: 0.1.1
 PackageLocale: en-US
 Publisher: Param Factory
 PackageName: DB File Sync Safety
@@ -9,8 +9,8 @@ PackageUrl: https://db-file-sync-safety.sociobot.in
 InstallerType: zip
 Installers:
   - Architecture: x64
-    InstallerUrl: https://github.com/B-Divyesh/sf-db-file-sync-safety/releases/download/v0.1.0/dbsync-safe-windows-x86_64.zip
-    InstallerSha256: 2D91215BDE34611D3601381BF480CA61DFD8E459CDC9E37AE9740F2BADABC7D3
+    InstallerUrl: https://github.com/B-Divyesh/sf-db-file-sync-safety/releases/download/v0.1.1/dbsync-safe-windows-x86_64.zip
+    InstallerSha256: 201A3F86C6D9D82CDE0F4057445D4E7FD9A197E48BE041DABCA01D8F1568FA5E
     NestedInstallerType: portable
     NestedInstallerFiles:
       - RelativeFilePath: dbsync-safe.exe

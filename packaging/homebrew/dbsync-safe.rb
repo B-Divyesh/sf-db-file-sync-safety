@@ -1,21 +1,21 @@
 class DbsyncSafe < Formula
   desc "Make verified SQLite snapshots before file sync"
   homepage "https://db-file-sync-safety.sociobot.in"
-  version "0.1.0"
+  version "0.1.1"
 
   on_macos do
     if Hardware::CPU.arm?
-      url "https://github.com/B-Divyesh/sf-db-file-sync-safety/releases/download/v0.1.0/dbsync-safe-macos-aarch64.tar.gz"
-      sha256 "9ccfd0b4dc46a8f26aec560681ee71bfbdd77a70d96e98663db728af02731944"
+      url "https://github.com/B-Divyesh/sf-db-file-sync-safety/releases/download/v0.1.1/dbsync-safe-macos-aarch64.tar.gz"
+      sha256 "44dd7f6649f8570014ec7d0ad6635023497343819a9811682757b7547f1aff2b"
     else
-      url "https://github.com/B-Divyesh/sf-db-file-sync-safety/releases/download/v0.1.0/dbsync-safe-macos-x86_64.tar.gz"
-      sha256 "724843da739b27e19d61e9a1aabf13f30686b320f9d00cc42d98a00a8238075d"
+      url "https://github.com/B-Divyesh/sf-db-file-sync-safety/releases/download/v0.1.1/dbsync-safe-macos-x86_64.tar.gz"
+      sha256 "bafc5a3ba5dd41fee34648267acb0bc10d33b6bd4d78e0c290f1387f73e425e2"
     end
   end
 
   on_linux do
-    url "https://github.com/B-Divyesh/sf-db-file-sync-safety/releases/download/v0.1.0/dbsync-safe-linux-x86_64.tar.gz"
-    sha256 "dbc74bedea6eed268092dc707bc306519b45300166af1091c3632c90e4bda5a2"
+    url "https://github.com/B-Divyesh/sf-db-file-sync-safety/releases/download/v0.1.1/dbsync-safe-linux-x86_64.tar.gz"
+    sha256 "7e75a6a40cec4ca0dcf24632215088cec272bf7093db5999f157484df58467fa"
   end
 
   def install

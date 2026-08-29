@@ -1,4 +1,67 @@
-# Handoff — DB File Sync Safety v0.1.0
+# Handoff — DB File Sync Safety v0.1.1
+
+## Repair work order `db-file-sync-safety-repair-3` — PASS
+
+**Completed:** 2026-08-29 UTC
+
+**Verifier report:** `2f7e9c0b3f3ac0f9df7228fad204d7c04102b9ea`
+
+**Rejected candidate:** `0e69eef3d1a42782dea2e22d01bb3eda25a89e81`
+
+**Repair implementation and v0.1.1 tag:** `e7adb0e354215b796cfba643fed9c1df53dabb23`
+
+All findings in `.factory/verification-3.md` are repaired. The researched brief, CLI artifact class, static deployment class, passed safety behavior, and visual system are unchanged.
+
+### Reproduction and repairs
+
+- The rejected browser demo said three notes were restored. A fresh candidate `dbsync-safe --json --demo` database contained four rows and one `Train changes` row written while WAL mode was active. The browser now reports all 4 notes and names the live-WAL note.
+- `.factory/claims.json` registers `demo-restored-count`. Its one exact Playwright test runs the real CLI demo, queries the restored SQLite database, requires four rows and one live-WAL row, then compares that observed count with `/demo`.
+- The rejected CLI remained silent under `BEGIN EXCLUSIVE` until external `timeout 3` returned 124. It left `packet.partial-<pid>/databases/locked.sqlite` at zero bytes. Snapshot backup now retries in small steps, returns a plain error after two continuous seconds of lock contention, and passes through the existing failure cleanup.
+- `locked_database_fails_within_a_bound_and_removes_staging_files` holds a real exclusive SQLite lock and requires the bounded error, no published packet, and no partial directory.
+- Version 0.1.1 records the changed CLI behavior. Tag `v0.1.1` resolves to the exact implementation commit above, closing the older-tag provenance finding.
+
+### Local verification
+
+- Clean `cargo clean` and `npm ci`: passed; 22 packages, 0 vulnerabilities.
+- `cargo fmt --all -- --check`: passed.
+- `cargo clippy --all-targets --all-features -- -D warnings`: passed.
+- Standalone TypeScript check for `site/src/site.ts`: passed.
+- Final `npm test`: passed; 6 Rust integration tests and 15 Playwright tests.
+- Every one of the 10 exact commands in `.factory/claims.json`: passed independently. Each claim ID occurs in exactly one tagged test.
+- `npm run build`: passed; produced `target/release/dbsync-safe` and `dist/site/`.
+- `cargo package --locked`: passed, including Cargo's verification build.
+- Clean consumer install from `target/package/db-file-sync-safety-0.1.1`: passed. The installed binary reported 0.1.1 and its restored database contained four notes, including one live-WAL note, with integrity `ok`.
+- Local browser audit at 1440×900 and 390×844 covered `/`, `/demo`, `/privacy`, `/terms`, and the not-found UI. Every route had one `main`, one `h1`, `lang=en`, no page overflow, no console/page errors, and zero serious/critical Axe findings. Every mobile interactive target was at least 44×44 CSS pixels.
+- Keyboard audit reached the skip link first and all 12 demo controls without a trap. Focus used the designed 3px outline, and browser Back restored focus to the landing heading.
+- Reduced motion hid the integrity sweep and reduced terminal animation to `0.00001s`. At 200% zoom the demo retained its heading and footer without page overflow.
+- Privacy audit: `/demo` made only same-origin requests and left cookies, localStorage, and sessionStorage empty. No service worker was registered. The product makes no offline claim, so offline/update testing is not applicable.
+- Local Lighthouse 13: Performance 100, Accessibility 100, Best Practices 100, SEO 100; LCP 1.5s, CLS 0.025, TBT 0ms, transfer 86KiB. Production JS is 14,747 bytes and CSS is 13,145 bytes.
+
+### Release and installers
+
+- GitHub Actions release run `33229880162` passed all Linux, Windows, Intel macOS, Apple-silicon macOS, and publish jobs.
+- GitHub Release `v0.1.1` has eight platform/package payloads plus `SHA256SUMS` and `latest.json`. All eight payloads passed `sha256sum -c`.
+- `latest.json` reports version 0.1.1, tag `v0.1.1`, and all eight payload URLs.
+- The published Linux archive reports 0.1.1. Its demo restored four notes with one live-WAL note and integrity `ok`.
+- The published Debian package reports `0.1.1-1`; its extracted binary reports 0.1.1.
+- The live shell installer installed the checksum-verified v0.1.1 binary into a clean prefix. The mismatch regression still proves installation is refused before any file is installed.
+- The tracked Homebrew, Scoop, and winget manifests use the v0.1.1 URLs and published hashes. Public Homebrew tap commit `fd34925` carries the same formula.
+
+### Deployment and live verification
+
+- `dist/site/` was deployed with Static Web Apps CLI 2.0.10 to production resource `sf-db-file-sync-safety` in resource group `sociobot`. The Azure hostname and <https://db-file-sync-safety.sociobot.in> serve the repair.
+- All 13 public build files are byte-identical live. `staticwebapp.config.json` is host configuration and is correctly not public. Key SHA-256 values: `index.html` `cf84cc9cb17e1afe519b6759dcac9765acd317318ea45a8a8ddc4c738bfee734`; JS `c321653df69f09e95cfcfeb39e1677c07b9e5419451eaaf52d3a8ef7d468ed9e`; CSS `e9a28bc38849030d3d86c4ad096888fcd3409d711ccce2924225960fbf907f08`.
+- `/`, `/demo`, `/privacy`, `/terms`, and `/404` return 200. An arbitrary document path returns HTTP 404.
+- HTML uses `public, must-revalidate, max-age=30`; hashed assets use `public, max-age=31536000, immutable`. CSP, HSTS, `nosniff`, referrer policy, and permissions policy are present.
+- The worker's `verify-url.sh` passed with no console errors. Live desktop and 390px mobile audits passed on all four normal routes with zero serious/critical Axe findings, no overflow, and no sub-44px targets.
+- The live demo says four notes, makes only same-origin requests, stores nothing, and registers no service worker. The live landing detects Linux and links to the real v0.1.1 Debian asset without console errors.
+- Live mobile Lighthouse 13: Performance 100, Accessibility 100, Best Practices 100, SEO 100; LCP 1.6s, CLS 0.024, TBT 40ms, transfer 86KiB.
+
+### Remaining operator notes
+
+- Submit `winget/ParamFactory.DBSyncSafe.yaml` upstream when desired.
+- macOS packages and the Windows binary remain unsigned, as stated on the site. Signing requires operator certificates and was not part of this repair.
+- This product has no backend, account, payment, AI action, analytics, or service worker. Related rate-limit, authority, payment, model, and offline-update checks are not applicable.
 
 ## Independent verification 3 — 2026-08-29 UTC
 
