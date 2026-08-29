@@ -2,8 +2,8 @@
 
 ## Entry points
 
-- Browser: `https://db-file-sync-safety.sociobot.in/demo`
-- Local site: `http://localhost:5173/demo`
+- Browser: `https://db-file-sync-safety.sociobot.in/?demo=1`
+- Local site: `http://localhost:5173/?demo=1`
 - CLI: `dbsync-safe --demo` or `dbsync-safe demo`
 
 The CLI creates `field-notes.sqlite` from `examples/field-notes.sql`. It keeps the database open in WAL mode, runs the preflight, writes a packet, restores it into a second folder, and prints the temporary root.
@@ -17,6 +17,6 @@ The route makes no API request and uses no browser storage. Its sample state liv
 ## Reset and isolation
 
 - Click **Reset demo** to rebuild the browser recording from its original state.
-- Click **Start for real** to leave the demo and open installation.
+- Click **Install the CLI** to leave the demo and open installation.
 - Each CLI run uses a process-specific folder under the operating system's temporary directory.
-- CLI demo runs never inspect or write user-selected paths.
+- CLI demo sample, packet, and restore paths stay inside that temporary folder.

@@ -4,12 +4,12 @@ Audited on 29 August 2026. Counts treat hyphenated terms, paths, and version str
 
 | Words | Copy |
 | ---: | --- |
-| 3 | SQLite preflight · v0.1.2 |
+| 4 | SQLite sync check · v0.1.3 |
 | 6 | Make SQLite snapshots safe to sync |
 | 15 | For developers syncing app folders, it blocks raw database copies and creates a verified packet. |
 | 5 | Try it with sample data |
 | 2 | View downloads |
-| 8 | See a live WAL become a verified packet. |
+| 12 | See the CLI include a live write-ahead log in a verified packet. |
 | 4 | Runs on your device |
 | 2 | No telemetry |
 | 3 | Free under MIT |
@@ -17,9 +17,9 @@ Audited on 29 August 2026. Counts treat hyphenated terms, paths, and version str
 | 2 | Backup API |
 | 2 | Verified packet |
 | 3 | Real CLI output |
-| 7 | Watch the unsafe copy become a packet |
-| 12 | The bundled demo creates a temporary SQLite database with a live WAL. |
-| 10 | It snapshots and restores that database without reading your files. |
+| 10 | See the CLI block raw copying and create a packet |
+| 12 | The bundled demo creates and uses sample files in its temporary folder. |
+| 9 | It includes a live write-ahead log in the snapshot. |
 | 5 | Scan: field-notes.sqlite plus live WAL |
 | 6 | Block: raw file copy refused |
 | 4 | Snapshot: backup created |
@@ -29,7 +29,7 @@ Audited on 29 August 2026. Counts treat hyphenated terms, paths, and version str
 | 2 | Safe procedure |
 | 6 | Replace raw copying with three checks |
 | 4 | Scan the source folder |
-| 10 | Find SQLite headers and their WAL, SHM, or journal sidecars. |
+| 13 | Find SQLite headers and their write-ahead log (WAL), shared-memory (SHM), or journal sidecars. |
 | 4 | Make the snapshot packet |
 | 11 | Copy the bundle privately, then use SQLite’s backup API and write checksums. |
 | 5 | Restore on the other device |
@@ -64,7 +64,7 @@ Audited on 29 August 2026. Counts treat hyphenated terms, paths, and version str
 | 3 | macOS or Linux |
 | 2 | Windows PowerShell |
 | 3 | Package manager options |
-| 10 | The macOS package and Windows binary are unsigned in v0.1.2. |
+| 10 | The macOS package and Windows binary are unsigned in v0.1.3. |
 | 6 | Verified SQLite packets for file sync. |
 | 4 | Built by Param Factory |
 
@@ -92,4 +92,4 @@ The job, audience, changed outcome, and first action fit in one short breath.
 
 ## Catalog description
 
-Make verified SQLite snapshots before a file-sync tool copies them.
+Block raw SQLite copies by creating verified snapshots for file sync.
