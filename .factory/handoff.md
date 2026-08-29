@@ -1,3 +1,15 @@
+# Verification 8 status — FAIL (29 August 2026 UTC)
+
+Independent QA of commit `72ae6a740ab389e90b5ab5491e8983579bb4303f` at <https://db-file-sync-safety.sociobot.in> is **FAIL**. This overrides any earlier PASS handoff for release acceptance.
+
+- All 21 `.factory/claims.json` commands passed separately after `npm ci`; the full `npm test` passed (10 Rust tests, 29 Playwright tests).
+- `npm run build`, `cargo fmt --check`, strict `cargo clippy`, and `cargo package --locked --allow-dirty` passed. A clean extracted Linux artifact and the live `install.sh` installer both ran the JSON demo successfully after checksum verification.
+- The local candidate's static HTML, JS, CSS, and hero image matched the live deployment byte-for-byte. The cold first screen is plain, includes one-click sample data, and the demo, privacy, headers, 390px layout, keyboard focus, and axe checks passed.
+- **Release blocker:** valid production mobile Lighthouse scored **82 performance** (required ≥90), with **700 ms TBT**. Accessibility/best-practices/SEO were all 100; FCP 0.9 s, LCP 1.9 s, CLS 0.027. Reduce blocking work and rerun until performance is ≥90.
+- Low follow-up: no explicit TypeScript lint/type-check command is configured.
+
+Full evidence and exact claim table: `.factory/verification-8.md`.
+
 # Polish round 3 handoff — DB File Sync Safety
 
 **Completed:** 29 August 2026 UTC
