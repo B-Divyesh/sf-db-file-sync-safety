@@ -1,6 +1,80 @@
-# Handoff — DB File Sync Safety v0.1.1
+# Handoff — DB File Sync Safety v0.1.2
 
-## Independent verification 4 — FAIL
+## Repair work order `db-file-sync-safety-repair-4` — PASS
+
+**Completed:** 2026-08-29 UTC
+
+**Rejected candidate:** `3568fc48836f43acb14d68e25d62bf202121d17c`
+
+**Root-cause repair:** `6063c38c2268b3f5d9744f13e2d6c43f91ba6a82`
+
+**Release:** `v0.1.2` at the exact root-cause repair commit
+
+The researched SQLite safety job, CLI installer artifact class, static deployment class, and established visual system remain unchanged.
+
+### Root cause and repair
+
+- `SQLITE_OPEN_READ_ONLY` still let SQLite create WAL shared-memory state beside a closed source. It added a zero-byte `-wal`, added a 32 KiB `-shm`, changed the next scan result, and failed when the directory was genuinely read-only.
+- Snapshot acquisition now copies only source database and WAL bytes into the packet's private staging area. SQLite opens that writable working copy and uses its backup API there. SQLite never opens the source database.
+- Existing source SHM files are not copied or opened. Active-WAL regression coverage proves the main file, WAL, and SHM paths, modes, and bytes remain identical while committed WAL rows reach the snapshot.
+- A persistent rollback journal remains a conservative blocked state. The CLI waits at most two seconds, removes its partial packet, and tells the user to close the app.
+- The public installer sentence now promises only the tested shell checksum behavior. Mac browsers no longer guess CPU architecture from `MacIntel`, and Linux selects the distribution-neutral tarball instead of a Debian package.
+- Version 0.1.2 records the safety change. The Homebrew, Scoop, and winget manifests use its published URLs and hashes.
+
+### Exact source-tree evidence
+
+- `closed_wal_database_snapshot_preserves_every_source_path_and_byte` starts from a closed WAL-mode database with only `closed.sqlite`, inventories the recursive tree and every file byte, snapshots, compares the entire tree, restores four rows, and passes.
+- `active_wal_snapshot_preserves_existing_sidecar_bytes` holds an active WAL connection and proves the main file, WAL, and SHM bytes do not change during snapshot. Its restored row count is covered in the 20-scenario suite.
+- `readonly_closed_wal_source_snapshot_preserves_exact_tree` snapshots a `0444` database inside a `0555` directory and compares the exact tree before and after.
+- `@claim:consistent-snapshot` makes the same complete recursive path/type/mode/size/SHA-256 comparison for an ordinary closed WAL source.
+- `@claim:readonly-source-snapshot` runs the production-shaped debug CLI as uid/gid 65534 when the test process is root. The `0555`/`0444` tree is identical and the packet passes SQLite integrity verification.
+- The downloaded published Linux 0.1.2 binary was run separately against new ordinary and uid/gid-65534 read-only fixtures. Ordinary tree digests were `001d46d67bbde00a124912649be24879efb992129de56ed1f68f266de56b6e13` before and after. Read-only tree digests were `e96fa143a9bd03d50e36b116def4395de4f49b4540eaf0fc4c0fabacaa1a9075` before and after. Both snapshots verified and contained the committed row.
+
+### Clean local verification
+
+- `cargo clean` and `npm ci`: passed; 22 packages installed, 0 vulnerabilities.
+- `cargo fmt --all -- --check`: passed.
+- `cargo clippy --all-targets --all-features -- -D warnings`: passed.
+- `npx tsc --noEmit --target es2022 --module esnext --moduleResolution bundler --lib es2022,dom --skipLibCheck site/src/site.ts`: passed.
+- Exact original production command `npm run build`: passed; produced `target/release/dbsync-safe` and `dist/site/`.
+- `npm test`: passed; 9 Rust integration tests and 17 Playwright tests.
+- Every one of the 11 exact commands in `.factory/claims.json`: passed independently and selected one tagged claim test.
+- `cargo package --locked`: passed from clean commit `6063c38`; Cargo's clean verification build passed.
+- Clean `cargo install --path target/package/db-file-sync-safety-0.1.2 --root <temp> --locked`: passed. The installed binary reported 0.1.2 and completed its verified JSON demo with integrity `ok`.
+- Local mobile Lighthouse 13: Performance 100, Accessibility 100, Best Practices 100, SEO 100; LCP 1.590s, CLS 0.0246, TBT 32ms, transfer 88,402 bytes.
+- Production JavaScript is 14.89 KB raw / 5.21 KB gzip. CSS is 13.15 KB raw / 3.82 KB gzip.
+
+### Release and installer verification
+
+- GitHub release workflow run `33232384048` passed all Linux, Windows, Intel macOS, Apple-silicon macOS, and publish jobs.
+- Release `v0.1.2` has eight package payloads plus `SHA256SUMS` and `latest.json`. All eight payloads passed `sha256sum -c`.
+- `latest.json` reports version 0.1.2, tag `v0.1.2`, and all eight package URLs.
+- The public Linux tarball SHA-256 is `af8b4a7627a6b69dcc123524cdb330fcd4e37841e45c034757011bc7534625e7`. Its binary reports 0.1.2 and passed both exact-tree probes above.
+- The live shell installer installed the checksum-verified 0.1.2 binary into a clean prefix. That binary's JSON demo restored and verified with integrity `ok`.
+- Public Homebrew tap commit `7a6f9f438ea2c96d384f5c20e322a81c40dfa7ff` has the 0.1.2 formula. Repository Scoop and winget manifests match the published Windows hash.
+- CI runs `33232383485` for the tagged implementation and `33232526166` for the release-manifest commit passed.
+
+### Deployment and live verification
+
+- `dist/site/` was deployed with the configured factory static deployment to production resource `sf-db-file-sync-safety`; deployment id `52605ae1-02c9-4e0e-b251-4a9cada912a6` succeeded.
+- All 13 public build files match the live site byte-for-byte. SHA-256: `index.html` `b385c42b8c308268f6fe753a0043c13140560764dc9bfa33adddd3c56af90fad`; JavaScript `0f4fd5eea08a8aa5ae324f5c9189caab7fc7face8047b673a255de54c1b87dd6`; CSS `e9a28bc38849030d3d86c4ad096888fcd3409d711ccce2924225960fbf907f08`.
+- `/`, `/demo`, `/privacy`, `/terms`, and `/404` return 200. An arbitrary document path returns HTTP 404.
+- The factory `verify-url.sh` passed with the expected title, `lang=en`, one `<h1>`, one `<main>`, complete alt text, and no console errors.
+- The repeatable `scripts/live-audit.mjs` covered all four normal routes at 1440×900 and 390×844: zero Axe violations, zero console/page errors, no overflow, and no target below 44×44 CSS pixels.
+- Keyboard flow starts at the skip link, Enter opens Demo, route headings receive focus, and Back restores heading focus. Reduced motion hides the integrity sweep and reduces terminal animation. Content remains visible at 200% browser zoom.
+- A fresh Demo run makes only same-origin requests, leaves cookies/localStorage/sessionStorage empty, and registers zero service workers. Offline/update behavior is not applicable because the product has no service worker and makes no offline claim.
+- All 12 discovered links resolve. The detected Linux action links to the real 0.1.2 distribution-neutral archive. Mac shows explicit Apple-silicon and Intel choices.
+- HTML uses `public, must-revalidate, max-age=30`; hashed assets use `public, max-age=31536000, immutable`. CSP, HSTS, `nosniff`, referrer policy, and permissions policy are present.
+- Live mobile Lighthouse 13: Performance 100, Accessibility 100, Best Practices 100, SEO 100; LCP 1.206s, CLS 0.0239, TBT 7ms, transfer 87,973 bytes.
+
+### Remaining operator notes
+
+- Submit `winget/ParamFactory.DBSyncSafe.yaml` upstream when desired.
+- macOS packages and the Windows binary remain unsigned, as stated on the site. Signing requires operator certificates.
+- The release supports Linux x64, Windows x64, and both current macOS architectures. Linux ARM and Windows ARM are not included.
+- This product has no backend, account, payment, AI action, analytics, or service worker. Related backend, payment, model, and offline-update checks are not applicable.
+
+## Independent verification 4 — FAIL (superseded by v0.1.2)
 
 **Verified:** 2026-08-29 UTC
 
