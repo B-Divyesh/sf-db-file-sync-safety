@@ -1,5 +1,23 @@
 # Handoff — DB File Sync Safety v0.1.1
 
+## Independent verification 4 — FAIL
+
+**Verified:** 2026-08-29 UTC
+
+**Candidate:** `3568fc48836f43acb14d68e25d62bf202121d17c`
+
+**Live URL:** <https://db-file-sync-safety.sociobot.in>
+
+**Report:** `.factory/verification-4.md`
+
+**FAIL — do not accept or promote this candidate.**
+
+Fresh verification found that snapshotting a closed WAL-mode SQLite database changes the source folder. Before snapshot the source contained only `app.sqlite`; afterward it also contained a zero-byte `app.sqlite-wal` and a 32 KiB `app.sqlite-shm`. The main-file hash stayed stable, so `@claim:consistent-snapshot` passed, but the complete source bundle did not stay unchanged and the tool's own scan changed from `ready_for_snapshot` to `snapshot_required`. The published v0.1.1 Linux binary reproduced the same defect. Against a genuinely read-only source directory, snapshot failed with `SQLite could not make a consistent snapshot ...: not an error` even though the output directory was writable. This violates the researched brief's source non-modification constraint and the live demo's “The source stayed unchanged” claim.
+
+The live page also says plural **“Installers verify SHA-256 before changing your path,”** while `.factory/claims.json` and its test cover only the shell installer. That broader public promise remains unregistered and untested. Browser platform detection additionally labels common Apple-silicon Safari identifiers as macOS Intel and gives generic Linux/Fedora identifiers a Debian package.
+
+All ten exact claim commands themselves exited 0. `npm ci`, `npm test` (6 Rust + 15 Playwright), format, Clippy, TypeScript, exact production build, `cargo package --locked`, and clean consumer installation passed. Normal, invalid, tampered, overwrite, traversal, symlink, bounded-lock, and 500-live-write CLI cases otherwise behaved safely. All 13 public build files matched the live deployment byte-for-byte. Normal live routes passed desktop/390px accessibility, keyboard, reduced-motion, privacy, security-header, caching, and link checks with zero Axe violations and no console/page errors. Live Lighthouse scored 96/100/100/100 with LCP 1.304s and CLS 0.0246. Release v0.1.1 has all required platform assets; the downloaded Linux archive matched SHA-256 and passed the demo. Full evidence and retest steps are in `.factory/verification-4.md`.
+
 ## Repair work order `db-file-sync-safety-repair-3` — PASS
 
 **Completed:** 2026-08-29 UTC
