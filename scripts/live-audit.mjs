@@ -3,7 +3,7 @@ import AxeBuilder from '@axe-core/playwright';
 
 const origin = process.argv[2] ?? 'https://db-file-sync-safety.sociobot.in';
 const browser = await chromium.launch();
-const routes = ['/', '/demo', '/privacy', '/terms'];
+const routes = ['/', '/?demo=1', '/demo', '/privacy', '/terms'];
 
 for (const viewport of [{ width: 1440, height: 900 }, { width: 390, height: 844 }]) {
   const context = await browser.newContext({ viewport });
@@ -45,7 +45,7 @@ if (await keyboard.locator(':focus').textContent() !== 'Skip to main content') t
 const sample = keyboard.getByRole('link', { name: 'Try it with sample data' });
 await sample.focus();
 await keyboard.keyboard.press('Enter');
-await keyboard.waitForURL(`${origin}/demo`);
+await keyboard.waitForURL(`${origin}/?demo=1`);
 if (!(await keyboard.getByRole('heading', { level: 1 }).evaluate((node) => node === document.activeElement))) throw new Error('route heading did not receive focus');
 await keyboard.goBack();
 if (!(await keyboard.getByRole('heading', { level: 1 }).evaluate((node) => node === document.activeElement))) throw new Error('back navigation did not restore heading focus');
@@ -55,7 +55,7 @@ const reduced = await browser.newContext({ viewport: { width: 390, height: 844 }
 const reducedPage = await reduced.newPage();
 await reducedPage.goto(`${origin}/`);
 if (await reducedPage.locator('.integrity-sweep').evaluate((node) => getComputedStyle(node).display) !== 'none') throw new Error('integrity sweep remains visible');
-await reducedPage.goto(`${origin}/demo`);
+await reducedPage.goto(`${origin}/?demo=1`);
 const duration = await reducedPage.locator('.terminal-row').first().evaluate((node) => getComputedStyle(node).animationDuration);
 if (Number.parseFloat(duration) > 0.00001) throw new Error(`reduced motion duration is ${duration}`);
 await reduced.close();
@@ -64,7 +64,7 @@ const privacy = await browser.newContext({ viewport: { width: 390, height: 844 }
 const privacyPage = await privacy.newPage();
 const requests = [];
 privacyPage.on('request', (request) => requests.push(request.url()));
-await privacyPage.goto(`${origin}/demo`, { waitUntil: 'networkidle' });
+await privacyPage.goto(`${origin}/?demo=1`, { waitUntil: 'networkidle' });
 await privacyPage.getByRole('button', { name: 'Reset demo' }).click();
 const privacyState = await privacyPage.evaluate(async () => ({
   local: Object.keys(localStorage),
@@ -77,7 +77,7 @@ if (requests.some((url) => new URL(url).origin !== origin)) throw new Error(`dem
 await privacy.close();
 
 const zoom = await browser.newPage({ viewport: { width: 390, height: 844 } });
-await zoom.goto(`${origin}/demo`);
+await zoom.goto(`${origin}/?demo=1`);
 const devtools = await zoom.context().newCDPSession(zoom);
 await devtools.send('Emulation.setPageScaleFactor', { pageScaleFactor: 2 });
 if (!(await zoom.getByRole('heading', { level: 1 }).isVisible()) || !(await zoom.locator('footer').isVisible())) throw new Error('200% text lost content');

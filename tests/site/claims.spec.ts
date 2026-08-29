@@ -549,6 +549,7 @@ test('route metadata, demo query entry, reset, focus, and not-found indexing are
     expect(ogDescription).toBe(description);
     await expect(page.locator('meta[property="og:title"]')).toHaveAttribute('content', item.title);
     await expect(page.locator('meta[name="twitter:title"]')).toHaveAttribute('content', item.title);
+    await expect(page.locator('meta[name="twitter:description"]')).toHaveAttribute('content', description!);
     await expect(page.locator('link[rel="canonical"]')).toHaveAttribute('href', `https://db-file-sync-safety.sociobot.in${item.canonical}`);
     await expect(page.locator('meta[property="og:url"]')).toHaveAttribute('content', `https://db-file-sync-safety.sociobot.in${item.canonical}`);
     await expect(page.locator('meta[name="robots"]')).toHaveAttribute('content', item.noindex ? 'noindex, nofollow' : 'index, follow');

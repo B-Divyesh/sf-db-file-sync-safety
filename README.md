@@ -12,7 +12,7 @@ The tool supports SQLite only. It is not a sync engine, conflict resolver, repli
 dbsync-safe --demo
 ```
 
-The command creates bundled sample data in a temporary folder. It scans, snapshots, restores, verifies, and prints that folder. The demo uses only those sample files.
+The command creates bundled sample data in a temporary folder. It scans, snapshots, restores, verifies, and prints that folder. Its sample, packet, and restore paths stay inside that folder.
 
 The isolated browser recording is available at <https://db-file-sync-safety.sociobot.in/?demo=1>.
 

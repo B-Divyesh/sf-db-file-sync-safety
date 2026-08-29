@@ -182,7 +182,7 @@ fn demo(json: bool) -> Result<i32, String> {
         println!("3  SNAPSHOT  SQLite backup created and checksummed");
         println!("4  RESTORE   checksum and integrity check passed");
         println!("\nSample output: {}", root.display());
-        println!("Nothing touched your real files. Remove this folder when finished.");
+        println!("Sample files and output stayed inside this temporary folder.");
     }
     Ok(0)
 }
