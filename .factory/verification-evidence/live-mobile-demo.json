@@ -1,0 +1,82 @@
+{
+  "status": 200,
+  "headers": {
+    "cache-control": "public, must-revalidate, max-age=30",
+    "content-encoding": "br",
+    "content-security-policy": "default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; connect-src 'self' https://api.github.com; font-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'",
+    "content-type": "text/html",
+    "date": "Sat, 29 Aug 2026 10:41:29 GMT",
+    "etag": "\"79795525\"",
+    "last-modified": "Sat, 29 Aug 2026 09:47:01 GMT",
+    "permissions-policy": "camera=(), microphone=(), geolocation=()",
+    "referrer-policy": "strict-origin-when-cross-origin",
+    "strict-transport-security": "max-age=10886400; includeSubDomains; preload",
+    "vary": "Accept-Encoding",
+    "x-content-type-options": "nosniff",
+    "x-dns-prefetch-control": "off",
+    "x-xss-protection": "1; mode=block"
+  },
+  "landing": {
+    "h1": "Make SQLite snapshots safe to sync",
+    "facts": [
+      {
+        "text": "⌂ Runs on your device",
+        "bottom": 609.234375,
+        "viewport": 844
+      },
+      {
+        "text": "○ No telemetry",
+        "bottom": 642.921875,
+        "viewport": 844
+      },
+      {
+        "text": "◇ Free under MIT",
+        "bottom": 676.609375,
+        "viewport": 844
+      }
+    ],
+    "overflow": false,
+    "targets": []
+  },
+  "axeLanding": [],
+  "firstFocus": {
+    "text": "Skip to main content",
+    "outline": "rgb(6, 36, 30) solid 0px",
+    "boxShadow": "none"
+  },
+  "primaryFocus": {
+    "outline": "rgb(255, 199, 102) solid 3px",
+    "boxShadow": "rgba(115, 243, 203, 0.16) 0px 0px 32px 0px"
+  },
+  "demo": {
+    "title": "Demo — DB File Sync Safety",
+    "h1": "Run the SQLite safety check",
+    "headingFocused": true,
+    "banner": "Demo — sample data, nothing is saved Reset demoInstall the CLI",
+    "result": "✓Restore verified4 notes reached a new folder, including the live-WAL note. The source stayed unchanged.",
+    "terminalDuration": "1e-05s",
+    "storage": {
+      "local": [
+        "dbsync-safe:release"
+      ],
+      "session": [],
+      "cookie": ""
+    },
+    "overflow": false,
+    "targets": []
+  },
+  "axeDemo": [],
+  "resetStatus": "Demo reset with fresh sample data.",
+  "requests": [
+    "https://db-file-sync-safety.sociobot.in/",
+    "https://db-file-sync-safety.sociobot.in/hero-database.webp",
+    "https://db-file-sync-safety.sociobot.in/assets/index-BURSQoIL.js",
+    "https://db-file-sync-safety.sociobot.in/assets/index-Dt3pJBWW.css",
+    "https://api.github.com/repos/B-Divyesh/sf-db-file-sync-safety/releases?per_page=1"
+  ],
+  "externalRequests": [
+    "https://api.github.com/repos/B-Divyesh/sf-db-file-sync-safety/releases?per_page=1"
+  ],
+  "consoleErrors": [],
+  "pageErrors": []
+}
