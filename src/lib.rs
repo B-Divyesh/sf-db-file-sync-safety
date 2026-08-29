@@ -287,7 +287,7 @@ pub fn restore_packet(packet: &Path, target: &Path, force: bool) -> Result<Resto
 }
 
 fn backup_database(source_path: &Path, destination_path: &Path) -> Result<(), String> {
-    wait_for_rollback_journal(source_path)?;
+    wait_for_hot_rollback_journal(source_path)?;
     let acquisition =
         destination_path.with_extension(format!("dbsync-safe-acquisition-{}", std::process::id()));
     if acquisition.exists() {
@@ -309,13 +309,17 @@ fn backup_database(source_path: &Path, destination_path: &Path) -> Result<(), St
 
 fn copy_database_bundle(source_path: &Path, acquired_path: &Path) -> Result<(), String> {
     fs::copy(source_path, acquired_path).map_err(io_error)?;
-    let source_wal = PathBuf::from(format!("{}-wal", source_path.to_string_lossy()));
-    if source_wal.is_file() {
-        let acquired_wal = PathBuf::from(format!("{}-wal", acquired_path.to_string_lossy()));
-        fs::copy(&source_wal, acquired_wal).map_err(|error| {
+    for suffix in ["-wal", "-journal"] {
+        let source_sidecar = PathBuf::from(format!("{}{suffix}", source_path.to_string_lossy()));
+        if !source_sidecar.is_file() {
+            continue;
+        }
+        let acquired_sidecar =
+            PathBuf::from(format!("{}{suffix}", acquired_path.to_string_lossy()));
+        fs::copy(&source_sidecar, acquired_sidecar).map_err(|error| {
             format!(
-                "Could not copy the SQLite WAL for {}: {}. Close the app and try again.",
-                source_path.display(),
+                "Could not copy the SQLite sidecar {}: {}. Close the app and try again.",
+                source_sidecar.display(),
                 error
             )
         })?;
@@ -378,22 +382,73 @@ fn backup_acquired_database(
     Ok(())
 }
 
-fn wait_for_rollback_journal(source_path: &Path) -> Result<(), String> {
+fn wait_for_hot_rollback_journal(source_path: &Path) -> Result<(), String> {
     let journal = PathBuf::from(format!("{}-journal", source_path.to_string_lossy()));
-    if !journal.exists() {
+    if !rollback_journal_is_hot(source_path, &journal)? {
         return Ok(());
     }
     let started = Instant::now();
-    while journal.exists() && started.elapsed() < BACKUP_LOCK_TIMEOUT {
+    while rollback_journal_is_hot(source_path, &journal)? && started.elapsed() < BACKUP_LOCK_TIMEOUT
+    {
         thread::sleep(BACKUP_RETRY_DELAY);
     }
-    if journal.exists() {
+    if rollback_journal_is_hot(source_path, &journal)? {
         return Err(format!(
             "SQLite stayed locked for 2 seconds while snapshotting {}. Close the app and try again.",
             source_path.display()
         ));
     }
     Ok(())
+}
+
+fn rollback_journal_is_hot(source_path: &Path, journal: &Path) -> Result<bool, String> {
+    const JOURNAL_MAGIC: [u8; 8] = [0xd9, 0xd5, 0x05, 0xf9, 0x20, 0xa1, 0x63, 0xd7];
+    if !journal.is_file() {
+        return Ok(false);
+    }
+    if fs::metadata(journal).map_err(io_error)?.len() <= 512 {
+        return Ok(false);
+    }
+    let mut header = [0_u8; 8];
+    File::open(journal)
+        .and_then(|mut file| file.read_exact(&mut header))
+        .map_err(io_error)?;
+    Ok(header == JOURNAL_MAGIC || source_has_reserved_lock(source_path)?)
+}
+
+#[cfg(unix)]
+fn source_has_reserved_lock(source_path: &Path) -> Result<bool, String> {
+    use std::os::fd::AsRawFd;
+
+    const SQLITE_RESERVED_BYTE: libc::off_t = 1_073_741_825;
+    let file = File::open(source_path).map_err(io_error)?;
+    let mut lock = libc::flock {
+        l_type: libc::F_RDLCK as libc::c_short,
+        l_whence: libc::SEEK_SET as libc::c_short,
+        l_start: SQLITE_RESERVED_BYTE,
+        l_len: 1,
+        l_pid: 0,
+    };
+    // SAFETY: `lock` points to a valid flock structure and the file stays open.
+    let result = unsafe { libc::fcntl(file.as_raw_fd(), libc::F_SETLK, &lock) };
+    if result == -1 {
+        let error = std::io::Error::last_os_error();
+        return match error.raw_os_error() {
+            Some(code) if code == libc::EACCES || code == libc::EAGAIN => Ok(true),
+            _ => Err(io_error(error)),
+        };
+    }
+    lock.l_type = libc::F_UNLCK as libc::c_short;
+    // SAFETY: this releases the byte-range lock acquired above.
+    if unsafe { libc::fcntl(file.as_raw_fd(), libc::F_SETLK, &lock) } == -1 {
+        return Err(io_error(std::io::Error::last_os_error()));
+    }
+    Ok(false)
+}
+
+#[cfg(not(unix))]
+fn source_has_reserved_lock(_source_path: &Path) -> Result<bool, String> {
+    Ok(false)
 }
 
 fn integrity_check(path: &Path) -> Result<String, String> {

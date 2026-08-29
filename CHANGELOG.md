@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.1.3 — 2026-08-29
+
+- Snapshot closed databases that retain a finalized `journal_mode=PERSIST` rollback journal without changing the source.
+- Add syscall-level source-open and network-denial claim checks plus complete JSON, overwrite, packaging, and build claims.
+- Add the isolated `?demo=1` entry, precise first-screen copy, route metadata, and a standalone designed 404 response.
+
 ## 0.1.2 — 2026-08-29
 
 - Stage source database and WAL bytes before SQLite opens a working copy, so snapshot acquisition cannot create or edit source sidecars.

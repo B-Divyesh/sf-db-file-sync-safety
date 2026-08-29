@@ -1,6 +1,6 @@
 use db_file_sync_safety::{create_snapshot, restore_packet, scan, verify_packet, SafetyState};
 use rusqlite::Connection;
-use std::{collections::BTreeMap, fs, path::Path, time::Instant};
+use std::{collections::BTreeMap, fs, path::Path, process::Command, time::Instant};
 use tempfile::tempdir;
 
 fn database(path: &Path, wal: bool, rows: usize) -> Connection {
@@ -173,9 +173,19 @@ fn locked_database_fails_within_a_bound_and_removes_staging_files() {
     let packet = temp.path().join("packet");
 
     let started = Instant::now();
-    let error = create_snapshot(&source, &packet).unwrap_err();
+    let output = Command::new(env!("CARGO_BIN_EXE_dbsync-safe"))
+        .args([
+            "snapshot",
+            source.to_str().unwrap(),
+            "--output",
+            packet.to_str().unwrap(),
+        ])
+        .output()
+        .unwrap();
+    let error = String::from_utf8_lossy(&output.stderr);
 
     assert!(started.elapsed().as_secs_f32() < 3.0, "{error}");
+    assert!(!output.status.success());
     assert!(error.contains("stayed locked for 2 seconds"), "{error}");
     assert!(!packet.exists());
     assert!(!packet
@@ -252,4 +262,41 @@ fn active_wal_snapshot_preserves_existing_sidecar_bytes() {
 
     assert_eq!(after, before, "snapshot changed active WAL sidecars");
     drop(connection);
+}
+
+#[test]
+fn closed_persistent_journal_snapshot_preserves_source_and_restores() {
+    let temp = tempdir().unwrap();
+    let source = temp.path().join("source");
+    fs::create_dir(&source).unwrap();
+    let database_path = source.join("persist.sqlite");
+    let connection = Connection::open(&database_path).unwrap();
+    connection
+        .pragma_update(None, "journal_mode", "PERSIST")
+        .unwrap();
+    connection
+        .execute_batch(
+            "CREATE TABLE items(id INTEGER PRIMARY KEY, value TEXT NOT NULL);\
+             INSERT INTO items(value) VALUES ('kept from persistent journal mode');",
+        )
+        .unwrap();
+    drop(connection);
+
+    let journal = source.join("persist.sqlite-journal");
+    assert!(journal.is_file());
+    assert!(fs::metadata(&journal).unwrap().len() > 512);
+    assert_eq!(&fs::read(&journal).unwrap()[..8], &[0_u8; 8]);
+
+    let before = exact_tree(&source);
+    let packet = temp.path().join("packet");
+    create_snapshot(&source, &packet).unwrap();
+    assert_eq!(exact_tree(&source), before);
+
+    let restored = temp.path().join("restored");
+    restore_packet(&packet, &restored, false).unwrap();
+    let restored_connection = Connection::open(restored.join("persist.sqlite")).unwrap();
+    let value: String = restored_connection
+        .query_row("SELECT value FROM items", [], |row| row.get(0))
+        .unwrap();
+    assert_eq!(value, "kept from persistent journal mode");
 }
