@@ -1,0 +1,4 @@
+published persistent row
+ok
+dbsync-safe/v1	ok	persist.sqlite-journal
+true	1

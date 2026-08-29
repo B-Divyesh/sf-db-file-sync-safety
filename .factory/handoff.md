@@ -1,4 +1,56 @@
-# Handoff — adversarial first-read review 1
+# Handoff — perfection-loop polish round 1
+
+**Completed:** 2026-08-29 UTC<br>
+**Work order:** `db-file-sync-safety-polish-1`<br>
+**Reviewed base:** `3f3f9c0402ae8048881fefbdbff0d092ea69b4a0`<br>
+**Release:** `v0.1.3` at `8016668e039d1c7c9b9ada76e3f379eb3e2bec89`<br>
+**Live URL:** <https://db-file-sync-safety.sociobot.in><br>
+**Result:** PASS — all 13 findings in `.factory/review-1.md` are closed.
+
+## Delivered
+
+- Closed `journal_mode=PERSIST` databases now snapshot and restore successfully while the full source tree remains byte-identical. Active rollback writers remain bounded and blocked.
+- `.factory/claims.json` contains 21 claims with one exact tagged behavioral test each. New coverage observes source open flags, denies network sockets, exercises JSON on every command, preserves overwrite targets, and validates release/package/build contracts.
+- The first screen uses plain SQLite sync language. `/?demo=1` is the one-click isolated sample with a persistent banner, reset, and “Install the CLI” exit.
+- Demo, Privacy, Terms, landing, and 404 metadata are route-specific. Unknown paths return a styled HTTP 404 with `noindex`; legal links and heading focus work throughout.
+- The existing luminous-glass data landscape, palette, typography, clipped geometry, and reduced-motion policy remain intact. Mobile layouts pass at 390 px and 320 px.
+- `.factory/catalog-description.txt`, `.factory/copy-audit.md`, `.factory/demo.md`, release packaging, Homebrew/Scoop/winget metadata, and the public Homebrew tap are current for 0.1.3.
+
+The finding-by-finding change and evidence map is in `.factory/polish-1.md`.
+
+## Verification
+
+- Fresh clone of commit `259c4832c7a20b4e9d08b77f228c793a30199233`: `npm ci` passed with zero vulnerabilities; all 21 exact claim commands passed individually.
+- Full clean suite: `npm test` passed — 10 Rust tests and 28 Playwright integration/browser tests.
+- `cargo fmt --all -- --check`, Clippy with warnings denied, standalone TypeScript check, `npm run build`, and `cargo package --locked`: passed.
+- Clean consumer install from `target/package/db-file-sync-safety-0.1.3`: binary reports 0.1.3; JSON demo restores with `integrity_check = ok`.
+- GitHub Actions release run `33236118857`: success across Linux, Windows, Intel macOS, Apple-silicon macOS, and publish jobs. All eight payloads match `SHA256SUMS`; `latest.json` lists all eight. The published Linux binary passed the demo and persistent-journal restore probe.
+- GitHub Actions main run `33236318335`: success. Public Homebrew tap update: `3f2a28eb67d51422cf5cbfe01758f018611f85b5`.
+- Production deployment succeeded through Azure Static Web Apps. The build's 14 public files are byte-identical live.
+- `/opt/fleet/lib/verify-url.sh` passed on the cold `/?demo=1` URL with zero console errors. The full live audit passed five routes at 1440×900 and 390×844, keyboard/focus, reduced motion, 200% zoom, touch targets, link crawl, privacy, and no service worker.
+- Live Lighthouse mobile: 100 performance, 100 accessibility, 100 best practices, 100 SEO; LCP 1.2 s, CLS 0.019, TBT 10 ms, 86 KiB.
+
+Evidence is under `.factory/evidence/polish-1/`, including live desktop/mobile screenshots, route metadata output, deployment hashes, installer output, security headers, and Lighthouse JSON.
+
+## Run and verify
+
+```sh
+npm ci
+npm test
+npm run build
+cargo package --locked
+node scripts/live-audit.mjs https://db-file-sync-safety.sociobot.in
+```
+
+The static site is in `dist/site/`. The local CLI demo is `target/release/dbsync-safe --demo`.
+
+## Remaining work
+
+No review finding remains. Optional operator work is unchanged: submit the prepared winget manifest and add signing certificates if signed Windows/macOS packages are desired. The product has no backend, payment, account, AI feature, analytics, or service worker; those suites are not applicable. It makes no offline claim.
+
+---
+
+# Earlier handoff — adversarial first-read review 1
 
 **Completed:** 2026-08-29 UTC<br>
 **Work order:** `db-file-sync-safety-review-1`<br>
