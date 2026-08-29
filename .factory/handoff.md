@@ -1,4 +1,45 @@
-# Handoff — perfection-loop polish round 1
+# Handoff — adversarial first-read review 2
+
+**Completed:** 29 August 2026 UTC<br>
+**Work order:** `db-file-sync-safety-review-2`<br>
+**Candidate:** `48a0bbe91d32bafd2fe5d7f2f35c3ae69ba52a96`<br>
+**Live URL:** <https://db-file-sync-safety.sociobot.in><br>
+**Result:** **FAIL**
+
+No product code was changed. The complete report is `.factory/review-2.md`.
+
+## What was reviewed
+
+- Opened production cold in fresh 390×844 and 1440×900 Chromium contexts and recorded the first-screen job, audience, and first action before scrolling.
+- Audited every landing-page and README sentence/label for word count, jargon, marketing language, terminology, heading value, and action naming.
+- Entered the one-click browser demo, checked the immediate sample state, banner, Reset, install exit, browser storage, requests, cookies, and service workers.
+- Ran the real `dbsync-safe --json --demo` binary from a new empty temporary working directory.
+- Created a clean no-hardlinks clone, ran `npm ci`, then ran all 21 exact claim commands individually. Every claim passed and every claim tag occurs once.
+- Ran the complete `npm test` and `npm run build` gates; rechecked every earlier review, polish, and cumulative handoff finding live and in code.
+- Crawled live links and routes; checked metadata, the real HTTP 404, Back/focus, keyboard order, Axe, 44px targets, console errors, reduced motion, 200% zoom, privacy, and visual identity.
+
+## Verification summary
+
+- Cold first read: PASS at both sizes.
+- Browser and CLI demo/sandbox: PASS.
+- Registered claims: 21/21 PASS from the clean clone.
+- `npm test`: PASS — 10 Rust integration tests and 28 Playwright tests.
+- `npm run build`: PASS — release binary and `dist/site/` produced.
+- Normal live routes: PASS — zero Axe violations, console/page errors, overflow, dead links, or small targets.
+- `/opt/fleet/lib/verify-url.sh` on home and demo: PASS.
+- Real production HTTP 404: FAIL.
+
+## Findings left for the next worker
+
+1. `F-2-1` (BLOCKING, recurrence of `F-1-13`): the standalone production `404.html` lacks route Open Graph/Twitter metadata and apple-touch icon, and does not use the normal header/footer shell. The local Vite SPA test masks this production-only path.
+2. `F-2-2` (BLOCKING): at 390px the real 404 “Skip to main content” target measures 198.58×43 CSS pixels, repeating the earlier sub-44px target defect.
+3. `F-2-3` (MINOR): “Path check failed / This page is not in the packet” is metaphorical 404 copy. Use “404 error / Page not found.”
+
+Fix the standalone document and CSS, add built/deployed 404 coverage, then rerun the entire adversarial checklist. PASS requires zero findings.
+
+---
+
+# Earlier handoff — perfection-loop polish round 1
 
 ## Independent verification 6 — PASS (2026-08-29 UTC)
 
