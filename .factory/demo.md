@@ -6,7 +6,7 @@
 - Local site: `http://localhost:5173/?demo=1`
 - CLI: `dbsync-safe --demo` or `dbsync-safe demo`
 
-The CLI creates `field-notes.sqlite` from `examples/field-notes.sql`. It keeps the database open in WAL mode, runs the preflight, writes a packet, restores it into a second folder, and prints the temporary root.
+The CLI creates `field-notes.sqlite` from `examples/field-notes.sql`. It keeps the database open in WAL mode, runs the sync check, writes a packet, restores it into a second folder, and prints the temporary root.
 
 The browser route replays the exact four states printed by the binary. Its result says all 4 sample notes reached the restored folder.
 

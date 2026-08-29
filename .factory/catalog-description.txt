@@ -1,1 +1,1 @@
-Block raw SQLite copies by creating verified snapshots for file sync.
+Block unsafe SQLite file copies with verified snapshots built for syncing.

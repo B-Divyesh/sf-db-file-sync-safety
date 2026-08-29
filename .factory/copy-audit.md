@@ -68,6 +68,17 @@ Audited on 29 August 2026. Counts treat hyphenated terms, paths, and version str
 | 6 | Verified SQLite packets for file sync. |
 | 4 | Built by Param Factory |
 
+### Not-found route
+
+| Words | Copy |
+| ---: | --- |
+| 2 | 404 error |
+| 3 | Page not found |
+| 11 | Check the address or return to the DB File Sync Safety overview. |
+| 2 | Return home |
+| 6 | Verified SQLite packets for file sync. |
+| 4 | Built by Param Factory |
+
 No sentence exceeds 22 words. No copy contains a banned word from the plain-words contract.
 
 ## Terminology table
@@ -92,4 +103,4 @@ The job, audience, changed outcome, and first action fit in one short breath.
 
 ## Catalog description
 
-Block raw SQLite copies by creating verified snapshots for file sync.
+Block unsafe SQLite file copies with verified snapshots built for syncing.

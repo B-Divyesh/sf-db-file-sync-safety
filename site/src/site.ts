@@ -195,9 +195,9 @@ function terms(): string {
 function notFound(): string {
   return shell(`<main id="main" class="inner-main missing">
     <div class="lost-plate" aria-hidden="true"><span>404</span></div>
-    <p class="eyebrow">Path check failed</p>
-    <h1 id="page-title" tabindex="-1">This page is not in the packet</h1>
-    <p class="lede">The address may have moved. Return to the product overview.</p>
+    <p class="eyebrow">404 error</p>
+    <h1 id="page-title" tabindex="-1">Page not found</h1>
+    <p class="lede">Check the address or return to the DB File Sync Safety overview.</p>
     <a class="button primary" href="/" data-link>Return home</a>
   </main>`, '/404');
 }

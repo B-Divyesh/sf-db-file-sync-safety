@@ -524,7 +524,7 @@ test('static hosting serves only known application routes and returns a real 404
 });
 
 test('all routes have one h1, useful titles, and no serious accessibility errors', async ({ page }) => {
-  for (const route of ['/', '/demo', '/privacy', '/terms', '/not-a-route']) {
+  for (const route of ['/', '/demo', '/privacy', '/terms', '/not-a-route', '/404.html']) {
     const errors: string[] = [];
     page.on('console', (message) => { if (message.type() === 'error') errors.push(message.text()); });
     await page.goto(route);
@@ -578,16 +578,34 @@ test('route metadata, demo query entry, reset, focus, and not-found indexing are
 
   await page.goto('/404.html');
   await expect(page).toHaveTitle('Page not found — DB File Sync Safety');
+  await expect(page.locator('meta[name="description"]')).toHaveAttribute('content', 'This address is not part of the DB File Sync Safety site.');
   await expect(page.locator('meta[name="robots"]')).toHaveAttribute('content', 'noindex, nofollow');
+  await expect(page.locator('link[rel="canonical"]')).toHaveAttribute('href', 'https://db-file-sync-safety.sociobot.in/404');
+  await expect(page.locator('meta[property="og:type"]')).toHaveAttribute('content', 'website');
+  await expect(page.locator('meta[property="og:title"]')).toHaveAttribute('content', 'Page not found — DB File Sync Safety');
+  await expect(page.locator('meta[property="og:description"]')).toHaveAttribute('content', 'This address is not part of the DB File Sync Safety site.');
+  await expect(page.locator('meta[property="og:url"]')).toHaveAttribute('content', 'https://db-file-sync-safety.sociobot.in/404');
+  await expect(page.locator('meta[property="og:image"]')).toHaveAttribute('content', 'https://db-file-sync-safety.sociobot.in/og-image.webp');
+  await expect(page.locator('meta[name="twitter:card"]')).toHaveAttribute('content', 'summary_large_image');
+  await expect(page.locator('meta[name="twitter:title"]')).toHaveAttribute('content', 'Page not found — DB File Sync Safety');
+  await expect(page.locator('meta[name="twitter:description"]')).toHaveAttribute('content', 'This address is not part of the DB File Sync Safety site.');
+  await expect(page.locator('meta[name="twitter:image"]')).toHaveAttribute('content', 'https://db-file-sync-safety.sociobot.in/og-image.webp');
+  await expect(page.locator('link[rel="apple-touch-icon"]')).toHaveAttribute('href', '/apple-touch-icon.png');
   await expect(page.locator('h1')).toHaveCount(1);
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText('Page not found');
   await expect(page.locator('main')).toHaveCount(1);
-  await expect(page.getByRole('link', { name: 'Privacy' })).toHaveAttribute('href', '/privacy');
-  await expect(page.getByRole('link', { name: 'Terms' })).toHaveAttribute('href', '/terms');
+  await expect(page.getByRole('navigation', { name: 'Main navigation' }).getByRole('link')).toHaveCount(3);
+  await expect(page.getByRole('navigation', { name: 'Main navigation' }).getByRole('link', { name: 'Demo' })).toHaveAttribute('href', '/demo');
+  await expect(page.getByRole('navigation', { name: 'Main navigation' }).getByRole('link', { name: 'Install' })).toHaveAttribute('href', '/#install');
+  await expect(page.getByRole('navigation', { name: 'Footer navigation' }).getByRole('link', { name: 'Privacy' })).toHaveAttribute('href', '/privacy');
+  await expect(page.getByRole('navigation', { name: 'Footer navigation' }).getByRole('link', { name: 'Terms' })).toHaveAttribute('href', '/terms');
+  await expect(page.getByRole('link', { name: /Built by Param Factory/ })).toHaveAttribute('href', 'https://sociobot.in');
+  await expect(page.locator('.build')).toHaveText('v0.1.3 · build 004');
 });
 
 test('all interactive targets are at least 44 by 44 pixels at the 390-pixel viewport', async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 });
-  for (const route of ['/', '/demo', '/privacy', '/terms', '/not-a-route']) {
+  for (const route of ['/', '/demo', '/privacy', '/terms', '/not-a-route', '/404.html']) {
     await page.goto(route);
     await expect(page.getByRole('heading', { level: 1 })).toBeVisible();
     const results = await new AxeBuilder({ page }).analyze();

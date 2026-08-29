@@ -4,6 +4,7 @@ import AxeBuilder from '@axe-core/playwright';
 const origin = process.argv[2] ?? 'https://db-file-sync-safety.sociobot.in';
 const browser = await chromium.launch();
 const routes = ['/', '/?demo=1', '/demo', '/privacy', '/terms'];
+const missingRoute = '/definitely-not-a-route';
 
 for (const viewport of [{ width: 1440, height: 900 }, { width: 390, height: 844 }]) {
   const context = await browser.newContext({ viewport });
@@ -34,6 +35,51 @@ for (const viewport of [{ width: 1440, height: 900 }, { width: 390, height: 844 
     }
     if (errors.length) throw new Error(`${route} console: ${errors.join(' | ')}`);
     await page.close();
+  }
+  await context.close();
+}
+
+for (const viewport of [{ width: 1440, height: 900 }, { width: 390, height: 844 }]) {
+  const context = await browser.newContext({ viewport });
+  const page = await context.newPage();
+  const response = await page.goto(`${origin}${missingRoute}`, { waitUntil: 'networkidle' });
+  if (response?.status() !== 404) throw new Error(`${missingRoute} returned ${response?.status()}`);
+  const expected = {
+    title: 'Page not found — DB File Sync Safety',
+    description: 'This address is not part of the DB File Sync Safety site.',
+    canonical: `${origin}/404`,
+  };
+  const actual = await page.evaluate(() => ({
+    title: document.title,
+    description: document.querySelector('meta[name="description"]')?.getAttribute('content'),
+    robots: document.querySelector('meta[name="robots"]')?.getAttribute('content'),
+    canonical: document.querySelector('link[rel="canonical"]')?.getAttribute('href'),
+    ogTitle: document.querySelector('meta[property="og:title"]')?.getAttribute('content'),
+    ogDescription: document.querySelector('meta[property="og:description"]')?.getAttribute('content'),
+    ogUrl: document.querySelector('meta[property="og:url"]')?.getAttribute('content'),
+    ogImage: document.querySelector('meta[property="og:image"]')?.getAttribute('content'),
+    twitterTitle: document.querySelector('meta[name="twitter:title"]')?.getAttribute('content'),
+    twitterDescription: document.querySelector('meta[name="twitter:description"]')?.getAttribute('content'),
+    twitterImage: document.querySelector('meta[name="twitter:image"]')?.getAttribute('content'),
+    appleTouchIcon: document.querySelector('link[rel="apple-touch-icon"]')?.getAttribute('href'),
+    h1: document.querySelector('h1')?.textContent?.trim(),
+    main: document.querySelectorAll('main').length,
+    headerLinks: document.querySelectorAll('header nav a').length,
+    footerLinks: document.querySelectorAll('footer nav a').length,
+    build: document.querySelector('.build')?.textContent?.trim(),
+    overflow: document.documentElement.scrollWidth > document.documentElement.clientWidth,
+  }));
+  if (actual.title !== expected.title || actual.description !== expected.description || actual.robots !== 'noindex, nofollow' || actual.canonical !== expected.canonical || actual.ogTitle !== expected.title || actual.ogDescription !== expected.description || actual.ogUrl !== expected.canonical || actual.ogImage !== `${origin}/og-image.webp` || actual.twitterTitle !== expected.title || actual.twitterDescription !== expected.description || actual.twitterImage !== `${origin}/og-image.webp` || actual.appleTouchIcon !== '/apple-touch-icon.png' || actual.h1 !== 'Page not found' || actual.main !== 1 || actual.headerLinks !== 3 || actual.footerLinks !== 3 || actual.build !== 'v0.1.3 · build 004' || actual.overflow) {
+    throw new Error(`${missingRoute} shell/metadata failed: ${JSON.stringify(actual)}`);
+  }
+  const axe = await new AxeBuilder({ page }).analyze();
+  if (axe.violations.length) throw new Error(`${missingRoute} Axe: ${axe.violations.map((item) => item.id).join(', ')}`);
+  if (viewport.width === 390) {
+    const small = await page.locator('a, button, summary').evaluateAll((nodes) => nodes.map((node) => {
+      const box = node.getBoundingClientRect();
+      return { text: node.textContent?.trim(), width: box.width, height: box.height };
+    }).filter((item) => item.width < 44 || item.height < 44));
+    if (small.length) throw new Error(`${missingRoute} small targets: ${JSON.stringify(small)}`);
   }
   await context.close();
 }
@@ -100,4 +146,4 @@ for (const href of links) {
 await linksContext.close();
 
 await browser.close();
-console.log(JSON.stringify({ routes: routes.length, viewports: 2, axeViolations: 0, consoleErrors: 0, keyboard: 'pass', reducedMotion: 'pass', privacy: 'pass', serviceWorkers: 0, textZoom: 'pass', liveLinks: links.size, detectedDownload: 'v0.1.3 Linux archive' }));
+console.log(JSON.stringify({ routes: routes.length, production404: 'pass', viewports: 2, axeViolations: 0, consoleErrors: 0, keyboard: 'pass', reducedMotion: 'pass', privacy: 'pass', serviceWorkers: 0, textZoom: 'pass', liveLinks: links.size, detectedDownload: 'v0.1.3 Linux archive' }));
