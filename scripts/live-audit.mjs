@@ -92,7 +92,7 @@ for (const route of routes) {
 }
 await linksPage.goto(`${origin}/`, { waitUntil: 'networkidle' });
 const detectedDownload = await linksPage.locator('.platform-download').first().getAttribute('href');
-if (!detectedDownload?.endsWith('/v0.1.2/dbsync-safe-linux-x86_64.tar.gz')) throw new Error(`wrong detected download: ${detectedDownload}`);
+if (!detectedDownload?.endsWith('/v0.1.3/dbsync-safe-linux-x86_64.tar.gz')) throw new Error(`wrong detected download: ${detectedDownload}`);
 for (const href of links) {
   const response = await linksContext.request.fetch(href, { method: 'HEAD', maxRedirects: 10 });
   if (response.status() >= 400) throw new Error(`dead link ${href}: ${response.status()}`);
@@ -100,4 +100,4 @@ for (const href of links) {
 await linksContext.close();
 
 await browser.close();
-console.log(JSON.stringify({ routes: routes.length, viewports: 2, axeViolations: 0, consoleErrors: 0, keyboard: 'pass', reducedMotion: 'pass', privacy: 'pass', serviceWorkers: 0, textZoom: 'pass', liveLinks: links.size, detectedDownload: 'v0.1.2 Linux archive' }));
+console.log(JSON.stringify({ routes: routes.length, viewports: 2, axeViolations: 0, consoleErrors: 0, keyboard: 'pass', reducedMotion: 'pass', privacy: 'pass', serviceWorkers: 0, textZoom: 'pass', liveLinks: links.size, detectedDownload: 'v0.1.3 Linux archive' }));

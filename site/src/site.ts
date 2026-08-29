@@ -7,19 +7,40 @@ const routeStatus = document.querySelector<HTMLDivElement>('#route-status')!;
 
 type Route = '/' | '/demo' | '/privacy' | '/terms' | '/404';
 
-const routeTitles: Record<Route, string> = {
-  '/': 'DB File Sync Safety — Make SQLite snapshots safe',
-  '/demo': 'Demo — DB File Sync Safety',
-  '/privacy': 'Privacy — DB File Sync Safety',
-  '/terms': 'Terms — DB File Sync Safety',
-  '/404': 'Page not found — DB File Sync Safety',
+const routeMeta: Record<Route, { title: string; description: string; path: string; noindex?: boolean }> = {
+  '/': {
+    title: 'DB File Sync Safety — Make SQLite snapshots safe',
+    description: 'Block raw SQLite copies, create verified snapshots, and restore them safely on another device.',
+    path: '/',
+  },
+  '/demo': {
+    title: 'Demo — DB File Sync Safety',
+    description: 'Try the bundled SQLite sample in an isolated browser demo. Nothing is saved.',
+    path: '/demo',
+  },
+  '/privacy': {
+    title: 'Privacy — DB File Sync Safety',
+    description: 'Read what the local CLI and download page access, store, and request.',
+    path: '/privacy',
+  },
+  '/terms': {
+    title: 'Terms — DB File Sync Safety',
+    description: 'Read the license, safety limits, and SQLite-only scope for DB File Sync Safety.',
+    path: '/terms',
+  },
+  '/404': {
+    title: 'Page not found — DB File Sync Safety',
+    description: 'This address is not part of the DB File Sync Safety site.',
+    path: '/404',
+    noindex: true,
+  },
 };
 
 function shell(content: string, route: Route): string {
   const demoBanner = route === '/demo' ? `
     <aside class="demo-banner" aria-label="Demo mode">
       <span><strong>Demo</strong> — sample data, nothing is saved</span>
-      <div><button class="text-button" data-reset-demo>Reset demo</button><a href="/#install" data-link>Start for real</a></div>
+      <div><button class="text-button" data-reset-demo>Reset demo</button><a href="/#install" data-link>Install the CLI</a></div>
     </aside>` : '';
   return `${demoBanner}
     <header class="site-header">
@@ -37,7 +58,7 @@ function shell(content: string, route: Route): string {
     <footer class="site-footer">
       <p><span class="signal-dot" aria-hidden="true"></span> Verified SQLite packets for file sync.</p>
       <nav aria-label="Footer navigation"><a href="/privacy" data-link>Privacy</a><a href="/terms" data-link>Terms</a><a href="https://sociobot.in" rel="external">Built by Param Factory <span class="sr-only">(external)</span></a></nav>
-      <p class="build">v0.1.2 · build 003</p>
+      <p class="build">v0.1.3 · build 004</p>
     </footer>`;
 }
 
@@ -59,14 +80,14 @@ function landing(): string {
   return shell(`<main id="main">
     <section class="hero" aria-labelledby="page-title">
       <div class="hero-copy">
-        <p class="eyebrow">SQLite preflight · v0.1.2</p>
+        <p class="eyebrow">SQLite sync check · v0.1.3</p>
         <h1 id="page-title" tabindex="-1">Make SQLite snapshots safe to sync</h1>
         <p class="lede">For developers syncing app folders, it blocks raw database copies and creates a verified packet.</p>
         <div class="hero-actions">
-          <a class="button primary" href="/demo" data-link>Try it with sample data</a>
+          <a class="button primary" href="/?demo=1" data-link>Try it with sample data</a>
           <a class="button secondary platform-download" href="${releasePage}">View downloads</a>
         </div>
-        <p class="action-note">See a live WAL become a verified packet.</p>
+        <p class="action-note">See the CLI include a live write-ahead log in a verified packet.</p>
         <ul class="plain-facts" aria-label="Product facts">
           <li><span aria-hidden="true">⌂</span> Runs on your device</li>
           <li><span aria-hidden="true">○</span> No telemetry</li>
@@ -83,10 +104,10 @@ function landing(): string {
     <section class="preview band" aria-labelledby="preview-heading">
       <div class="section-label"><span>01</span><p>Real CLI output</p></div>
       <div>
-        <h2 id="preview-heading">Watch the unsafe copy become a packet</h2>
-        <p class="measure">The bundled demo creates a temporary SQLite database with a live WAL. It snapshots and restores that database without reading your files.</p>
+        <h2 id="preview-heading">See the CLI block raw copying and create a packet</h2>
+        <p class="measure">The bundled demo creates and uses sample files in its temporary folder. It includes a live write-ahead log in the snapshot.</p>
         ${terminal('landing-terminal')}
-        <p class="terminal-command"><code>dbsync-safe --demo</code><button data-copy="dbsync-safe --demo" aria-label="Copy demo command">Copy</button></p>
+        <p class="terminal-command"><code>dbsync-safe --demo</code><button data-copy="dbsync-safe --demo">Copy demo command</button></p>
       </div>
     </section>
 
@@ -95,7 +116,7 @@ function landing(): string {
       <div>
         <h2 id="workflow-heading">Replace raw copying with three checks</h2>
         <ol class="steps">
-          <li><span>1</span><div><h3>Scan the source folder</h3><p>Find SQLite headers and their WAL, SHM, or journal sidecars.</p><code>dbsync-safe scan ~/Sync/App</code></div></li>
+          <li><span>1</span><div><h3>Scan the source folder</h3><p>Find SQLite headers and their write-ahead log (WAL), shared-memory (SHM), or journal sidecars.</p><code>dbsync-safe scan ~/Sync/App</code></div></li>
           <li><span>2</span><div><h3>Make the snapshot packet</h3><p>Copy the bundle privately, then use SQLite’s backup API and write checksums.</p><code>dbsync-safe snapshot ~/Sync/App -o ~/ToSync</code></div></li>
           <li><span>3</span><div><h3>Restore on the other device</h3><p>Check the packet before copying, then run SQLite’s integrity check.</p><code>dbsync-safe restore ~/ToSync -t ~/AppData</code></div></li>
         </ol>
@@ -128,7 +149,7 @@ function landing(): string {
           <div><p>macOS or Linux</p><code>curl -fsSL https://db-file-sync-safety.sociobot.in/install.sh | sh</code></div>
           <div><p>Windows PowerShell</p><code>irm https://db-file-sync-safety.sociobot.in/install.ps1 | iex</code></div>
         </div>
-        <details><summary>Package manager options</summary><div class="package-list"><code>brew install B-Divyesh/db-file-sync-safety/dbsync-safe</code><code>scoop install https://raw.githubusercontent.com/B-Divyesh/sf-db-file-sync-safety/main/scoop-bucket/dbsync-safe.json</code><p>The macOS package and Windows binary are unsigned in v0.1.2.</p></div></details>
+        <details><summary>Package manager options</summary><div class="package-list"><code>brew install B-Divyesh/db-file-sync-safety/dbsync-safe</code><code>scoop install https://raw.githubusercontent.com/B-Divyesh/sf-db-file-sync-safety/main/scoop-bucket/dbsync-safe.json</code><p>The macOS package and Windows binary are unsigned in v0.1.3.</p></div></details>
       </div>
     </section>
   </main>`, '/');
@@ -152,10 +173,10 @@ function privacy(): string {
   return shell(`<main id="main" class="inner-main legal">
     <p class="eyebrow">Policy · effective 28 August 2026</p>
     <h1 id="page-title" tabindex="-1">Your database stays on your device</h1>
-    <p class="lede">The CLI has no account, analytics, ads, or telemetry.</p>
+    <p class="lede">The CLI needs no account and sends no network requests.</p>
     <section><h2>What the CLI reads</h2><p>It reads database and sidecar bytes from paths you give it. SQLite opens only a temporary working copy.</p><p>Read-only source folders stay unchanged. Snapshots and manifests go only to the output folder you choose.</p></section>
     <section><h2>What this site stores</h2><p>The site may cache public GitHub release details for one hour. The demo does not save any data.</p></section>
-    <section><h2>Network requests</h2><p>The landing page asks GitHub for the latest public release. The CLI makes no network requests.</p></section>
+    <section><h2>Network requests</h2><p>The landing page asks GitHub for the latest public release. The CLI sends no network requests.</p></section>
     <section><h2>Questions</h2><p>Open an issue in the <a href="https://github.com/${repo}">public repository <span class="sr-only">(external)</span></a>.</p></section>
   </main>`, '/privacy');
 }
@@ -182,14 +203,24 @@ function notFound(): string {
 }
 
 function currentRoute(): Route {
+  if (new URLSearchParams(window.location.search).get('demo') === '1') return '/demo';
   const clean = window.location.pathname.replace(/\/$/, '') || '/';
   return (['/', '/demo', '/privacy', '/terms'].includes(clean) ? clean : '/404') as Route;
 }
 
 function render(shouldFocus = false): void {
   const route = currentRoute();
-  document.title = routeTitles[route];
-  document.querySelector<HTMLLinkElement>('link[rel="canonical"]')!.href = `https://db-file-sync-safety.sociobot.in${route === '/404' ? '/404' : route}`;
+  const meta = routeMeta[route];
+  const canonical = `https://db-file-sync-safety.sociobot.in${meta.path}`;
+  document.title = meta.title;
+  document.querySelector<HTMLMetaElement>('meta[name="description"]')!.content = meta.description;
+  document.querySelector<HTMLLinkElement>('link[rel="canonical"]')!.href = canonical;
+  document.querySelector<HTMLMetaElement>('meta[property="og:title"]')!.content = meta.title;
+  document.querySelector<HTMLMetaElement>('meta[property="og:description"]')!.content = meta.description;
+  document.querySelector<HTMLMetaElement>('meta[property="og:url"]')!.content = canonical;
+  document.querySelector<HTMLMetaElement>('meta[name="twitter:title"]')!.content = meta.title;
+  document.querySelector<HTMLMetaElement>('meta[name="twitter:description"]')!.content = meta.description;
+  document.querySelector<HTMLMetaElement>('meta[name="robots"]')!.content = meta.noindex ? 'noindex, nofollow' : 'index, follow';
   app.innerHTML = route === '/' ? landing() : route === '/demo' ? demo() : route === '/privacy' ? privacy() : route === '/terms' ? terms() : notFound();
   bindEvents();
   if (route === '/') void loadRelease();
@@ -205,13 +236,14 @@ function bindEvents(): void {
     const target = new URL(link.href);
     if (target.origin !== window.location.origin) return;
     event.preventDefault();
-    history.pushState({}, '', `${target.pathname}${target.hash}`);
+    history.pushState({}, '', `${target.pathname}${target.search}${target.hash}`);
     render(true);
-    window.scrollTo({ top: target.hash ? document.querySelector(target.hash)?.getBoundingClientRect().top ?? 0 : 0 });
+    if (target.hash) document.querySelector(target.hash)?.scrollIntoView();
+    else window.scrollTo({ top: 0 });
   }));
   document.querySelectorAll<HTMLButtonElement>('[data-copy]').forEach((button) => button.addEventListener('click', async () => {
     await navigator.clipboard.writeText(button.dataset.copy ?? '');
-    button.textContent = 'Copied';
+    button.textContent = 'Demo command copied';
   }));
   document.querySelector<HTMLButtonElement>('[data-reset-demo]')?.addEventListener('click', () => {
     const old = document.querySelector('#demo-terminal');
