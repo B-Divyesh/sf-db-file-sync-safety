@@ -136,7 +136,12 @@ test('@claim:readonly-source-snapshot snapshots a read-only source and preserves
   const fixture = closedWalFixture(true);
   const before = sourceTree(fixture.source);
   const runAsNobody = typeof process.getuid === 'function' && process.getuid() === 0;
-  const result = spawnSync(binary, ['--json', 'snapshot', fixture.source, '--output', fixture.packet], {
+  const executable = runAsNobody ? join(fixture.root, 'dbsync-safe') : binary;
+  if (runAsNobody) {
+    copyFileSync(binary, executable);
+    chmodSync(executable, 0o755);
+  }
+  const result = spawnSync(executable, ['--json', 'snapshot', fixture.source, '--output', fixture.packet], {
     encoding: 'utf8',
     ...(runAsNobody ? { uid: 65534, gid: 65534 } : {}),
   });
