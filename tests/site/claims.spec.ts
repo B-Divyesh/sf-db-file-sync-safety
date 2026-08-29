@@ -2,6 +2,7 @@ import { test, expect } from '@playwright/test';
 import AxeBuilder from '@axe-core/playwright';
 import { execFileSync, spawnSync } from 'node:child_process';
 import { createHash } from 'node:crypto';
+import { DatabaseSync } from 'node:sqlite';
 import { chmodSync, copyFileSync, existsSync, mkdtempSync, readFileSync, readdirSync, writeFileSync } from 'node:fs';
 import { join, resolve } from 'node:path';
 import { tmpdir } from 'node:os';
@@ -48,6 +49,24 @@ test('@claim:verified-restore restores the sample into another folder and verifi
   expect(demo.restore.restored).toHaveLength(1);
   expect(existsSync(demo.restore.restored[0])).toBe(true);
   expect(cli('verify', join(demo.temporary_root, 'safe-packet'))).toContain('Packet verified');
+});
+
+test('@claim:demo-restored-count browser result matches the restored CLI sample', async ({ page }) => {
+  const demo = freshDemo();
+  const restored = new DatabaseSync(demo.restore.restored[0], { readOnly: true });
+  const sample = restored.prepare(`
+    SELECT count(*) AS restored_note_count,
+           sum(title = 'Train changes') AS live_wal_note_count
+    FROM notes
+  `).get() as { restored_note_count: number; live_wal_note_count: number };
+  restored.close();
+  expect(sample.restored_note_count).toBe(4);
+  expect(sample.live_wal_note_count).toBe(1);
+
+  await page.goto('/demo');
+  const result = page.locator('.demo-result');
+  await expect(result).toContainText(`${sample.restored_note_count} notes reached a new folder`);
+  await expect(result).toContainText('including the live-WAL note');
 });
 
 test('@claim:json-output emits parseable scan output for scripts', () => {

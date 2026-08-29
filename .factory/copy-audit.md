@@ -4,7 +4,7 @@ Audited on 28 August 2026. Counts treat hyphenated terms, paths, and version str
 
 | Words | Copy |
 | ---: | --- |
-| 3 | SQLite preflight · v0.1.0 |
+| 3 | SQLite preflight · v0.1.1 |
 | 6 | Make SQLite snapshots safe to sync |
 | 15 | For developers syncing app folders, it blocks raw database copies and creates a verified packet. |
 | 5 | Try it with sample data |
@@ -25,6 +25,7 @@ Audited on 28 August 2026. Counts treat hyphenated terms, paths, and version str
 | 4 | Snapshot: backup created |
 | 5 | Restore: checksum and integrity passed |
 | 2 | Copy demo command |
+| 15 | 4 notes reached a new folder, including the live-WAL note. The source stayed unchanged. |
 | 2 | Safe procedure |
 | 6 | Replace raw copying with three checks |
 | 4 | Scan the source folder |
@@ -61,7 +62,7 @@ Audited on 28 August 2026. Counts treat hyphenated terms, paths, and version str
 | 3 | macOS or Linux |
 | 2 | Windows PowerShell |
 | 3 | Package manager options |
-| 10 | The macOS package and Windows binary are unsigned in v0.1.0. |
+| 10 | The macOS package and Windows binary are unsigned in v0.1.1. |
 | 6 | Verified SQLite packets for file sync. |
 | 4 | Built by Param Factory |
 
@@ -90,4 +91,3 @@ The job, audience, changed outcome, and first action fit in one short breath.
 ## Catalog description
 
 Make verified SQLite snapshots before a file-sync tool copies them.
-

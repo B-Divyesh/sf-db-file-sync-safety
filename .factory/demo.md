@@ -8,7 +8,11 @@
 
 The CLI creates `field-notes.sqlite` from `examples/field-notes.sql`. It keeps the database open in WAL mode, runs the preflight, writes a packet, restores it into a second folder, and prints the temporary root.
 
-The browser route replays the exact four states printed by the binary. It makes no API request and uses no browser storage. Its sample state lives only in the current DOM.
+The browser route replays the exact four states printed by the binary. Its result says all 4 sample notes reached the restored folder.
+
+The fourth note is written while WAL mode is active. The claim regression queries the real CLI demo's restored database and requires the browser count to match.
+
+The route makes no API request and uses no browser storage. Its sample state lives only in the current DOM.
 
 ## Reset and isolation
 
@@ -16,4 +20,3 @@ The browser route replays the exact four states printed by the binary. It makes 
 - Click **Start for real** to leave the demo and open installation.
 - Each CLI run uses a process-specific folder under the operating system's temporary directory.
 - CLI demo runs never inspect or write user-selected paths.
-

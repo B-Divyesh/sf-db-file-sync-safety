@@ -37,7 +37,7 @@ function shell(content: string, route: Route): string {
     <footer class="site-footer">
       <p><span class="signal-dot" aria-hidden="true"></span> Verified SQLite packets for file sync.</p>
       <nav aria-label="Footer navigation"><a href="/privacy" data-link>Privacy</a><a href="/terms" data-link>Terms</a><a href="https://sociobot.in" rel="external">Built by Param Factory <span class="sr-only">(external)</span></a></nav>
-      <p class="build">v0.1.0 · build 001</p>
+      <p class="build">v0.1.1 · build 002</p>
     </footer>`;
 }
 
@@ -59,7 +59,7 @@ function landing(): string {
   return shell(`<main id="main">
     <section class="hero" aria-labelledby="page-title">
       <div class="hero-copy">
-        <p class="eyebrow">SQLite preflight · v0.1.0</p>
+        <p class="eyebrow">SQLite preflight · v0.1.1</p>
         <h1 id="page-title" tabindex="-1">Make SQLite snapshots safe to sync</h1>
         <p class="lede">For developers syncing app folders, it blocks raw database copies and creates a verified packet.</p>
         <div class="hero-actions">
@@ -128,7 +128,7 @@ function landing(): string {
           <div><p>macOS or Linux</p><code>curl -fsSL https://db-file-sync-safety.sociobot.in/install.sh | sh</code></div>
           <div><p>Windows PowerShell</p><code>irm https://db-file-sync-safety.sociobot.in/install.ps1 | iex</code></div>
         </div>
-        <details><summary>Package manager options</summary><div class="package-list"><code>brew install B-Divyesh/db-file-sync-safety/dbsync-safe</code><code>scoop install https://raw.githubusercontent.com/B-Divyesh/sf-db-file-sync-safety/main/scoop-bucket/dbsync-safe.json</code><p>The macOS package and Windows binary are unsigned in v0.1.0.</p></div></details>
+        <details><summary>Package manager options</summary><div class="package-list"><code>brew install B-Divyesh/db-file-sync-safety/dbsync-safe</code><code>scoop install https://raw.githubusercontent.com/B-Divyesh/sf-db-file-sync-safety/main/scoop-bucket/dbsync-safe.json</code><p>The macOS package and Windows binary are unsigned in v0.1.1.</p></div></details>
       </div>
     </section>
   </main>`, '/');
@@ -142,7 +142,7 @@ function demo(): string {
     <section aria-labelledby="demo-result-heading" class="demo-stage">
       <div class="demo-path"><span>temporary folder</span><code>/tmp/dbsync-safe-demo/sync-folder</code></div>
       ${terminal('demo-terminal')}
-      <div class="demo-result"><span class="safe-mark" aria-hidden="true">✓</span><div><h2 id="demo-result-heading">Restore verified</h2><p>Three notes reached a new folder. The source stayed unchanged.</p></div></div>
+      <div class="demo-result"><span class="safe-mark" aria-hidden="true">✓</span><div><h2 id="demo-result-heading">Restore verified</h2><p>4 notes reached a new folder, including the live-WAL note. The source stayed unchanged.</p></div></div>
     </section>
     <section class="try-cli" aria-labelledby="try-heading"><h2 id="try-heading">Run the same demo after install</h2><p><code>dbsync-safe --demo</code></p><button class="button secondary" data-copy="dbsync-safe --demo">Copy demo command</button></section>
   </main>`, '/demo');

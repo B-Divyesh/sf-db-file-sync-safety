@@ -1,4 +1,7 @@
-use rusqlite::{backup::Backup, Connection, OpenFlags};
+use rusqlite::{
+    backup::{Backup, StepResult},
+    Connection, OpenFlags,
+};
 use serde::{Deserialize, Serialize};
 use sha2::{Digest, Sha256};
 use std::{
@@ -6,10 +9,12 @@ use std::{
     io::{Read, Write},
     path::{Path, PathBuf},
     thread,
-    time::{Duration, SystemTime, UNIX_EPOCH},
+    time::{Duration, Instant, SystemTime, UNIX_EPOCH},
 };
 
 pub const MANIFEST_NAME: &str = "dbsync-safe-manifest.json";
+const BACKUP_LOCK_TIMEOUT: Duration = Duration::from_secs(2);
+const BACKUP_RETRY_DELAY: Duration = Duration::from_millis(25);
 
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq)]
 pub struct DatabaseFinding {
@@ -287,12 +292,40 @@ fn backup_database(source_path: &Path, destination_path: &Path) -> Result<(), St
         OpenFlags::SQLITE_OPEN_READ_ONLY | OpenFlags::SQLITE_OPEN_NO_MUTEX,
     )
     .map_err(sql_error(source_path))?;
+    source.busy_timeout(Duration::ZERO).map_err(|e| {
+        format!(
+            "SQLite could not prepare a snapshot of {}: {}. Close the app and try again.",
+            source_path.display(),
+            e
+        )
+    })?;
     let mut destination =
         Connection::open(destination_path).map_err(sql_error(destination_path))?;
     let backup = Backup::new(&source, &mut destination).map_err(|e| e.to_string())?;
-    backup
-        .run_to_completion(32, Duration::from_millis(25), None)
-        .map_err(|e| format!("SQLite could not make a consistent snapshot of {}: {}. Close the app and try again.", source_path.display(), e))?;
+    let mut blocked_since = None;
+    loop {
+        match backup.step(32).map_err(|e| {
+            format!(
+                "SQLite could not make a consistent snapshot of {}: {}. Close the app and try again.",
+                source_path.display(),
+                e
+            )
+        })? {
+            StepResult::Done => break,
+            StepResult::More => blocked_since = None,
+            StepResult::Busy | StepResult::Locked => {
+                let started = blocked_since.get_or_insert_with(Instant::now);
+                if started.elapsed() >= BACKUP_LOCK_TIMEOUT {
+                    return Err(format!(
+                        "SQLite stayed locked for 2 seconds while snapshotting {}. Close the app and try again.",
+                        source_path.display()
+                    ));
+                }
+            }
+            _ => {}
+        }
+        thread::sleep(BACKUP_RETRY_DELAY);
+    }
     drop(backup);
     destination.close().map_err(|(_, e)| e.to_string())?;
     Ok(())

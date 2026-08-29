@@ -1,6 +1,6 @@
 use db_file_sync_safety::{create_snapshot, restore_packet, scan, verify_packet, SafetyState};
 use rusqlite::Connection;
-use std::{fs, path::Path};
+use std::{fs, path::Path, time::Instant};
 use tempfile::tempdir;
 
 fn database(path: &Path, wal: bool, rows: usize) -> Connection {
@@ -111,4 +111,24 @@ fn refuses_to_replace_a_target_by_default() {
         "keep me"
     );
     drop(connection);
+}
+
+#[test]
+fn locked_database_fails_within_a_bound_and_removes_staging_files() {
+    let temp = tempdir().unwrap();
+    let source = temp.path().join("source");
+    fs::create_dir(&source).unwrap();
+    let connection = database(&source.join("locked.sqlite"), false, 1);
+    connection.execute_batch("BEGIN EXCLUSIVE;").unwrap();
+    let packet = temp.path().join("packet");
+
+    let started = Instant::now();
+    let error = create_snapshot(&source, &packet).unwrap_err();
+
+    assert!(started.elapsed().as_secs_f32() < 3.0, "{error}");
+    assert!(error.contains("stayed locked for 2 seconds"), "{error}");
+    assert!(!packet.exists());
+    assert!(!packet
+        .with_extension(format!("partial-{}", std::process::id()))
+        .exists());
 }

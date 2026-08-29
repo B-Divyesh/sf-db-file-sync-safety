@@ -89,7 +89,7 @@ npm run build
 
 ## Release and deploy
 
-Tag a tested commit with `v0.1.0`. The release workflow builds macOS Intel and Apple silicon archives, Windows, Linux, `.deb`, `.rpm`, and `.pkg` assets. It publishes `SHA256SUMS` and `latest.json` with the GitHub Release.
+Tag a tested commit with the next `v*` version. The release workflow builds macOS Intel and Apple silicon archives, Windows, Linux, `.deb`, `.rpm`, and `.pkg` assets. It publishes `SHA256SUMS` and `latest.json` with the GitHub Release.
 
 Deploy `dist/site/` to the static host. Infrastructure, DNS, and billing stay outside this repository.
 
