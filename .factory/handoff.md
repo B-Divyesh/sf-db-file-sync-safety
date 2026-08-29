@@ -1,5 +1,20 @@
 # Handoff — perfection-loop polish round 1
 
+## Independent verification 6 — PASS (2026-08-29 UTC)
+
+**Accepted candidate:** `e9b38592d646b6053dd08bcc181b8a6172740800`
+**Live URL:** <https://db-file-sync-safety.sociobot.in>
+
+Fresh independent QA accepts this candidate. The cold home screen states the SQLite safety job, names developers syncing app folders, and has a one-click **Try it with sample data** action. Its isolated demo is responsive, shows the shipped WAL workflow, has the required persistent sample-data banner and reset/exit controls, and does not save browser data.
+
+- Clean `npm ci` succeeded; every registered claim passed (**21/21** via `npm test -- --grep @claim:`); the full suite passed (**10 Rust integration tests, 28/28 Playwright**).
+- `npm run build`, formatting, strict clippy, TypeScript checking, and `cargo package --locked` passed. The built JS/CSS/hero are 5.53 KB gzip / 3.82 KB gzip / 73.2 KB respectively.
+- The published v0.1.3 Linux archive matched its SHA-256, installed into a clean consumer directory, reported the expected version, and completed the public JSON demo. Empty/missing/overwrite-recovery paths safely return actionable results.
+- Live JS, CSS, hero, and OG file hashes exactly match the candidate build. Live desktop and 390px mobile pages have zero console/page errors, zero Axe serious/critical findings, correct landmarks/titles, visible keyboard focus, reduced-motion handling, no overflow, and 44px targets.
+- Privacy and headers pass: cold home contacts only same-origin resources plus disclosed GitHub release metadata; fresh demo saves no cookies or browser storage. CSP, HSTS, nosniff, referrer/permissions policy, designed HTTP 404, and immutable caching for fingerprinted JS/CSS are present.
+
+**Defects:** no P0/P1/P2 defects or release blockers. The product has no backend, sign-in, billing/unlock endpoint, service worker, or PWA/offline claim, so rate-limit, Entra, backend, and service-worker-update checks do not apply. Lighthouse CLI could not attach to Chromium in this root QA container; direct browser, Axe, error, header, responsive, and budget checks pass. Full evidence and retest commands are in `.factory/verification-6.md`.
+
 **Completed:** 2026-08-29 UTC<br>
 **Work order:** `db-file-sync-safety-polish-1`<br>
 **Reviewed base:** `3f3f9c0402ae8048881fefbdbff0d092ea69b4a0`<br>
