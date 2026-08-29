@@ -1,0 +1,22 @@
+Live audit: https://db-file-sync-safety.sociobot.in
+Run after deployment 47bcda0f-5b69-45a8-ab8f-4abfc8eecf37 on 29 August 2026 UTC.
+
+{"routes":5,"production404":"pass","viewports":2,"axeViolations":0,"consoleErrors":0,"keyboard":"pass","reducedMotion":"pass","privacy":"pass","serviceWorkers":0,"textZoom":"pass","liveLinks":14,"detectedDownload":"v0.1.3 Linux archive"}
+
+Production unknown-route probe at 390x844:
+- HTTP status: 404
+- Eyebrow: 404 error
+- h1: Page not found
+- Focused skip-link bounds: 198.578125 x 44 CSS px
+- Header links: Demo, Install, Privacy
+- Footer links: Privacy, Terms, Built by Param Factory (external)
+- Title: Page not found — DB File Sync Safety
+- Description: This address is not part of the DB File Sync Safety site.
+- Canonical: https://db-file-sync-safety.sociobot.in/404
+- Open Graph and Twitter titles: Page not found — DB File Sync Safety
+- Apple touch icon: https://db-file-sync-safety.sociobot.in/apple-touch-icon.png
+- Horizontal overflow: false
+
+verify-url.sh:
+- Home: 200; 608-618 ms observed; title/lang/one h1/main/alt/button/console checks passed.
+- ?demo=1: 200; 556-587 ms observed; title/lang/one h1/main/alt/button/console checks passed.

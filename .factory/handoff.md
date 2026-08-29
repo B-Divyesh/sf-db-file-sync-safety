@@ -1,4 +1,45 @@
-# Handoff — adversarial first-read review 2
+# Handoff — perfection-loop polish round 2
+
+**Completed:** 29 August 2026 UTC<br>
+**Work order:** `db-file-sync-safety-polish-2`<br>
+**Reviewed candidate:** `48a0bbe91d32bafd2fe5d7f2f35c3ae69ba52a96`<br>
+**Implementation commit:** `d30d8fc8fa8562da903e21b2654561dfd01ae770`<br>
+**Live URL:** <https://db-file-sync-safety.sociobot.in><br>
+**Result:** **PASS — zero cumulative findings remain.**
+
+## What changed
+
+- Completed the real standalone HTTP 404 rather than only the SPA fallback. It now has the normal Demo/Install/Privacy header; Privacy/Terms/Param Factory footer; v0.1.3 build ID; apple-touch icon; and route-specific canonical, robots, Open Graph, and Twitter metadata.
+- Replaced the packet metaphor with “404 error” and “Page not found” on both not-found implementations.
+- Raised the standalone skip link to an explicit 44px minimum and added direct built-404 coverage to the accessibility, metadata, and mobile-target tests.
+- Moved the decorative glass plate clear of mobile copy while preserving the luminous database landscape identity.
+- Updated `.factory/catalog-description.txt`, `.factory/copy-audit.md`, `.factory/demo.md`, the live audit, and the complete finding map in `.factory/polish-2.md`.
+
+## Verification
+
+- A clean no-hardlinks clone ran all 21 `.factory/claims.json` commands individually: 21/21 passed, with one exact `@claim:<id>` test per claim.
+- `npm test`: 10 Rust integration tests and 28 Playwright tests passed.
+- Formatting, strict Clippy, TypeScript, `npm run build`, `cargo package --locked`, the JSON CLI demo, and `git diff --check` passed.
+- CI run [33239744097](https://github.com/B-Divyesh/sf-db-file-sync-safety/actions/runs/33239744097) passed for the deployed implementation.
+- Published v0.1.3 Linux archive matched `SHA256SUMS`; the binary and live shell installer reported 0.1.3 and the JSON demo restored a verified `ok` database.
+- Live audit covered `/`, `/?demo=1`, `/demo`, `/privacy`, `/terms`, and a real unknown URL at desktop and 390px. It found zero Axe violations, console errors, overflow, dead links, or targets below 44px. Privacy, keyboard, focus, Back, reduced motion, 200% zoom, and release selection passed.
+- The unknown URL returns HTTP 404. Its focused skip link measures 198.58×44px; metadata and full shell match the route contract.
+- `verify-url.sh` passed on home and demo. Lighthouse scored 100/100/100/100 with LCP 1.3 s, CLS 0.019, TBT 90 ms, and 86 KiB transfer.
+- Deployment `47bcda0f-5b69-45a8-ab8f-4abfc8eecf37` succeeded. Local `404.html`, `404.css`, index, hashed JS/CSS, hero, and OG art match live byte-for-byte.
+
+Evidence is under `.factory/evidence/polish-2/`. The finding-by-finding record is `.factory/polish-2.md`.
+
+## Known gaps and operator actions
+
+- No review finding remains. Offline reload is not promised and no service worker exists; the demo's no-external-request privacy behavior is tested.
+- The v0.1.3 macOS and Windows artifacts remain unsigned as disclosed. Signing requires owner certificates.
+- Submit the included winget manifest upstream when desired.
+
+The original Rust CLI artifact class, static deployment class, public v0.1.3 binaries, SQLite-only scope, and product-specific luminous-glass design remain intact.
+
+---
+
+# Earlier handoff — adversarial first-read review 2
 
 **Completed:** 29 August 2026 UTC<br>
 **Work order:** `db-file-sync-safety-review-2`<br>

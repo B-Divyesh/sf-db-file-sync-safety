@@ -1,0 +1,15 @@
+Deployment: 47bcda0f-5b69-45a8-ab8f-4abfc8eecf37
+Implementation commit: d30d8fc8fa8562da903e21b2654561dfd01ae770
+Live URL: https://db-file-sync-safety.sociobot.in
+
+Each local dist/site hash matched the live response byte-for-byte:
+
+fa28daf86c37ac268cd2a174ff50b548fd7fbd484f24644a41e0e2b538520ecb  404.html
+c10169ee5489c3882318603b57a92bdaae04de78a1cdf522a112add4f562bed1  404.css
+9dbfae8d9f6646bdf3d752dfce7381aa65beaaf1812975b6533a4356ef73e2fa  index.html
+ecac2bdfee95d3ec7143983aad3f3f335b33fb5b57d8566da05ac0a6f59d6da5  assets/index-DO_QlB7P.js
+4c7550432877fced289100224c55dd2e8989e37bef7e0a4a17d7683bbb1659e4  assets/index-B3B1em57.css
+83424c8f3662842245432fa77a8bd98a38522c6c06c4fa4392eded6ba9a05513  hero-database.webp
+c467fb205444748f1672c31fb13d3739b2922fa90864c0928dcaca2d093e82a5  og-image.webp
+
+The unknown live URL returned HTTP 404 with public, must-revalidate, max-age=30 and the configured CSP, HSTS, nosniff, referrer, and permissions headers.
