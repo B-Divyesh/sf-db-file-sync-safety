@@ -24,6 +24,16 @@ for (const viewport of [{ width: 1440, height: 900 }, { width: 390, height: 844 
     if (structure.lang !== 'en' || structure.main !== 1 || structure.h1 !== 1 || structure.overflow) {
       throw new Error(`${route} structure failed: ${JSON.stringify(structure)}`);
     }
+    if (route === '/' && viewport.width === 1440) {
+      const facts = await page.locator('.plain-facts li').evaluateAll((nodes) => nodes.map((node) => ({
+        text: node.textContent?.replace(/\s+/g, ' ').trim(),
+        bottom: node.getBoundingClientRect().bottom,
+        viewportHeight: window.innerHeight,
+      })));
+      if (facts.length !== 3 || facts.some((fact) => fact.bottom > fact.viewportHeight)) {
+        throw new Error(`${route} first-screen facts are below the fold: ${JSON.stringify(facts)}`);
+      }
+    }
     const axe = await new AxeBuilder({ page }).analyze();
     if (axe.violations.length) throw new Error(`${route} Axe: ${axe.violations.map((item) => item.id).join(', ')}`);
     if (viewport.width === 390) {

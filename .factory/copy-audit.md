@@ -103,4 +103,4 @@ The job, audience, changed outcome, and first action fit in one short breath.
 
 ## Catalog description
 
-Block unsafe SQLite file copies with verified snapshots built for syncing.
+Create verified SQLite snapshots before syncing a live database.

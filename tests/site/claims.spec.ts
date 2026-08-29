@@ -537,6 +537,25 @@ test('all routes have one h1, useful titles, and no serious accessibility errors
   }
 });
 
+test('the complete first-screen fact list is visible before scrolling at required viewports', async ({ page }) => {
+  for (const viewport of [
+    { width: 1440, height: 900 },
+    { width: 1440, height: 768 },
+    { width: 390, height: 844 },
+  ]) {
+    await page.setViewportSize(viewport);
+    await page.goto('/');
+    expect(await page.evaluate(() => window.scrollY)).toBe(0);
+    const facts = await page.locator('.plain-facts li').evaluateAll((nodes) => nodes.map((node) => ({
+      text: node.textContent?.replace(/\s+/g, ' ').trim(),
+      bottom: node.getBoundingClientRect().bottom,
+      viewportHeight: window.innerHeight,
+    })));
+    expect(facts.map((fact) => fact.text)).toEqual(['⌂ Runs on your device', '○ No telemetry', '◇ Free under MIT']);
+    expect(facts.every((fact) => fact.bottom <= fact.viewportHeight), `${viewport.width}x${viewport.height}: ${JSON.stringify(facts)}`).toBe(true);
+  }
+});
+
 test('route metadata, demo query entry, reset, focus, and not-found indexing are real', async ({ page }) => {
   const expected = [
     { route: '/', title: 'DB File Sync Safety — Make SQLite snapshots safe', canonical: '/' },
