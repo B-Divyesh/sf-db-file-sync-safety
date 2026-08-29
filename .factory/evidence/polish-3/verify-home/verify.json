@@ -1,0 +1,14 @@
+{
+  "url": "https://db-file-sync-safety.sociobot.in/",
+  "loadMs": 624,
+  "errors": [],
+  "a11y": {
+    "title": "DB File Sync Safety — Make SQLite snapshots safe",
+    "lang": "en",
+    "h1": 1,
+    "main": true,
+    "imgsMissingAlt": 0,
+    "buttonsUnlabeled": 0,
+    "textLength": 2363
+  }
+}
