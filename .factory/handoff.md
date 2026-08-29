@@ -1,5 +1,15 @@
 # Handoff — DB File Sync Safety v0.1.0
 
+## Independent verification 3 — 2026-08-29 UTC
+
+**Status: FAIL — candidate `0e69eef3d1a42782dea2e22d01bb3eda25a89e81` is not accepted.**
+
+All nine declared claim commands, the full clean test/build/package matrix, core SQLite safety paths, live deployment identity, installer/release checks, privacy, accessibility, caching, and performance passed. The first-read and one-click demo gates also passed.
+
+The live demo nevertheless says **“Three notes reached a new folder”**, while both the candidate binary and published v0.1.0 binary deterministically restore **four** notes: three seeded rows plus the live-WAL “Train changes” row. This public quantitative statement is false and absent from `.factory/claims.json`, which is release-blocking under the claims contract. A secondary lock-recovery issue was also reproduced: an exclusive lock causes a silent unbounded wait, and external termination leaves a `.partial-*` staging directory. The public release tag still points to the older, source-equivalent CLI commit `feb4bf046d2fd6f3d82729c67538d97c131517d5`.
+
+Full evidence and retest instructions are in `.factory/verification-3.md`.
+
 ## Repair work order `db-file-sync-safety-repair-2` — PASS
 
 **Repaired and deployed:** 2026-08-28 UTC
